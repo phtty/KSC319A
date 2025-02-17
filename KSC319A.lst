@@ -1,0 +1,1427 @@
+gplink-0.13.7 beta
+Copyright (c) 1998-2005 gputils project
+Listing File Generated: 2-17-2025  18:00:35
+ 
+ 
+Address  Value    Disassembly              Source
+-------  -----    -----------              ------
+                                           List	P = HC18P134L, R = DEC
+                                           
+                                           include	HC18P133L.inc
+                                           ;==========================================================================
+                                           ;
+                                           ;       Register Definitions
+                                           ;
+                                           ;==========================================================================
+                                           
+                                           W			EQU		H'0000'
+                                           F			EQU		H'0001'
+                                           
+                                           ;CORE REGISTER
+                                           INDF0		EQU		0x00
+                                           INDF1		EQU		0x01
+                                           PCL			EQU		0x02
+                                           STATUS		EQU		0x03
+                                           FSR0L		EQU		0x04
+                                           FSR0H		EQU		0x05
+                                           FSR1L		EQU		0x06
+                                           FSR1H		EQU		0x07
+                                           PCLATH		EQU		0x08
+                                           INTCON		EQU		0x09
+                                           
+                                           ;BANK0
+                                           ;IO
+                                           TRISA		EQU		0x10
+                                           TRISB		EQU		0x11
+                                           TRISC		EQU		0x12
+                                           TRISD		EQU		0x13	;235涓撶敤
+                                           TRISE		EQU		0x14	;235涓撶敤
+                                           TRISF		EQU		0x15
+                                           
+                                           PORTA		EQU		0x1C
+                                           PORTB		EQU		0x1D
+                                           PORTC		EQU		0x1E
+                                           PORTF		EQU		0x21
+                                           
+                                           WPUA		EQU		0x28
+                                           WPUB		EQU		0x29
+                                           WPUC		EQU		0x2A
+                                           WPUF		EQU		0x2D
+                                           
+                                           WPDA		EQU		0x34
+                                           WPDB		EQU		0x35
+                                           WPDC		EQU		0x36
+                                           WPDF		EQU		0x39
+                                           
+                                           IOCA		EQU		0x40
+                                           IOCB		EQU		0x41
+                                           IOCC		EQU		0x42
+                                           IOCF		EQU		0x45
+                                           
+                                           PORCTR		EQU		0x4C
+                                           DRENAL		EQU		0x4D
+                                           DRENBL		EQU		0x4E
+                                           DRENCL		EQU		0x4F
+                                           DRENFL		EQU		0x52
+                                           
+                                           PIR1		EQU		0x54
+                                           PIR2		EQU		0x55
+                                           PIR3		EQU		0x56
+                                           
+                                           T1L			EQU		0x58
+                                           T1H			EQU		0x59
+                                           T1CON		EQU		0x5A
+                                           
+                                           T0			EQU		0x5B
+                                           T2			EQU		0x5C
+                                           PR2			EQU		0x5D
+                                           T2CON		EQU		0x5E
+                                           PR1L		EQU		0x5F
+                                           PR1CON		EQU		0x60
+                                           
+                                           PIE1		EQU		0x70
+                                           PIE2		EQU		0x71
+                                           PIE3		EQU		0x72
+                                           
+                                           OPTION		EQU		0x78
+                                           PCON		EQU		0x79
+                                           OSCCON		EQU		0x7A
+                                           CCPR2L		EQU		0x80
+                                           CCPR2H		EQU		0x81
+                                           CCP2CON		EQU		0x82
+                                           
+                                           CCPR1L		EQU		0x83
+                                           CCPR1H		EQU		0x84
+                                           CCP1CON		EQU		0x85
+                                           
+                                           ANSELL		EQU		0x8C
+                                           ANSELH		EQU		0x8D
+                                           ADRESL		EQU		0x92
+                                           ADRESH		EQU		0x93
+                                           ADCON0		EQU		0x94
+                                           ADCON1		EQU		0x95
+                                           ADCLK		EQU		0x96
+                                           
+                                           PMDATL		EQU		0x9A
+                                           PMDATH		EQU		0x9B
+                                           PMADRL		EQU		0x9C
+                                           PMADRH		EQU		0x9D
+                                           PMCON		EQU		0x9E
+                                           
+                                           DRENAH		EQU		0xA0
+                                           DRENBH		EQU		0xA1
+                                           DRENCH		EQU		0xA2
+                                           DRENFH		EQU		0xA5
+                                           
+                                           
+                                           
+                                           
+                                           ;BANK1  			          	
+                                           BRT			EQU		0x23A
+                                           AUXR		EQU		0x23B
+                                           SCON		EQU		0x23C
+                                           SBUF		EQU		0x23D
+                                           SADEN		EQU		0x23E
+                                           SADDR		EQU		0x23F
+                                           
+                                           PWM0DT		EQU		0x258
+                                           PWM0DL		EQU		0x259
+                                           PWM0DH		EQU		0x25A
+                                           PWM0PL		EQU		0x25B
+                                           PWM0PH		EQU		0x25C
+                                           PWM0C		EQU		0x25D
+                                           PWMEN		EQU		0x25E
+                                           FLTM		EQU		0x25F
+                                           
+                                           
+                                           LCDCON		EQU		0x2B0
+                                           COMAEN		EQU		0x2B1
+                                           COMBEN		EQU		0x2B2
+                                           COMCEN		EQU		0x2B3
+                                           COMFEN		EQU		0x2B6
+                                           
+                                           
+                                           ;**********************************************
+                                           ;*****************BIT Definitions *************
+                                           ;**********************************************
+                                           ;STATUS
+                                           #define			RP0			STATUS,5
+                                           #define			TO			STATUS,4
+                                           #define			PD			STATUS,3
+                                           #define			Z			STATUS,2
+                                           #define			DC			STATUS,1
+                                           #define			C			STATUS,0
+                                           ;INTCON
+                                           #define			GIE			INTCON,7
+                                           #define			PEIE		INTCON,6
+                                           #define			T0IE		INTCON,5
+                                           #define			INTE		INTCON,4
+                                           #define			RBIE		INTCON,3
+                                           #define			T0IF		INTCON,2
+                                           #define			INTF		INTCON,1
+                                           #define			RBIF		INTCON,0
+                                           ;PIR1
+                                           #define			ADIF		PIR1,6
+                                           #define			CCP1IF		PIR1,2
+                                           #define			T2IF		PIR1,1
+                                           #define			T1IF		PIR1,0
+                                           ;PIR2
+                                           #define			PWM2IF		PIR2,7
+                                           #define			PWM1IF		PIR2,6
+                                           #define			PWM0IF		PIR2,5
+                                           #define			RXIF		PIR2,3
+                                           #define			TXIF		PIR2,2
+                                           #define			SPIF		PIR2,1
+                                           #define			CCP2IF		PIR2,0
+                                           ;PIR3
+                                           #define			RFIF		PIR3,4
+                                           #define			RCIF		PIR3,1
+                                           #define			RAIF		PIR3,0
+                                           ;T1CON
+                                           #define			T1CS1		T1CON,7
+                                           #define			T1CS0		T1CON,6
+                                           #define			T1CKPS1		T1CON,5
+                                           #define			T1CKPS0		T1CON,4
+                                           #define			T1OSCEN		T1CON,3
+                                           #define			T1SYNC		T1CON,2
+                                           #define			T1ON		T1CON,0
+                                           ;T2CON
+                                           #define			T2CKPS3		T2CON,6
+                                           #define			T2CKPS2		T2CON,5
+                                           #define			T2CKPS1		T2CON,4
+                                           #define			T2CKPS0		T2CON,3
+                                           #define			T2ON		T2CON,2
+                                           ;OPTION
+                                           #define			RBPUB		OPTION,7
+                                           #define			INTEDG		OPTION,6
+                                           #define			T0CS		OPTION,5
+                                           #define			T0SE		OPTION,4
+                                           #define			PSA			OPTION,3
+                                           #define			PS2			OPTION,2
+                                           #define			PS1			OPTION,1
+                                           #define			PS0			OPTION,0
+                                           ;PIE1
+                                           #define			ADIE		PIE1,6
+                                           #define			CCP1IE		PIE1,2
+                                           #define			T2IE		PIE1,1
+                                           #define			T1IE		PIE1,0
+                                           
+                                           ;PIE2
+                                           #define			PWM2IE		PIE2,7
+                                           #define			PWM1IE		PIE2,6
+                                           #define			PWM0IE		PIE2,5
+                                           #define			USBIE		PIE2,4
+                                           #define			UARTIE		PIE2,2
+                                           #define			SPIE		PIE2,1
+                                           #define			CCP2IE		PIE2,0
+                                           
+                                           ;PIE3
+                                           #define			RCIE		PIE3,1
+                                           #define			RAIE		PIE3,0
+                                           
+                                           ;IOCB
+                                           #define			IOCB7		IOCB,7
+                                           #define			IOCB6		IOCB,6
+                                           #define			IOCB5		IOCB,5
+                                           #define			IOCB4		IOCB,4
+                                           #define			IOCB3		IOCB,3
+                                           #define			IOCB2		IOCB,2
+                                           #define			IOCB1		IOCB,1
+                                           #define			IOCB0		IOCB,0
+                                           ;CCP1CON
+                                           #define			DC1B1		CCP1CON,5
+                                           #define			DC1B0		CCP1CON,4
+                                           #define			CCP1M3		CCP1CON,3
+                                           #define			CCP1M2		CCP1CON,2
+                                           #define			CCP1M1		CCP1CON,1
+                                           #define			CCP1M0		CCP1CON,0
+                                           ;CCP2CON
+                                           #define			DC2B1		CCP2CON,5
+                                           #define			DC2B0		CCP2CON,4
+                                           #define			CCP2M3		CCP2CON,3
+                                           #define			CCP2M2		CCP2CON,2
+                                           #define			CCP2M1		CCP2CON,1
+                                           #define			CCP2M0		CCP2CON,0
+                                           ;PCON
+                                           #define			LVD2EN		PCON,7
+                                           #define			LVD1EN		PCON,6
+                                           #define			WDTENS		PCON,4
+                                           #define			LVD2F		PCON,3
+                                           #define			LVD1F		PCON,2
+                                           #define			POR			PCON,1
+                                           #define			BOR			PCON,0
+                                           ;OSCCON
+                                           #define			T0OSCEN		OSCCON,7
+                                           #define			HXEN		OSCCON,1
+                                           #define			SCS 		OSCCON,0
+                                           
+                                           ;WPUA
+                                           #define			WPUA7		WPUA,7
+                                           #define			WPUA6		WPUA,6
+                                           #define			WPUA5		WPUA,5
+                                           #define			WPUA4		WPUA,4
+                                           #define			WPUA3		WPUA,3
+                                           #define			WPUA2		WPUA,2
+                                           #define			WPUA1		WPUA,1
+                                           #define			WPUA0		WPUA,0
+                                           ;WPUB
+                                           #define			WPUB7		WPUB,7
+                                           #define			WPUB6		WPUB,6
+                                           #define			WPUB5		WPUB,5
+                                           #define			WPUB4		WPUB,4
+                                           #define			WPUB3		WPUB,3
+                                           #define			WPUB2		WPUB,2
+                                           #define			WPUB1		WPUB,1
+                                           #define			WPUB0		WPUB,0
+                                           ;WPUC
+                                           #define			WPUC7		WPUC,7
+                                           #define			WPUC6		WPUC,6
+                                           #define			WPUC5		WPUC,5
+                                           #define			WPUC4		WPUC,4
+                                           #define			WPUC3		WPUC,3
+                                           #define			WPUC2		WPUC,2
+                                           #define			WPUC1		WPUC,1
+                                           #define			WPUC0		WPUC,0 
+                                           ;WPUF
+                                           #define			WPUF7		WPUF,7
+                                           #define			WPUF6		WPUF,6
+                                           #define			WPUF5		WPUF,5
+                                           #define			WPUF4		WPUF,4
+                                           #define			WPUF3		WPUF,3
+                                           #define			WPUF2		WPUF,2
+                                           #define			WPUF1		WPUF,1
+                                           #define			WPUF0		WPUF,0
+                                           
+                                           ;WPDA
+                                           #define			WPDA7		WPDA,7
+                                           #define			WPDA6		WPDA,6
+                                           #define			WPDA5		WPDA,5
+                                           #define			WPDA4		WPDA,4
+                                           #define			WPDA3		WPDA,3
+                                           #define			WPDA2		WPDA,2
+                                           #define			WPDA1		WPDA,1
+                                           #define			WPDA0		WPDA,0
+                                           ;WPDB
+                                           #define			WPDB7		WPDB,7
+                                           #define			WPDB6		WPDB,6
+                                           #define			WPDB5		WPDB,5
+                                           #define			WPDB4		WPDB,4
+                                           #define			WPDB3		WPDB,3
+                                           #define			WPDB2		WPDB,2
+                                           #define			WPDB1		WPDB,1
+                                           #define			WPDB0		WPDB,0
+                                           ;WPDC
+                                           #define			WPDC7		WPDC,7
+                                           #define			WPDC6		WPDC,6
+                                           #define			WPDC5		WPDC,5
+                                           #define			WPDC4		WPDC,4
+                                           #define			WPDC3		WPDC,3
+                                           #define			WPDC2		WPDC,2
+                                           #define			WPDC1		WPDC,1
+                                           #define			WPDC0		WPDC,0
+                                           ;WPDF
+                                           #define			WPDF7		WPDF,7
+                                           #define			WPDF6		WPDF,6
+                                           #define			WPDF5		WPDF,5
+                                           #define			WPDF4		WPDF,4
+                                           #define			WPDF3		WPDF,3
+                                           #define			WPDF2		WPDF,2
+                                           #define			WPDF1		WPDF,1
+                                           #define			WPDF0		WPDF,0
+                                           
+                                           ;IOCA
+                                           #define			IOCA7		IOCA,7
+                                           #define			IOCA6		IOCA,6
+                                           #define			IOCA5		IOCA,5
+                                           #define			IOCA4		IOCA,4
+                                           #define			IOCA3		IOCA,3
+                                           #define			IOCA2		IOCA,2
+                                           #define			IOCA1		IOCA,1
+                                           #define			IOCA0		IOCA,0
+                                           ;IOCC
+                                           #define			IOCC7		IOCC,7
+                                           #define			IOCC6		IOCC,6
+                                           #define			IOCC5		IOCC,5
+                                           #define			IOCC4		IOCC,4
+                                           #define			IOCC3		IOCC,3
+                                           #define			IOCC2		IOCC,2
+                                           #define			IOCC1		IOCC,1
+                                           #define			IOCC0		IOCC,0
+                                           ;IOCF
+                                           #define			IOCF7		IOCF,7
+                                           #define			IOCF6		IOCF,6
+                                           #define			IOCF5		IOCF,5
+                                           #define			IOCF4		IOCF,4
+                                           #define			IOCF3		IOCF,3
+                                           #define			IOCF2		IOCF,2
+                                           #define			IOCF1		IOCF,1
+                                           #define			IOCF0		IOCF,0
+                                           
+                                           
+                                           
+                                           
+                                           
+                                           ;----- PMCON Bits ----------------------------------------------------------
+                                           
+                                           #define			RDON		PMCON,0
+                                           
+                                           
+                                           
+                                           
+                                           
+                                           ;**********************************************
+                                           ;*****************PWM**************************
+                                           ;**********************************************
+                                           ;PWM0C
+                                           #define			FLTS		PWM0C,5
+                                           #define			FLTC		PWM0C,4
+                                           #define			PWM0S1		PWM0C,3
+                                           #define			PWM0S0		PWM0C,2
+                                           #define			CK01		PWM0C,1
+                                           #define			CK00		PWM0C,0
+                                           ;FLTM
+                                           #define			FLT0M1		FLTM,1
+                                           #define			FLT0M0		FLTM,0
+                                           ;PWMEN
+                                           #define			EFLT		PWM0C,6
+                                           #define			EPWM01		PWM0C,3
+                                           #define			EPWM0		PWM0C,0
+                                           ;***************PWM END***********************
+                                           
+                                           
+                                           ;**********************************************
+                                           ;*****************ADC**************************
+                                           ;**********************************************
+                                           ;ANSELL
+                                           #define			ANSEL7		ANSELL,7
+                                           #define			ANSEL6		ANSELL,6
+                                           #define			ANSEL5		ANSELL,5
+                                           #define			ANSEL4		ANSELL,4
+                                           #define			ANSEL3		ANSELL,3
+                                           #define			ANSEL2		ANSELL,2
+                                           #define			ANSEL1		ANSELL,1
+                                           #define			ANSEL0		ANSELL,0
+                                           ;ANSELH
+                                           #define			ANSEL14		ANSELH,6
+                                           #define			ANSEL13		ANSELH,5
+                                           #define			ANSEL12		ANSELH,4
+                                           #define			ANSEL11		ANSELH,3
+                                           #define			ANSEL10		ANSELH,2
+                                           #define			ANSEL9		ANSELH,1
+                                           #define			ANSEL8		ANSELH,0
+                                           ;ADCON0
+                                           #define			VHS1		ADCON0,7
+                                           #define			VHS0		ADCON0,6
+                                           #define			CHS3		ADCON0,5
+                                           #define			CHS2		ADCON0,4
+                                           #define			CHS1		ADCON0,3
+                                           #define			CHS0		ADCON0,2
+                                           #define			ADON		ADCON0,1
+                                           #define			ADEN		ADCON0,0
+                                           ;ADCON1
+                                           #define			ADFM		ADCON1,7
+                                           #define			ADCS2		ADCON1,6
+                                           #define			ADCS1		ADCON1,5
+                                           #define			ADCS0		ADCON1,4
+                                           #define			ADREF		ADCON1,0
+                                           ;ADCLK
+                                           #define			ADCLK2		ADCLK,2
+                                           #define			ADCLK1		ADCLK,1
+                                           #define			ADCLK0		ADCLK,0
+                                           ;***************ADC END***********************
+                                           
+                                           ;**********************************************
+                                           ;*****************LCD**************************
+                                           ;**********************************************
+                                           ;LCDCON
+                                           #define			LCDEN		LCDCON,7
+                                           #define			RLCD1		LCDCON,6
+                                           #define			RLCD0		LCDCON,5
+                                           #define			FRAM		LCDCON,4
+                                           ;***************LCD END***********************
+                                           
+                                           
+                                           ;**********************************************
+                                           ;*****************UART**************************
+                                           ;**********************************************
+                                           ;AUXR
+                                           #define			UARTEN		AUXR,6
+                                           #define			UARTM0		AUXR,5
+                                           #define			BRTR		AUXR,4
+                                           #define			BRTX12		AUXR,3
+                                           #define			S1BRS		AUXR,2
+                                           #define			SMOD		AUXR,1
+                                           #define			SMOD0		AUXR,0
+                                           ;SCON
+                                           #define			SM0			SCON,7
+                                           #define			SM1			SCON,6
+                                           #define			SM2			SCON,5
+                                           #define			REN			SCON,4
+                                           #define			TR8			SCON,3
+                                           #define			RB8			SCON,2
+                                           #define			RXWK		SCON,1
+                                           ;***************UART END***********************
+                                           
+                                           ;==========================================================================
+                                           errorlevel -306
+                                           ; File End
+                                           ;
+                                           ;==========================================================================
+                                           
+                                           include	RAM_DEF.inc
+                                           cblock				100H
+                                           ; 用于现场保护的寄存器备份
+                                           W_BAK
+                                           STATUS_BAK
+                                           PCLATH_BAK
+                                           
+                                           ; 变址寻址专用变量
+                                           R_X
+                                           
+                                           ; T0定时器计数
+                                           T0_Counter
+                                           ; T1定时器计数
+                                           T1_Counter
+                                           
+                                           Calendar_Flag
+                                           
+                                           Clock_Flag
+                                           
+                                           Time_Flag
+                                           ;bit0=1 1Hz标志		|走时
+                                           ;bit1=1 2Hz标志		|走时
+                                           ;bit2=1 4Hz标志		|快加
+                                           ;bit3=1 16Hz标志	|响铃
+                                           ;bit4=1 32Hz标志	|扫键
+                                           
+                                           TimeFlag_SW
+                                           ;bit0=1 4Hz标志开启
+                                           ;bit1=1 16Hz标志开启
+                                           ;bit2=1 32Hz标志开启
+                                           
+                                           Primary_Status
+                                           ;bit0=1 时钟显示
+                                           ;bit1=1 闹钟显示
+                                           ;bit2=1 设置时钟
+                                           ;bit3=1 设置闹钟
+                                           Secondary_Status
+                                           ;子状态序号
+                                           
+                                           Key_Flag
+                                           ;bit0=1 存在压键事件
+                                           ;bit1=1 存在松键事件
+                                           ;bit2=1 首次触发标志
+                                           ;bit3=1 快加标志
+                                           ;bit4=1 按键音标志
+                                           ;bit5=1 SNZ键长按
+                                           ;bit6=1 长按1S标志
+                                           
+                                           SpecialKey_Flag
+                                           ;bit0 = 1 Mode键待处理				|特殊按键
+                                           ;bit1 = 1 Alarm键待处理				|特殊按键
+                                           ;bit2 = 1 SNZ/Backlight键待处理		|特殊按键
+                                           ;bit3 = 1 Up键待处理				|特殊按键
+                                           ;bit4 = 1 Down键待处理				|特殊按键
+                                           
+                                           Power_Flag
+                                           
+                                           PORTA_BackUp
+                                           
+                                           QuickAdd_Counter
+                                           
+                                           Beep_Serial
+                                           
+                                           ; COM计数
+                                           COM_Counter
+                                           ; 发送位数计数
+                                           L_Send_Counter
+                                           
+                                           ; 显存
+                                           DRAM:
+                                           DRAM1
+                                           DRAM2
+                                           DRAM3
+                                           
+                                           DRAM_Buffer:
+                                           DRAM_Buffer0
+                                           DRAM_Buffer1
+                                           
+                                           ; 临时变量
+                                           P_Temp:
+                                           P_Temp1
+                                           P_Temp2
+                                           P_Temp3
+                                           P_Temp4
+                                           P_Temp5
+                                           P_Temp6
+                                           P_Temp7
+                                           
+                                           endc
+                                           
+                                           cblock	300H
+                                           endc
+                                           
+                                           	org	0000H
+000000   8005     goto	0x5                 	goto	START
+                                           	org	0004H
+000004   8010     goto	0x10                	goto	IRQ
+                                           
+                                           START:
+000005   0000     nop                      	nop
+000006   0000     nop                      	nop
+                                           
+000007   a026     call	0x26                	call	System_Init
+                                           
+                                           	; movlw	led_d1
+                                           	; movwf	R_X
+                                           	; movlw	2
+                                           	; call	F_7Digit_Dis
+                                           
+000008   a178     call	0x178               	call	F_FillScreen
+                                           
+000009   0403     movlw	0x3                	movlw	3
+00000a   6703     movwf	0x103              	movwf	R_X
+00000b   a1bd     call	0x1bd               	call	F_6Digit_Dis
+                                           
+00000c   041b     movlw	0x1b               	movlw	led_col
+00000d   6703     movwf	0x103              	movwf	R_X
+00000e   a1d8     call	0x1d8               	call	F_DisSymbol
+                                           MAIN:
+                                           	
+00000f   800f     goto	0xf                 	goto	MAIN
+                                           
+                                           
+                                           
+                                           IRQ:
+000010   6700     movwf	0x100              	movwf	W_BAK
+000011   5c03     swapf	0x3, w             	swapf	STATUS,W
+000012   6701     movwf	0x101              	movwf	STATUS_BAK
+000013   4408     movf	0x8, w              	movf	PCLATH,W
+000014   6702     movwf	0x102              	movwf	PCLATH_BAK
+                                           
+000015   d409     btfsc	0x9, 0x2           	btfsc	T0IF
+000016   809c     goto	0x9c                	goto	T0_IRQ_Handler
+                                           
+000017   d054     btfsc	0x54, 0            	btfsc	T1IF
+000018   80ba     goto	0xba                	goto	T1_IRQ_Handler
+                                           
+000019   d056     btfsc	0x56, 0            	btfsc	RAIF
+00001a   80c7     goto	0xc7                	goto	PA_IRQ_Handler
+                                           
+00001b   d009     btfsc	0x9, 0             	btfsc	RBIF
+00001c   80d9     goto	0xd9                	goto	PB_IRQ_Handler
+                                           
+00001d   d856     btfsc	0x56, 0x4          	btfsc	RFIF
+00001e   80db     goto	0xdb                	goto	PF_IRQ_Handler
+                                           
+                                           IRQ_EXIT:
+00001f   4502     movf	0x102, w            	movf	PCLATH_BAK,W
+000020   6608     movwf	0x8                	movwf	PCLATH
+000021   5d01     swapf	0x101, w           	swapf	STATUS_BAK,W
+000022   6603     movwf	0x3                	movwf	STATUS
+000023   5f00     swapf	0x100, f           	swapf	W_BAK,F
+000024   5d00     swapf	0x100, w           	swapf	W_BAK,W
+                                           
+000025   0001     retfie                   	retfie
+                                           
+                                           include	Init.inc
+                                           System_Init:
+000026   fa03     bcf	0x3, 0x5             	bcf		RP0
+000027   6209     clrf	0x9                 	clrf	INTCON			; 清所有外设的中断使能
+000028   6279     clrf	0x79                	clrf	PCON
+000029   624c     clrf	0x4c                	clrf	PORCTR			; 重置引脚配置寄存器
+00002a   628c     clrf	0x8c                	clrf	ANSELL			; 设置IO口为数字IO模式
+00002b   628d     clrf	0x8d                	clrf	ANSELH
+00002c   6278     clrf	0x78                	clrf	OPTION			; 重置功能选择寄存器
+00002d   6210     clrf	0x10                	clrf	TRISA			; 重置PORTA为输出
+00002e   6212     clrf	0x12                	clrf	TRISC			; 重置PORTC为输出
+00002f   6215     clrf	0x15                	clrf	TRISF			; 重置PORTF为输出
+                                           
+000030   f07a     bcf	0x7a, 0              	bcf		SCS
+000031   04b1     movlw	0xb1               	movlw	0xb1
+000032   6678     movwf	0x78               	movwf	OPTION
+                                           
+000033   a03a     call	0x3a                	call	RamInitial
+                                           
+000034   a04c     call	0x4c                	call	PortInitial
+                                           
+000035   a06a     call	0x6a                	call	PWM_Initial
+                                           
+000036   a088     call	0x88                	call	TIM_Initial
+                                           
+000037   ee09     bsf	0x9, 0x7             	bsf		GIE				; 开启总中断
+000038   ec09     bsf	0x9, 0x6             	bsf		PEIE			; 使能外设中断
+                                           
+000039   0002     return                   	return
+                                           
+                                           
+                                           ; 上电初始化RAM
+                                           RamInitial:
+00003a   fa03     bcf	0x3, 0x5             	bcf		RP0
+00003b   0400     movlw	0                  	movlw	00H				; 清零0X100~0X1FF
+00003c   6604     movwf	0x4                	movwf	FSR0L
+00003d   0401     movlw	0x1                	movlw	0X01
+00003e   6605     movwf	0x5                	movwf	FSR0H			; FSR 指向100h 地址 
+                                           NEXTBYTE:
+00003f   6200     clrf	0                   	clrf	INDF0			; 对FSR 指向的数据存储器清零
+000040   5a04     incfsz	0x4, f            	incfsz	FSR0L,F			; FSR0L + 1,指向下一个地址。注意这里的边界值为欲操作RAM 最大地址+1
+                                           							; 利用间接寻址，注意意外指向特殊寄存器的情况
+000041   803f     goto	0x3f                	goto	NEXTBYTE		; FSR0L 的值加一不溢出,循环清零下一个地址
+                                           
+000042   0400     movlw	0                  	movlw	00H				; 清零0X300~0X3FF
+000043   6606     movwf	0x6                	movwf	FSR1L			; FSR 指向300h 地址
+000044   0403     movlw	0x3                	movlw	0X03
+000045   6607     movwf	0x7                	movwf	FSR1H
+                                           NEXTBYTE_1:
+000046   6201     clrf	0x1                 	clrf	INDF1			; 对FSR 指向的数据存储器清零 
+000047   5a06     incfsz	0x6, f            	incfsz	FSR1L,F			; FSR1L,指向下一个地址 
+                                           							; 注意这里的边界值为欲操作RAM 最大地址+1 
+                                           							; 利用间接寻址，注意意外指向特殊寄存器的情况 
+000048   8046     goto	0x46                	goto	NEXTBYTE_1		; FSR1L 的值加不溢出,循环清零下一个地址
+                                           
+                                           ; 用户变量初始化
+000049   0420     movlw	0x20               	movlw	32
+00004a   6704     movwf	0x104              	movwf	T0_Counter		; 从32开始计数到0
+                                           
+00004b   0002     return                   	return
+                                           
+                                           
+                                           ; GPIO初始化
+                                           PortInitial:
+00004c   fa03     bcf	0x3, 0x5             	bcf		RP0
+00004d   047c     movlw	0x7c               	movlw	0x7c
+00004e   6610     movwf	0x10               	movwf	TRISA			; 配置PA2~6为输入
+00004f   0483     movlw	0x83               	movlw	0x83
+000050   6634     movwf	0x34               	movwf	WPDA			; 配置为下拉
+000051   047c     movlw	0x7c               	movlw	0x7c
+000052   6640     movwf	0x40               	movwf	IOCA			; 启用PA2~5电平变化中断
+                                           
+000053   ea11     bsf	0x11, 0x5            	bsf		TRISB,5			; PB5配置为输入
+000054   ea41     bsf	0x41, 0x5            	bsf		IOCB,5			; 启用PB5电平变化中断
+                                           
+000055   0448     movlw	0x48               	movlw	0x48
+000056   6615     movwf	0x15               	movwf	TRISF			; 配置PF3、6为输入
+000057   04b7     movlw	0xb7               	movlw	0xb7
+000058   6639     movwf	0x39               	movwf	WPDF			; 配置为下拉
+000059   0448     movlw	0x48               	movlw	0x48
+00005a   6645     movwf	0x45               	movwf	IOCF			; 启用PF3、6电平变化中断
+                                           
+00005b   ee78     bsf	0x78, 0x7            	bsf		RBPUB
+                                           
+00005c   041c     movlw	0x1c               	movlw	PORTA
+00005d   0e7c     andlw	0x7c               	andlw	0x7c
+00005e   670f     movwf	0x10f              	movwf	PORTA_BackUp	; 按键IO口初始状态保存
+                                           
+00005f   0002     return                   	return
+                                           
+                                           ; ADC初始化
+                                           ADC_Initial:
+000060   fa03     bcf	0x3, 0x5             	bcf		RP0
+                                           
+000061   e011     bsf	0x11, 0              	bsf		TRISB,0			; PB0配置为输入
+000062   e28d     bsf	0x8d, 0x1            	bsf		ANSELH,1		; PB0设为模拟IO
+                                           
+000063   0430     movlw	0x30               	movlw	0x30
+000064   6695     movwf	0x95               	movwf	ADCON1			; 数据格式左对齐12位ADC，时钟源为Fsys8M/4T
+000065   0401     movlw	0x1                	movlw	0x01
+000066   6696     movwf	0x96               	movwf	ADCLK
+                                           
+000067   04e4     movlw	0xe4               	movlw	0xe4
+000068   6694     movwf	0x94               	movwf	ADCON0			; 启用模拟通道9，参考电压内部VDD
+                                           
+000069   0002     return                   	return
+                                           
+                                           ; PWM初始化
+                                           PWM_Initial:
+00006a   fa03     bcf	0x3, 0x5             	bcf		RP0
+00006b   e84c     bsf	0x4c, 0x4            	bsf		PORCTR,4		; 配置CCP2为PA7，输出PWM
+00006c   04fc     movlw	0xfc               	movlw	0xfc
+00006d   7210     andwf	0x10, f            	andwf	TRISA
+                                           
+00006e   ea03     bsf	0x3, 0x5             	bsf		RP0
+00006f   625e     clrf	0x5e                	clrf	PWMEN			; PWM模块使能寄存器
+000070   040f     movlw	0xf                	movlw	0x0f
+000071   665d     movwf	0x5d               	movwf	PWM0C			; PWM模块控制寄存器
+                                           
+000072   04e8     movlw	0xe8               	movlw	0xe8
+000073   665b     movwf	0x5b               	movwf	PWM0PL
+000074   0403     movlw	0x3                	movlw	0x03
+000075   665c     movwf	0x5c               	movwf	PWM0PH			; 周期寄存器
+                                           
+000076   04f4     movlw	0xf4               	movlw	0xf4
+000077   6659     movwf	0x59               	movwf	PWM0DL			; 先设置低位
+000078   0401     movlw	0x1                	movlw	0x01
+000079   665a     movwf	0x5a               	movwf	PWM0DH			; 占空比寄存器
+                                           
+00007a   fa03     bcf	0x3, 0x5             	bcf		RP0
+00007b   ee10     bsf	0x10, 0x7            	bsf		TRISA,7			; PA7先关闭输出
+                                           
+00007c   0416     movlw	0x16               	movlw	0x16
+00007d   665e     movwf	0x5e               	movwf	T2CON			; Fcpu预分频为4作为时钟源
+                                           
+00007e   04f9     movlw	0xf9               	movlw	0xf9
+00007f   665d     movwf	0x5d               	movwf	PR2				; 250个脉冲为1个周期（2KHz）
+                                           
+000080   040f     movlw	0xf                	movlw	0x0f
+000081   6682     movwf	0x82               	movwf	CCP2CON			; 配置CCP模块为PWM模式
+                                           
+000082   047d     movlw	0x7d               	movlw	0x7d
+000083   6680     movwf	0x80               	movwf	CCPR2L			; 占空比寄存器的高8位，低2位在CCP2CON的[6:5]位
+                                           
+000084   e45e     bsf	0x5e, 0x2            	bsf		T2ON			; 开启TIM2
+000085   e01c     bsf	0x1c, 0              	bsf		PORTA,0
+000086   e21c     bsf	0x1c, 0x1            	bsf		PORTA,1
+                                           	;bcf		TRISA,7			; PA7输出启用
+                                           
+000087   0002     return                   	return
+                                           
+                                           ; 定时器初始化
+                                           TIM_Initial:
+000088   fa03     bcf	0x3, 0x5             	bcf		RP0
+                                           	; Tim0
+000089   0431     movlw	0x31               	movlw	0x31
+00008a   7678     iorwf	0x78, f            	iorwf	OPTION,F
+00008b   04f1     movlw	0xf1               	movlw	0xf1
+00008c   7278     andwf	0x78, f            	andwf	OPTION,F		; 设置8分频，PSA=0，T0CS=1,T0SE=1
+00008d   ee7a     bsf	0x7a, 0x7            	bsf		T0OSCEN			; T0OSCEN = 1
+                                           
+00008e   625b     clrf	0x5b                	clrf	T0				; T0从0计到256,32Hz溢出一次
+00008f   ea09     bsf	0x9, 0x5             	bsf		T0IE
+000090   f409     bcf	0x9, 0x2             	bcf		T0IF			; 开启TIM0中断并清中断标志位
+                                           
+                                           	; Tim1
+000091   0489     movlw	0x89               	movlw	0x89
+000092   665a     movwf	0x5a               	movwf	T1CON			; Tim1配置为同步计数器模式，预分频系数设为不分频
+                                           
+000093   6258     clrf	0x58                	clrf	T1L
+000094   6259     clrf	0x59                	clrf	T1H				; 清空Tim1计数
+000095   04ff     movlw	0xff               	movlw	0xff
+000096   6659     movwf	0x59               	movwf	T1H
+000097   047f     movlw	0x7f               	movlw	0xff-0x80
+000098   6658     movwf	0x58               	movwf	T1L				; 只计128个数
+                                           
+000099   e070     bsf	0x70, 0              	bsf		T1IE
+00009a   f054     bcf	0x54, 0              	bcf		T1IF			; 开启TIM1中断并清中断标志位
+                                           
+00009b   0002     return                   	return
+                                           include	IRQHandler.inc
+                                           T0_IRQ_Handler:
+00009c   f409     bcf	0x9, 0x2             	bcf		T0IF
+00009d   6b04     decf	0x104, f            	decf	T0_Counter
+                                           
+                                           L_32Hz_Juge:
+00009e   c509     btfss	0x109, 0x2         	btfss	TimeFlag_SW,2			; 32Hz标志开关
+00009f   80a1     goto	0xa1                	goto	L_16Hz_Juge
+0000a0   e908     bsf	0x108, 0x4           	bsf		Time_Flag,4				; 32Hz标志位
+                                           
+                                           L_16Hz_Juge:
+0000a1   c309     btfss	0x109, 0x1         	btfss	TimeFlag_SW,1
+0000a2   80a7     goto	0xa7                	goto	L_4Hz_Juge
+0000a3   4504     movf	0x104, w            	movf	T0_Counter,W
+0000a4   0e01     andlw	0x1                	andlw	0x01					; 对2求余
+0000a5   d403     btfsc	0x3, 0x2           	btfsc	Z
+0000a6   e708     bsf	0x108, 0x3           	bsf		Time_Flag,3				; 16Hz标志位
+                                           
+                                           L_4Hz_Juge:
+0000a7   c109     btfss	0x109, 0           	btfss	TimeFlag_SW,0
+0000a8   80ad     goto	0xad                	goto	L_2Hz_Juge
+0000a9   4504     movf	0x104, w            	movf	T0_Counter,W
+0000aa   0e07     andlw	0x7                	andlw	0x07					; 对8求余
+0000ab   d403     btfsc	0x3, 0x2           	btfsc	Z
+0000ac   e508     bsf	0x108, 0x2           	bsf		Time_Flag,2				; 4Hz标志位
+                                           
+                                           L_2Hz_Juge:
+0000ad   4504     movf	0x104, w            	movf	T0_Counter,W
+0000ae   0e0f     andlw	0xf                	andlw	0x0f					; 对16求余
+0000af   d403     btfsc	0x3, 0x2           	btfsc	Z
+0000b0   e308     bsf	0x108, 0x1           	bsf		Time_Flag,1				; 2Hz标志位
+                                           
+0000b1   4704     movf	0x104, f            	movf	T0_Counter,F			; 判0
+0000b2   d403     btfsc	0x3, 0x2           	btfsc	Z
+0000b3   a0b5     call	0xb5                	call	T0_Counter_Reload
+                                           
+0000b4   801f     goto	0x1f                	goto	IRQ_EXIT
+                                           
+                                           T0_Counter_Reload:
+0000b5   0420     movlw	0x20               	movlw	32
+0000b6   6704     movwf	0x104              	movwf	T0_Counter				; 重装载T0计数
+0000b7   e108     bsf	0x108, 0             	bsf		Time_Flag,0				; 1Hz标志
+0000b8   ed0c     bsf	0x10c, 0x6           	bsf		Key_Flag,6				; 长按1S标志
+0000b9   801f     goto	0x1f                	goto	IRQ_EXIT
+                                           
+                                           
+                                           
+                                           
+                                           T1_IRQ_Handler:
+0000ba   f054     bcf	0x54, 0              	bcf		T1IF
+0000bb   04ff     movlw	0xff               	movlw	0xff
+0000bc   6659     movwf	0x59               	movwf	T1H
+0000bd   047f     movlw	0x7f               	movlw	0xff-0x80
+0000be   6658     movwf	0x58               	movwf	T1L						; 重装载T1计数器的计数值
+                                           
+0000bf   0401     movlw	0x1                	movlw	0x01
+0000c0   7e1e     xorwf	0x1e, f            	xorwf	PORTC,F
+                                           
+0000c1   d112     btfsc	0x112, 0           	btfsc	COM_Counter,0
+0000c2   80c4     goto	0xc4                	goto	COM_Display
+0000c3   6312     clrf	0x112               	clrf	COM_Counter
+                                           COM_Display:
+0000c4   a1fb     call	0x1fb               	call	L_Send_Buffer_COM
+0000c5   4f12     incf	0x112, f            	incf	COM_Counter,F
+0000c6   801f     goto	0x1f                	goto	IRQ_EXIT
+                                           
+                                           
+                                           
+                                           
+                                           PA_IRQ_Handler:
+0000c7   f056     bcf	0x56, 0              	bcf		RAIF
+                                           
+0000c8   047c     movlw	0x7c               	movlw	0x7c
+0000c9   701c     andwf	0x1c, w            	andwf	PORTA,W					; PA2~6有1个为1则有键压下
+0000ca   c403     btfss	0x3, 0x2           	btfss	Z
+0000cb   a0cf     call	0xcf                	call	PortA_PressKey
+                                           
+0000cc   c10c     btfss	0x10c, 0           	btfss	Key_Flag,0				; 只有在压键事件存在时，才会判断有无松键事件
+0000cd   a0d2     call	0xd2                	call	PortA_ReleaseKey
+                                           
+0000ce   801f     goto	0x1f                	goto	IRQ_EXIT
+                                           
+                                           PortA_PressKey:
+0000cf   e10c     bsf	0x10c, 0             	bsf		Key_Flag,0				; 压键事件标志位
+0000d0   e50c     bsf	0x10c, 0x2           	bsf		Key_Flag,2				; 首次触发标志位
+0000d1   0002     return                   	return
+                                           
+                                           PortA_ReleaseKey:
+0000d2   047c     movlw	0x7c               	movlw	0x7c
+0000d3   701c     andwf	0x1c, w            	andwf	PORTA,W
+0000d4   c403     btfss	0x3, 0x2           	btfss	Z
+0000d5   80d8     goto	0xd8                	goto	PortA_ReleaseKey_Exit	; 若PA2~6都为0，则为抬起
+0000d6   e30c     bsf	0x10c, 0x1           	bsf		Key_Flag,1				; 松键事件标志位
+0000d7   f10c     bcf	0x10c, 0             	bcf		Key_Flag,0
+                                           PortA_ReleaseKey_Exit:
+0000d8   0002     return                   	return
+                                           
+                                           
+                                           
+                                           
+                                           PB_IRQ_Handler:
+0000d9   f009     bcf	0x9, 0               	bcf		RBIF
+                                           	
+0000da   801f     goto	0x1f                	goto	IRQ_EXIT
+                                           
+                                           
+                                           
+                                           
+                                           PF_IRQ_Handler:
+0000db   f856     bcf	0x56, 0x4            	bcf		RFIF
+                                           	
+0000dc   801f     goto	0x1f                	goto	IRQ_EXIT
+                                           include KeyHandler.inc
+                                           ; 按键处理
+                                           F_KeyHandler:
+0000dd   d70c     btfsc	0x10c, 0x3         	btfsc	Key_Flag,3
+0000de   80ea     goto	0xea                	goto	L_Key4Hz					; 存在快加则4Hz进一次按键功能
+0000df   c50c     btfss	0x10c, 0x2         	btfss	Key_Flag,2
+0000e0   80ed     goto	0xed                	goto	L_KeyScan					; 非首次触发直接跳到长按等待
+0000e1   f50c     bcf	0x10c, 0x2           	bcf		Key_Flag,2					; 清首次触发
+                                           
+0000e2   a12f     call	0x12f               	call	F_KeyDelay					; 延时消抖
+                                           
+0000e3   041c     movlw	0x1c               	movlw	PORTA
+0000e4   0e7c     andlw	0x7c               	andlw	0x7c
+0000e5   d403     btfsc	0x3, 0x2           	btfsc	Z
+0000e6   8114     goto	0x114               	goto	L_KeyExit					; 消抖后无按键则退出
+                                           
+0000e7   e509     bsf	0x109, 0x2           	bsf		TimeFlag_SW,2
+0000e8   670f     movwf	0x10f              	movwf	PORTA_BackUp				; 更新按键IO历史状态
+0000e9   8105     goto	0x105               	goto	L_KeyHandle
+                                           
+                                           L_Key4Hz:
+0000ea   c508     btfss	0x108, 0x2         	btfss	Time_Flag,2
+0000eb   8114     goto	0x114               	goto	L_KeyExit
+0000ec   f508     bcf	0x108, 0x2           	bcf		Time_Flag,2					; 清4Hz标志
+                                           
+                                           L_KeyScan:
+0000ed   d30c     btfsc	0x10c, 0x1         	btfsc	Key_Flag,1
+0000ee   8115     goto	0x115               	goto	F_SpecialKey_Handle			; 检测到松键，进特殊按键处理
+                                           
+0000ef   d70c     btfsc	0x10c, 0x3         	btfsc	Key_Flag,3
+0000f0   8103     goto	0x103               	goto	L_QuikAdd
+                                           
+0000f1   d81c     btfsc	0x1c, 0x4          	btfsc	PORTA,4
+0000f2   eb0c     bsf	0x10c, 0x5           	bsf		Key_Flag,5
+                                           
+0000f3   c908     btfss	0x108, 0x4         	btfss	Time_Flag,4					; 长按1S计时
+0000f4   8114     goto	0x114               	goto	L_KeyExit
+                                           
+0000f5   f908     bcf	0x108, 0x4           	bcf		Time_Flag,4					; 清除32Hz标志
+0000f6   4f10     incf	0x110, f            	incf	QuickAdd_Counter,F
+0000f7   db0c     btfsc	0x10c, 0x5         	btfsc	Key_Flag,5
+0000f8   80fb     goto	0xfb                	goto	L_SNZ_LongPress
+0000f9   0440     movlw	0x40               	movlw	64							; 非SNZ键长按计时2S
+0000fa   80fc     goto	0xfc                	goto	LongPress
+                                           L_SNZ_LongPress:
+0000fb   0460     movlw	0x60               	movlw	96							; SNZ键长按计时3S
+                                           LongPress:
+0000fc   6d10     subwf	0x110, w           	subwf	QuickAdd_Counter,W
+0000fd   c003     btfss	0x3, 0             	btfss	C
+0000fe   8114     goto	0x114               	goto	L_KeyExit					; 未到达长按计数
+                                           
+0000ff   e70c     bsf	0x10c, 0x3           	bsf		Key_Flag,3					; 设置快加标志
+000100   f509     bcf	0x109, 0x2           	bcf		TimeFlag_SW,2				; 关闭32Hz计时，开启4Hz计时
+000101   e109     bsf	0x109, 0             	bsf		TimeFlag_SW,0
+000102   6310     clrf	0x110               	clrf	QuickAdd_Counter			; 清长按计数
+                                           
+                                           L_QuikAdd:
+000103   c70c     btfss	0x10c, 0x3         	btfss	Key_Flag,3
+000104   a135     call	0x135               	call	L_Key_Beep
+                                           
+                                           
+                                           L_KeyHandle:
+000105   d41c     btfsc	0x1c, 0x2          	btfsc	PORTA,2
+000106   812a     goto	0x12a               	goto	L_KeyMTrigger
+000107   d61c     btfsc	0x1c, 0x3          	btfsc	PORTA,3
+000108   812b     goto	0x12b               	goto	L_KeyATrigger
+000109   d81c     btfsc	0x1c, 0x4          	btfsc	PORTA,4
+00010a   812c     goto	0x12c               	goto	L_KeyBTrigger
+00010b   da1c     btfsc	0x1c, 0x5          	btfsc	PORTA,5
+00010c   812d     goto	0x12d               	goto	L_KeyUTrigger
+00010d   dc1c     btfsc	0x1c, 0x6          	btfsc	PORTA,6
+00010e   812e     goto	0x12e               	goto	L_KeyDTrigger
+                                           
+                                           L_KeyHandle_Over:
+00010f   6309     clrf	0x109               	clrf	TimeFlag_SW
+000110   630c     clrf	0x10c               	clrf	Key_Flag
+000111   630d     clrf	0x10d               	clrf	SpecialKey_Flag
+000112   f508     bcf	0x108, 0x2           	bcf		Time_Flag,2					; 清4Hz标志
+000113   f908     bcf	0x108, 0x4           	bcf		Time_Flag,4					; 清32Hz标志
+                                           
+                                           L_KeyExit:
+000114   0002     return                   	return
+                                           
+                                           
+                                           ; 特殊功能按键处理
+                                           F_SpecialKey_Handle:
+000115   470d     movf	0x10d, f            	movf	SpecialKey_Flag,F
+000116   d403     btfsc	0x3, 0x2           	btfsc	Z
+000117   0002     return                   	return
+                                           
+000118   c70c     btfss	0x10c, 0x3         	btfss	Key_Flag,3
+000119   a135     call	0x135               	call	L_Key_Beep
+                                           
+00011a   d10d     btfsc	0x10d, 0           	btfsc	SpecialKey_Flag,0
+00011b   8125     goto	0x125               	goto	L_KeyM_ShortHandle
+00011c   d30d     btfsc	0x10d, 0x1         	btfsc	SpecialKey_Flag,1
+00011d   8126     goto	0x126               	goto	L_KeyA_ShortHandle
+00011e   d50d     btfsc	0x10d, 0x2         	btfsc	SpecialKey_Flag,2
+00011f   8127     goto	0x127               	goto	L_KeyB_ShortHandle
+000120   d70d     btfsc	0x10d, 0x3         	btfsc	SpecialKey_Flag,3
+000121   8128     goto	0x128               	goto	L_KeyU_ShortHandle
+000122   d90d     btfsc	0x10d, 0x4         	btfsc	SpecialKey_Flag,4
+000123   8129     goto	0x129               	goto	L_KeyD_ShortHandle
+000124   0002     return                   	return
+                                           
+                                           
+                                           L_KeyM_ShortHandle:
+000125   0002     return                   	return
+                                           
+                                           L_KeyA_ShortHandle:
+000126   0002     return                   	return
+                                           
+                                           L_KeyB_ShortHandle:
+000127   0002     return                   	return
+                                           
+                                           L_KeyU_ShortHandle:
+000128   0002     return                   	return
+                                           
+                                           L_KeyD_ShortHandle:
+000129   0002     return                   	return
+                                           
+                                           
+                                           
+                                           
+                                           ; 按键触发函数，处理每个按键触发后的响应条件
+                                           L_KeyMTrigger:
+00012a   0002     return                   	return
+                                           
+                                           
+                                           L_KeyATrigger:
+00012b   0002     return                   	return
+                                           
+                                           
+                                           L_KeyBTrigger:
+00012c   0002     return                   	return
+                                           
+                                           
+                                           L_KeyUTrigger:
+00012d   0002     return                   	return
+                                           
+                                           
+                                           L_KeyDTrigger:
+00012e   0002     return                   	return
+                                           
+                                           
+                                           
+                                           
+                                           F_KeyDelay:
+00012f   fa03     bcf	0x3, 0x5             	bcf		RP0
+                                           
+000130   0450     movlw	0x50               	movlw	80
+000131   671b     movwf	0x11b              	movwf	P_Temp
+                                           
+000132   4b1b     decfsz	0x11b, f          	decfsz	P_Temp,F
+000133   8132     goto	0x132               	goto	$-1
+000134   0002     return                   	return
+                                           
+                                           L_Key_Beep:
+000135   0402     movlw	0x2                	movlw	B'10'
+000136   6711     movwf	0x111              	movwf	Beep_Serial
+000137   0002     return                   	return
+                                           include LedTable.inc
+                                           Led_byte:
+                                           led_d0	equ	$-Led_byte
+000138   0100     dw	0x100  ;unknown opcode 	db	1				; 0a
+000139   0100     dw	0x100  ;unknown opcode 	db	1				; 0b
+00013a   0300     dw	0x300  ;unknown opcode 	db	3				; 0c
+00013b   0300     dw	0x300  ;unknown opcode 	db	3				; 0d
+00013c   0300     dw	0x300  ;unknown opcode 	db	3				; 0e
+00013d   0300     dw	0x300  ;unknown opcode 	db	3				; 0g
+                                           led_d1	equ	$-Led_byte
+00013e   0100     dw	0x100  ;unknown opcode 	db	1				; 1a
+00013f   0100     dw	0x100  ;unknown opcode 	db	1				; 1b
+000140   0300     dw	0x300  ;unknown opcode 	db	3				; 1c
+000141   0300     dw	0x300  ;unknown opcode 	db	3				; 1d
+000142   0300     dw	0x300  ;unknown opcode 	db	3				; 1e
+000143   0100     dw	0x100  ;unknown opcode 	db	1				; 1f
+000144   0100     dw	0x100  ;unknown opcode 	db	1				; 1g
+                                           led_d2	equ	$-Led_byte
+000145   0000     nop                      	db	0				; 2a
+000146   0000     nop                      	db	0				; 2b
+000147   0200     dw	0x200  ;unknown opcode 	db	2				; 2c
+000148   0200     dw	0x200  ;unknown opcode 	db	2				; 2d
+000149   0200     dw	0x200  ;unknown opcode 	db	2				; 2e
+00014a   0000     nop                      	db	0				; 2f
+00014b   0000     nop                      	db	0				; 2g
+                                           led_d3	equ	$-Led_byte
+00014c   0000     nop                      	db	0				; 3a
+00014d   0000     nop                      	db	0				; 3b
+00014e   0200     dw	0x200  ;unknown opcode 	db	2				; 3c
+00014f   0200     dw	0x200  ;unknown opcode 	db	2				; 3d
+000150   0200     dw	0x200  ;unknown opcode 	db	2				; 3e
+000151   0000     nop                      	db	0				; 3f
+000152   0000     nop                      	db	0				; 3g
+                                           led_col	equ	$-Led_byte
+000153   0200     dw	0x200  ;unknown opcode 	db	2				; COL
+                                           led_al	equ	$-Led_byte
+000154   0100     dw	0x100  ;unknown opcode 	db	1				; AL
+                                           led_pm	equ	$-Led_byte
+000155   0100     dw	0x100  ;unknown opcode 	db	1				; PM
+                                           led_c	equ	$-Led_byte
+000156   0300     dw	0x300  ;unknown opcode 	db	3				; C
+                                           led_f	equ	$-Led_byte
+000157   0200     dw	0x200  ;unknown opcode 	db	2				; F
+                                           
+                                           
+                                           Led_bit:
+000158   0100     dw	0x100  ;unknown opcode 	db	0x1				; 0a
+000159   0200     dw	0x200  ;unknown opcode 	db	0x2				; 0b
+00015a   0800     addlw	0                  	db	0x8				; 0c
+00015b   0400     movlw	0                  	db	0x4				; 0d
+00015c   0100     dw	0x100  ;unknown opcode 	db	0x1				; 0e
+00015d   0200     dw	0x200  ;unknown opcode 	db	0x2				; 0g
+                                           
+00015e   0800     addlw	0                  	db	0x8				; 1a
+00015f   2000     dw	0x2000  ;unknown opcode 	db	0x20			; 1b
+000160   4000     comf	0, w                	db	0x40			; 1c
+000161   2000     dw	0x2000  ;unknown opcode 	db	0x20			; 1d
+000162   1000     dw	0x1000  ;unknown opcode 	db	0x10			; 1e
+000163   0400     movlw	0                  	db	0x4				; 1f
+000164   1000     dw	0x1000  ;unknown opcode 	db	0x10			; 1g
+                                           
+000165   4000     comf	0, w                	db	0x40			; 2a
+000166   1000     dw	0x1000  ;unknown opcode 	db	0x10			; 2b
+000167   0800     addlw	0                  	db	0x8				; 2c
+000168   1000     dw	0x1000  ;unknown opcode 	db	0x10			; 2d
+000169   2000     dw	0x2000  ;unknown opcode 	db	0x20			; 2e
+00016a   8000     goto	0                   	db	0x80			; 2f
+00016b   2000     dw	0x2000  ;unknown opcode 	db	0x20			; 2g
+                                           
+00016c   0400     movlw	0                  	db	0x4				; 3a
+00016d   0100     dw	0x100  ;unknown opcode 	db	0x1				; 3b
+00016e   0100     dw	0x100  ;unknown opcode 	db	0x1				; 3c
+00016f   0200     dw	0x200  ;unknown opcode 	db	0x2				; 3d
+000170   0400     movlw	0                  	db	0x4				; 3e
+000171   0800     addlw	0                  	db	0x8				; 3f
+000172   0200     dw	0x200  ;unknown opcode 	db	0x2				; 3g
+                                           
+000173   8000     goto	0                   	db	0x80			; COL
+000174   4000     comf	0, w                	db	0x40			; AL
+000175   8000     goto	0                   	db	0x80			; PM
+000176   8000     goto	0                   	db	0x80			; C
+000177   4000     comf	0, w                	db	0x40			; F
+                                           include Dis.inc
+                                           F_FillScreen:
+000178   fa03     bcf	0x3, 0x5             	bcf		RP0
+000179   04ff     movlw	0xff               	movlw	0xff
+00017a   817d     goto	0x17d               	goto	L_FillLed
+                                           F_ClearScreen:
+00017b   fa03     bcf	0x3, 0x5             	bcf		RP0
+00017c   0400     movlw	0                  	movlw	0x00
+                                           L_FillLed:
+00017d   6714     movwf	0x114              	movwf	DRAM
+00017e   6715     movwf	0x115              	movwf	DRAM+1
+00017f   6716     movwf	0x116              	movwf	DRAM+2
+000180   6717     movwf	0x117              	movwf	DRAM+3
+000181   0002     return                   	return
+                                           
+                                           
+                                           
+                                           
+                                           ; 显示七段数字
+                                           ; W==要显示的数字，X==要显示位码的偏移
+                                           F_7Digit_Dis:
+000182   fa03     bcf	0x3, 0x5             	bcf		RP0
+                                           
+000183   671b     movwf	0x11b              	movwf	P_Temp
+000184   0402     movlw	0x2                	movlw	High(Table_7bit_Digit)	; 先查表得出a~g的码对应的二进制位
+000185   669d     movwf	0x9d               	movwf	PMADRH
+000186   0436     movlw	0x36               	movlw	Low(Table_7bit_Digit)
+000187   791b     addwf	0x11b, w           	addwf	P_Temp,W
+000188   669c     movwf	0x9c               	movwf	PMADRL
+000189   e09e     bsf	0x9e, 0              	bsf		RDON
+00018a   0000     nop                      	nop
+00018b   0000     nop                      	nop
+00018c   449b     movf	0x9b, w             	movf	PMDATH,W
+00018d   671c     movwf	0x11c              	movwf	P_Temp1					; 目标数字的a-g码放入Temp1中
+                                           
+00018e   4503     movf	0x103, w            	movf	R_X,W
+00018f   671b     movwf	0x11b              	movwf	P_Temp
+                                           
+000190   0407     movlw	0x7                	movlw	7
+000191   671d     movwf	0x11d              	movwf	P_Temp2					; 循环位移7次计数
+                                           
+                                           L_DRAM_OprationStart:
+000192   0401     movlw	0x1                	movlw	High(Led_bit)			; 查表得出显存中bit偏移
+000193   669d     movwf	0x9d               	movwf	PMADRH
+000194   0458     movlw	0x58               	movlw	Low(Led_bit)
+000195   791b     addwf	0x11b, w           	addwf	P_Temp,W				; 加上位码的偏移
+000196   669c     movwf	0x9c               	movwf	PMADRL
+000197   e09e     bsf	0x9e, 0              	bsf		RDON
+000198   0000     nop                      	nop
+000199   0000     nop                      	nop
+00019a   449b     movf	0x9b, w             	movf	PMDATH,W
+00019b   671e     movwf	0x11e              	movwf	P_Temp3					; 要操作的显存位存进Temp3
+                                           
+00019c   0401     movlw	0x1                	movlw	High(Led_byte)			; 查表得出显存中byte偏移
+00019d   669d     movwf	0x9d               	movwf	PMADRH
+00019e   0438     movlw	0x38               	movlw	Low(Led_byte)
+00019f   791b     addwf	0x11b, w           	addwf	P_Temp,W				; 加上位码的偏移
+0001a0   669c     movwf	0x9c               	movwf	PMADRL
+0001a1   e09e     bsf	0x9e, 0              	bsf		RDON
+0001a2   0000     nop                      	nop
+0001a3   0000     nop                      	nop
+0001a4   449b     movf	0x9b, w             	movf	PMDATH,W
+0001a5   6703     movwf	0x103              	movwf	R_X						; 显存偏移暂存进X
+                                           
+0001a6   571c     rrf	0x11c, f             	rrf		P_Temp1,F
+0001a7   c003     btfss	0x3, 0             	btfss	C
+0001a8   81b1     goto	0x1b1               	goto	L_DRAM_ClrBit
+0001a9   0414     movlw	0x14               	movlw	Low(DRAM)
+0001aa   7903     addwf	0x103, w           	addwf	R_X,W
+0001ab   6604     movwf	0x4                	movwf	FSR0L
+0001ac   0401     movlw	0x1                	movlw	High(DRAM)
+0001ad   6605     movwf	0x5                	movwf	FSR0H
+0001ae   451e     movf	0x11e, w            	movf	P_Temp3,W
+0001af   7600     iorwf	0, f               	iorwf	INDF0,F
+0001b0   81b9     goto	0x1b9               	goto	L_DRAM_OprationJuge
+                                           L_DRAM_ClrBit:
+0001b1   0414     movlw	0x14               	movlw	Low(DRAM)
+0001b2   7903     addwf	0x103, w           	addwf	R_X,W
+0001b3   6604     movwf	0x4                	movwf	FSR0L
+0001b4   0401     movlw	0x1                	movlw	High(DRAM)
+0001b5   6605     movwf	0x5                	movwf	FSR0H
+0001b6   451e     movf	0x11e, w            	movf	P_Temp3,W
+0001b7   7600     iorwf	0, f               	iorwf	INDF0,F
+0001b8   7e00     xorwf	0, f               	xorwf	INDF0,F
+                                           L_DRAM_OprationJuge:
+0001b9   4f1b     incf	0x11b, f            	incf	P_Temp,F
+0001ba   4b1d     decfsz	0x11d, f          	decfsz	P_Temp2
+0001bb   8192     goto	0x192               	goto	L_DRAM_OprationStart
+0001bc   0002     return                   	return
+                                           
+                                           
+                                           
+                                           
+                                           F_6Digit_Dis:
+0001bd   04fc     movlw	0xfc               	movlw	0xfc
+0001be   7315     andwf	0x115, f           	andwf	DRAM+1,F
+0001bf   04f0     movlw	0xf0               	movlw	0xf0
+0001c0   7317     andwf	0x117, f           	andwf	DRAM+3,F
+                                           
+0001c1   0401     movlw	0x1                	movlw	High(Table_6Digit_Jump)
+0001c2   6608     movwf	0x8                	movwf	PCLATH
+0001c3   4503     movf	0x103, w            	movf	R_X,W
+                                           Table_6Digit_Jump:
+0001c4   7a02     addwf	0x2, f             	addwf	PCL,F
+0001c5   81ca     goto	0x1ca               	goto	L_D0_Dis0
+0001c6   81cb     goto	0x1cb               	goto	L_D0_Dis1
+0001c7   81d0     goto	0x1d0               	goto	L_D0_Dis2
+0001c8   81d5     goto	0x1d5               	goto	L_D0_DisMinus
+0001c9   0002     return                   	return
+                                           L_D0_Dis0:
+                                           
+0001ca   0002     return                   	return
+                                           L_D0_Dis1:
+0001cb   0402     movlw	0x2                	movlw	0x02
+0001cc   7715     iorwf	0x115, f           	iorwf	DRAM+1,F
+0001cd   0408     movlw	0x8                	movlw	0x08
+0001ce   7717     iorwf	0x117, f           	iorwf	DRAM+3,F
+0001cf   0002     return                   	return
+                                           L_D0_Dis2:
+0001d0   0403     movlw	0x3                	movlw	0x03
+0001d1   7715     iorwf	0x115, f           	iorwf	DRAM+1,F
+0001d2   0407     movlw	0x7                	movlw	0x07
+0001d3   7717     iorwf	0x117, f           	iorwf	DRAM+3,F
+0001d4   0002     return                   	return
+                                           L_D0_DisMinus:
+0001d5   0402     movlw	0x2                	movlw	0x02
+0001d6   7717     iorwf	0x117, f           	iorwf	DRAM+3,F
+0001d7   0002     return                   	return
+                                           
+                                           
+                                           
+                                           
+                                           ; 画点、清点函数
+                                           ; X==要显示位码的偏移
+                                           F_DisSymbol:
+0001d8   fa03     bcf	0x3, 0x5             	bcf		RP0
+0001d9   a1df     call	0x1df               	call	F_DisSymbol_Com
+0001da   0002     return                   	return
+                                           
+                                           F_ClrSymbol:
+0001db   fa03     bcf	0x3, 0x5             	bcf		RP0
+0001dc   a1df     call	0x1df               	call	F_DisSymbol_Com
+0001dd   7e00     xorwf	0, f               	xorwf	INDF0,F
+0001de   0002     return                   	return
+                                           
+                                           F_DisSymbol_Com:
+0001df   0401     movlw	0x1                	movlw	High(Led_bit)			; 查表得出显存中bit偏移
+0001e0   669d     movwf	0x9d               	movwf	PMADRH
+0001e1   0458     movlw	0x58               	movlw	Low(Led_bit)
+0001e2   7903     addwf	0x103, w           	addwf	R_X,W					; 加上位码的偏移
+0001e3   669c     movwf	0x9c               	movwf	PMADRL
+0001e4   e09e     bsf	0x9e, 0              	bsf		RDON
+0001e5   0000     nop                      	nop
+0001e6   0000     nop                      	nop
+0001e7   449b     movf	0x9b, w             	movf	PMDATH,W
+0001e8   671b     movwf	0x11b              	movwf	P_Temp					; 要操作的显存位存进Temp0
+                                           
+0001e9   0401     movlw	0x1                	movlw	High(Led_byte)			; 查表得出显存中byte偏移
+0001ea   669d     movwf	0x9d               	movwf	PMADRH
+0001eb   0438     movlw	0x38               	movlw	Low(Led_byte)
+0001ec   7903     addwf	0x103, w           	addwf	R_X,W					; 加上位码的偏移
+0001ed   669c     movwf	0x9c               	movwf	PMADRL
+0001ee   e09e     bsf	0x9e, 0              	bsf		RDON
+0001ef   0000     nop                      	nop
+0001f0   0000     nop                      	nop
+0001f1   449b     movf	0x9b, w             	movf	PMDATH,W
+0001f2   6703     movwf	0x103              	movwf	R_X
+                                           
+0001f3   0414     movlw	0x14               	movlw	Low(DRAM)
+0001f4   7903     addwf	0x103, w           	addwf	R_X,W
+0001f5   6604     movwf	0x4                	movwf	FSR0L
+0001f6   0401     movlw	0x1                	movlw	High(DRAM)
+0001f7   6605     movwf	0x5                	movwf	FSR0H
+0001f8   451b     movf	0x11b, w            	movf	P_Temp,W
+0001f9   7600     iorwf	0, f               	iorwf	INDF0,F
+0001fa   0002     return                   	return
+                                           
+                                           
+                                           
+                                           
+                                           ; 发送显存里一个COM的内容
+                                           L_Send_Buffer_COM:
+0001fb   fa03     bcf	0x3, 0x5             	bcf		RP0
+                                           
+0001fc   f021     bcf	0x21, 0              	bcf		PORTF,0					; 拉低LE锁存5020数据
+0001fd   f421     bcf	0x21, 0x2            	bcf		PORTF,2					; SDI空闲时低电平
+0001fe   f221     bcf	0x21, 0x1            	bcf		PORTF,1					; CLK空闲时低电平
+0001ff   f003     bcf	0x3, 0               	bcf		C
+000200   5112     rlf	0x112, w             	rlf		COM_Counter,W			; 用COM序号乘以2算出显存的偏移
+000201   6703     movwf	0x103              	movwf	R_X
+000202   0414     movlw	0x14               	movlw	low(DRAM)
+000203   7903     addwf	0x103, w           	addwf	R_X,W
+000204   6604     movwf	0x4                	movwf	FSR0L
+000205   0401     movlw	0x1                	movlw	High(DRAM)
+000206   6605     movwf	0x5                	movwf	FSR0H
+000207   4400     movf	0, w                	movf	INDF0,W
+000208   6718     movwf	0x118              	movwf	DRAM_Buffer
+                                           
+000209   4f03     incf	0x103, f            	incf	R_X,F
+00020a   0414     movlw	0x14               	movlw	low(DRAM)
+00020b   7903     addwf	0x103, w           	addwf	R_X,W
+00020c   6604     movwf	0x4                	movwf	FSR0L
+00020d   0401     movlw	0x1                	movlw	High(DRAM)
+00020e   6605     movwf	0x5                	movwf	FSR0H
+00020f   4400     movf	0, w                	movf	INDF0,W
+000210   6719     movwf	0x119              	movwf	DRAM_Buffer+1			; 将显存的值取出，放入发送缓存中
+                                           
+000211   0410     movlw	0x10               	movlw	16
+000212   6713     movwf	0x113              	movwf	L_Send_Counter
+                                           L_Sending_Loop:						; 由于5020是MSB，发送必须高位先发
+000213   5318     rlf	0x118, f             	rlf		DRAM_Buffer,F
+000214   5319     rlf	0x119, f             	rlf		DRAM_Buffer+1,F
+000215   c003     btfss	0x3, 0             	btfss	C
+000216   8219     goto	0x219               	goto	L_Send_0
+000217   e421     bsf	0x21, 0x2            	bsf		PORTF,2					; SDI输出1
+000218   821a     goto	0x21a               	goto	L_CLK_Change
+                                           L_Send_0:
+000219   f421     bcf	0x21, 0x2            	bcf		PORTF,2					; SDI输出0
+                                           L_CLK_Change:
+00021a   f221     bcf	0x21, 0x1            	bcf		PORTF,1
+00021b   0000     nop                      	nop
+00021c   0000     nop                      	nop
+00021d   0000     nop                      	nop
+00021e   e221     bsf	0x21, 0x1            	bsf		PORTF,1					; CLK产生一次上升沿，让5020内数据开始位移
+00021f   4b13     decfsz	0x113, f          	decfsz	L_Send_Counter
+000220   8213     goto	0x213               	goto	L_Sending_Loop
+                                           
+000221   ea03     bsf	0x3, 0x5             	bsf		RP0						; PWM寄存器在BANK1
+000222   625e     clrf	0x5e                	clrf	PWMEN					; 先关闭所有COM，避免漏光
+000223   fa03     bcf	0x3, 0x5             	bcf		RP0						; 切回BACNK0
+000224   f421     bcf	0x21, 0x2            	bcf		PORTF,2					; SDI空闲时低电平
+000225   f221     bcf	0x21, 0x1            	bcf		PORTF,1					; CLK空闲时低电平
+000226   e01c     bsf	0x1c, 0              	bsf		PORTA,0
+000227   e21c     bsf	0x1c, 0x1            	bsf		PORTA,1
+000228   e021     bsf	0x21, 0              	bsf		PORTF,0					; 拉高LE，5020开始显示数据
+000229   0000     nop                      	nop
+00022a   0000     nop                      	nop
+00022b   f021     bcf	0x21, 0              	bcf		PORTF,0					; 重新锁存数据，防止意外改变
+                                           
+00022c   4712     movf	0x112, f            	movf	COM_Counter,F			; 根据COM号重新打开一个COM的输出
+00022d   ea03     bsf	0x3, 0x5             	bsf		RP0						; PWM寄存器在BANK1
+00022e   c403     btfss	0x3, 0x2           	btfss	Z
+00022f   8233     goto	0x233               	goto	L_COM0_Send
+000230   e65e     bsf	0x5e, 0x3            	bsf		PWMEN,3
+000231   fa03     bcf	0x3, 0x5             	bcf		RP0
+000232   0002     return                   	return
+                                           L_COM0_Send:
+000233   e05e     bsf	0x5e, 0              	bsf		PWMEN,0
+000234   fa03     bcf	0x3, 0x5             	bcf		RP0
+000235   0002     return                   	return
+                                           
+                                           
+                                           Table_7bit_Digit:
+000236   3f00     dw	0x3f00  ;unknown opcode 	db	0x3f	; 0
+000237   0600     movlw	0                  	db	0x06	; 1
+000238   5b00     incfsz	0x100, f          	db	0x5b	; 2
+000239   4f00     incf	0x100, f            	db	0x4f	; 3
+00023a   6600     movwf	0                  	db	0x66	; 4
+00023b   6d00     subwf	0x100, w           	db	0x6d	; 5
+00023c   7d00     xorwf	0x100, w           	db	0x7d	; 6
+00023d   0700     movlw	0                  	db	0x07	; 7
+00023e   7f00     xorwf	0x100, f           	db	0x7f	; 8
+00023f   6f00     subwf	0x100, f           	db	0x6f	; 9
+000240   0000     nop                      	db	0x00	; undisplay
+                                           
+                                           end

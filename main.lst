@@ -1,0 +1,2101 @@
+hcasm-0.13.7 beta               main.asm    2-17-2025  18:00:35          PAGE  1
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+ 
+               00001 List    P = HC18P134L, R = DEC
+               00002 
+               00003 include HC18P133L.inc
+               00001 ;==========================================================================
+               00002 ;
+               00003 ;       Register Definitions
+               00004 ;
+               00005 ;==========================================================================
+               00006 
+  00000000     00007 W                       EQU             H'0000'
+  00000001     00008 F                       EQU             H'0001'
+               00009 
+               00010 ;CORE REGISTER
+  00000000     00011 INDF0           EQU             0x00
+  00000001     00012 INDF1           EQU             0x01
+  00000002     00013 PCL                     EQU             0x02
+  00000003     00014 STATUS          EQU             0x03
+  00000004     00015 FSR0L           EQU             0x04
+  00000005     00016 FSR0H           EQU             0x05
+  00000006     00017 FSR1L           EQU             0x06
+  00000007     00018 FSR1H           EQU             0x07
+  00000008     00019 PCLATH          EQU             0x08
+  00000009     00020 INTCON          EQU             0x09
+               00021 
+               00022 ;BANK0
+               00023 ;IO
+  00000010     00024 TRISA           EQU             0x10
+  00000011     00025 TRISB           EQU             0x11
+  00000012     00026 TRISC           EQU             0x12
+  00000013     00027 TRISD           EQU             0x13    ;235涓撶敤
+  00000014     00028 TRISE           EQU             0x14    ;235涓撶敤
+  00000015     00029 TRISF           EQU             0x15
+               00030 
+  0000001C     00031 PORTA           EQU             0x1C
+  0000001D     00032 PORTB           EQU             0x1D
+  0000001E     00033 PORTC           EQU             0x1E
+  00000021     00034 PORTF           EQU             0x21
+               00035 
+  00000028     00036 WPUA            EQU             0x28
+  00000029     00037 WPUB            EQU             0x29
+  0000002A     00038 WPUC            EQU             0x2A
+  0000002D     00039 WPUF            EQU             0x2D
+               00040 
+  00000034     00041 WPDA            EQU             0x34
+  00000035     00042 WPDB            EQU             0x35
+  00000036     00043 WPDC            EQU             0x36
+  00000039     00044 WPDF            EQU             0x39
+               00045 
+  00000040     00046 IOCA            EQU             0x40
+  00000041     00047 IOCB            EQU             0x41
+  00000042     00048 IOCC            EQU             0x42
+  00000045     00049 IOCF            EQU             0x45
+               00050 
+  0000004C     00051 PORCTR          EQU             0x4C
+hcasm-0.13.7 beta               main.asm    2-17-2025  18:00:35          PAGE  2
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+ 
+  0000004D     00052 DRENAL          EQU             0x4D
+  0000004E     00053 DRENBL          EQU             0x4E
+  0000004F     00054 DRENCL          EQU             0x4F
+  00000052     00055 DRENFL          EQU             0x52
+               00056 
+  00000054     00057 PIR1            EQU             0x54
+  00000055     00058 PIR2            EQU             0x55
+  00000056     00059 PIR3            EQU             0x56
+               00060 
+  00000058     00061 T1L                     EQU             0x58
+  00000059     00062 T1H                     EQU             0x59
+  0000005A     00063 T1CON           EQU             0x5A
+               00064 
+  0000005B     00065 T0                      EQU             0x5B
+  0000005C     00066 T2                      EQU             0x5C
+  0000005D     00067 PR2                     EQU             0x5D
+  0000005E     00068 T2CON           EQU             0x5E
+  0000005F     00069 PR1L            EQU             0x5F
+  00000060     00070 PR1CON          EQU             0x60
+               00071 
+  00000070     00072 PIE1            EQU             0x70
+  00000071     00073 PIE2            EQU             0x71
+  00000072     00074 PIE3            EQU             0x72
+               00075 
+  00000078     00076 OPTION          EQU             0x78
+  00000079     00077 PCON            EQU             0x79
+  0000007A     00078 OSCCON          EQU             0x7A
+  00000080     00079 CCPR2L          EQU             0x80
+  00000081     00080 CCPR2H          EQU             0x81
+  00000082     00081 CCP2CON         EQU             0x82
+               00082 
+  00000083     00083 CCPR1L          EQU             0x83
+  00000084     00084 CCPR1H          EQU             0x84
+  00000085     00085 CCP1CON         EQU             0x85
+               00086 
+  0000008C     00087 ANSELL          EQU             0x8C
+  0000008D     00088 ANSELH          EQU             0x8D
+  00000092     00089 ADRESL          EQU             0x92
+  00000093     00090 ADRESH          EQU             0x93
+  00000094     00091 ADCON0          EQU             0x94
+  00000095     00092 ADCON1          EQU             0x95
+  00000096     00093 ADCLK           EQU             0x96
+               00094 
+  0000009A     00095 PMDATL          EQU             0x9A
+  0000009B     00096 PMDATH          EQU             0x9B
+  0000009C     00097 PMADRL          EQU             0x9C
+  0000009D     00098 PMADRH          EQU             0x9D
+  0000009E     00099 PMCON           EQU             0x9E
+               00100 
+  000000A0     00101 DRENAH          EQU             0xA0
+  000000A1     00102 DRENBH          EQU             0xA1
+  000000A2     00103 DRENCH          EQU             0xA2
+  000000A5     00104 DRENFH          EQU             0xA5
+               00105 
+hcasm-0.13.7 beta               main.asm    2-17-2025  18:00:35          PAGE  3
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+ 
+               00106 
+               00107 
+               00108 
+               00109 ;BANK1                                          
+  0000023A     00110 BRT                     EQU             0x23A
+  0000023B     00111 AUXR            EQU             0x23B
+  0000023C     00112 SCON            EQU             0x23C
+  0000023D     00113 SBUF            EQU             0x23D
+  0000023E     00114 SADEN           EQU             0x23E
+  0000023F     00115 SADDR           EQU             0x23F
+               00116 
+  00000258     00117 PWM0DT          EQU             0x258
+  00000259     00118 PWM0DL          EQU             0x259
+  0000025A     00119 PWM0DH          EQU             0x25A
+  0000025B     00120 PWM0PL          EQU             0x25B
+  0000025C     00121 PWM0PH          EQU             0x25C
+  0000025D     00122 PWM0C           EQU             0x25D
+  0000025E     00123 PWMEN           EQU             0x25E
+  0000025F     00124 FLTM            EQU             0x25F
+               00125 
+               00126 
+  000002B0     00127 LCDCON          EQU             0x2B0
+  000002B1     00128 COMAEN          EQU             0x2B1
+  000002B2     00129 COMBEN          EQU             0x2B2
+  000002B3     00130 COMCEN          EQU             0x2B3
+  000002B6     00131 COMFEN          EQU             0x2B6
+               00132 
+               00133 
+               00134 ;**********************************************
+               00135 ;*****************BIT Definitions *************
+               00136 ;**********************************************
+               00137 ;STATUS
+0000 00138 #define                 RP0                     STATUS,5
+0000 00139 #define                 TO                      STATUS,4
+0000 00140 #define                 PD                      STATUS,3
+0000 00141 #define                 Z                       STATUS,2
+0000 00142 #define                 DC                      STATUS,1
+0000 00143 #define                 C                       STATUS,0
+               00144 ;INTCON
+0000 00145 #define                 GIE                     INTCON,7
+0000 00146 #define                 PEIE            INTCON,6
+0000 00147 #define                 T0IE            INTCON,5
+0000 00148 #define                 INTE            INTCON,4
+0000 00149 #define                 RBIE            INTCON,3
+0000 00150 #define                 T0IF            INTCON,2
+0000 00151 #define                 INTF            INTCON,1
+0000 00152 #define                 RBIF            INTCON,0
+               00153 ;PIR1
+0000 00154 #define                 ADIF            PIR1,6
+0000 00155 #define                 CCP1IF          PIR1,2
+0000 00156 #define                 T2IF            PIR1,1
+0000 00157 #define                 T1IF            PIR1,0
+               00158 ;PIR2
+0000 00159 #define                 PWM2IF          PIR2,7
+hcasm-0.13.7 beta               main.asm    2-17-2025  18:00:35          PAGE  4
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+ 
+0000 00160 #define                 PWM1IF          PIR2,6
+0000 00161 #define                 PWM0IF          PIR2,5
+0000 00162 #define                 RXIF            PIR2,3
+0000 00163 #define                 TXIF            PIR2,2
+0000 00164 #define                 SPIF            PIR2,1
+0000 00165 #define                 CCP2IF          PIR2,0
+               00166 ;PIR3
+0000 00167 #define                 RFIF            PIR3,4
+0000 00168 #define                 RCIF            PIR3,1
+0000 00169 #define                 RAIF            PIR3,0
+               00170 ;T1CON
+0000 00171 #define                 T1CS1           T1CON,7
+0000 00172 #define                 T1CS0           T1CON,6
+0000 00173 #define                 T1CKPS1         T1CON,5
+0000 00174 #define                 T1CKPS0         T1CON,4
+0000 00175 #define                 T1OSCEN         T1CON,3
+0000 00176 #define                 T1SYNC          T1CON,2
+0000 00177 #define                 T1ON            T1CON,0
+               00178 ;T2CON
+0000 00179 #define                 T2CKPS3         T2CON,6
+0000 00180 #define                 T2CKPS2         T2CON,5
+0000 00181 #define                 T2CKPS1         T2CON,4
+0000 00182 #define                 T2CKPS0         T2CON,3
+0000 00183 #define                 T2ON            T2CON,2
+               00184 ;OPTION
+0000 00185 #define                 RBPUB           OPTION,7
+0000 00186 #define                 INTEDG          OPTION,6
+0000 00187 #define                 T0CS            OPTION,5
+0000 00188 #define                 T0SE            OPTION,4
+0000 00189 #define                 PSA                     OPTION,3
+0000 00190 #define                 PS2                     OPTION,2
+0000 00191 #define                 PS1                     OPTION,1
+0000 00192 #define                 PS0                     OPTION,0
+               00193 ;PIE1
+0000 00194 #define                 ADIE            PIE1,6
+0000 00195 #define                 CCP1IE          PIE1,2
+0000 00196 #define                 T2IE            PIE1,1
+0000 00197 #define                 T1IE            PIE1,0
+               00198 
+               00199 ;PIE2
+0000 00200 #define                 PWM2IE          PIE2,7
+0000 00201 #define                 PWM1IE          PIE2,6
+0000 00202 #define                 PWM0IE          PIE2,5
+0000 00203 #define                 USBIE           PIE2,4
+0000 00204 #define                 UARTIE          PIE2,2
+0000 00205 #define                 SPIE            PIE2,1
+0000 00206 #define                 CCP2IE          PIE2,0
+               00207 
+               00208 ;PIE3
+0000 00209 #define                 RCIE            PIE3,1
+0000 00210 #define                 RAIE            PIE3,0
+               00211 
+               00212 ;IOCB
+0000 00213 #define                 IOCB7           IOCB,7
+hcasm-0.13.7 beta               main.asm    2-17-2025  18:00:35          PAGE  5
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+ 
+0000 00214 #define                 IOCB6           IOCB,6
+0000 00215 #define                 IOCB5           IOCB,5
+0000 00216 #define                 IOCB4           IOCB,4
+0000 00217 #define                 IOCB3           IOCB,3
+0000 00218 #define                 IOCB2           IOCB,2
+0000 00219 #define                 IOCB1           IOCB,1
+0000 00220 #define                 IOCB0           IOCB,0
+               00221 ;CCP1CON
+0000 00222 #define                 DC1B1           CCP1CON,5
+0000 00223 #define                 DC1B0           CCP1CON,4
+0000 00224 #define                 CCP1M3          CCP1CON,3
+0000 00225 #define                 CCP1M2          CCP1CON,2
+0000 00226 #define                 CCP1M1          CCP1CON,1
+0000 00227 #define                 CCP1M0          CCP1CON,0
+               00228 ;CCP2CON
+0000 00229 #define                 DC2B1           CCP2CON,5
+0000 00230 #define                 DC2B0           CCP2CON,4
+0000 00231 #define                 CCP2M3          CCP2CON,3
+0000 00232 #define                 CCP2M2          CCP2CON,2
+0000 00233 #define                 CCP2M1          CCP2CON,1
+0000 00234 #define                 CCP2M0          CCP2CON,0
+               00235 ;PCON
+0000 00236 #define                 LVD2EN          PCON,7
+0000 00237 #define                 LVD1EN          PCON,6
+0000 00238 #define                 WDTENS          PCON,4
+0000 00239 #define                 LVD2F           PCON,3
+0000 00240 #define                 LVD1F           PCON,2
+0000 00241 #define                 POR                     PCON,1
+0000 00242 #define                 BOR                     PCON,0
+               00243 ;OSCCON
+0000 00244 #define                 T0OSCEN         OSCCON,7
+0000 00245 #define                 HXEN            OSCCON,1
+0000 00246 #define                 SCS             OSCCON,0
+               00247 
+               00248 ;WPUA
+0000 00249 #define                 WPUA7           WPUA,7
+0000 00250 #define                 WPUA6           WPUA,6
+0000 00251 #define                 WPUA5           WPUA,5
+0000 00252 #define                 WPUA4           WPUA,4
+0000 00253 #define                 WPUA3           WPUA,3
+0000 00254 #define                 WPUA2           WPUA,2
+0000 00255 #define                 WPUA1           WPUA,1
+0000 00256 #define                 WPUA0           WPUA,0
+               00257 ;WPUB
+0000 00258 #define                 WPUB7           WPUB,7
+0000 00259 #define                 WPUB6           WPUB,6
+0000 00260 #define                 WPUB5           WPUB,5
+0000 00261 #define                 WPUB4           WPUB,4
+0000 00262 #define                 WPUB3           WPUB,3
+0000 00263 #define                 WPUB2           WPUB,2
+0000 00264 #define                 WPUB1           WPUB,1
+0000 00265 #define                 WPUB0           WPUB,0
+               00266 ;WPUC
+0000 00267 #define                 WPUC7           WPUC,7
+hcasm-0.13.7 beta               main.asm    2-17-2025  18:00:35          PAGE  6
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+ 
+0000 00268 #define                 WPUC6           WPUC,6
+0000 00269 #define                 WPUC5           WPUC,5
+0000 00270 #define                 WPUC4           WPUC,4
+0000 00271 #define                 WPUC3           WPUC,3
+0000 00272 #define                 WPUC2           WPUC,2
+0000 00273 #define                 WPUC1           WPUC,1
+0000 00274 #define                 WPUC0           WPUC,0 
+               00275 ;WPUF
+0000 00276 #define                 WPUF7           WPUF,7
+0000 00277 #define                 WPUF6           WPUF,6
+0000 00278 #define                 WPUF5           WPUF,5
+0000 00279 #define                 WPUF4           WPUF,4
+0000 00280 #define                 WPUF3           WPUF,3
+0000 00281 #define                 WPUF2           WPUF,2
+0000 00282 #define                 WPUF1           WPUF,1
+0000 00283 #define                 WPUF0           WPUF,0
+               00284 
+               00285 ;WPDA
+0000 00286 #define                 WPDA7           WPDA,7
+0000 00287 #define                 WPDA6           WPDA,6
+0000 00288 #define                 WPDA5           WPDA,5
+0000 00289 #define                 WPDA4           WPDA,4
+0000 00290 #define                 WPDA3           WPDA,3
+0000 00291 #define                 WPDA2           WPDA,2
+0000 00292 #define                 WPDA1           WPDA,1
+0000 00293 #define                 WPDA0           WPDA,0
+               00294 ;WPDB
+0000 00295 #define                 WPDB7           WPDB,7
+0000 00296 #define                 WPDB6           WPDB,6
+0000 00297 #define                 WPDB5           WPDB,5
+0000 00298 #define                 WPDB4           WPDB,4
+0000 00299 #define                 WPDB3           WPDB,3
+0000 00300 #define                 WPDB2           WPDB,2
+0000 00301 #define                 WPDB1           WPDB,1
+0000 00302 #define                 WPDB0           WPDB,0
+               00303 ;WPDC
+0000 00304 #define                 WPDC7           WPDC,7
+0000 00305 #define                 WPDC6           WPDC,6
+0000 00306 #define                 WPDC5           WPDC,5
+0000 00307 #define                 WPDC4           WPDC,4
+0000 00308 #define                 WPDC3           WPDC,3
+0000 00309 #define                 WPDC2           WPDC,2
+0000 00310 #define                 WPDC1           WPDC,1
+0000 00311 #define                 WPDC0           WPDC,0
+               00312 ;WPDF
+0000 00313 #define                 WPDF7           WPDF,7
+0000 00314 #define                 WPDF6           WPDF,6
+0000 00315 #define                 WPDF5           WPDF,5
+0000 00316 #define                 WPDF4           WPDF,4
+0000 00317 #define                 WPDF3           WPDF,3
+0000 00318 #define                 WPDF2           WPDF,2
+0000 00319 #define                 WPDF1           WPDF,1
+0000 00320 #define                 WPDF0           WPDF,0
+               00321 
+hcasm-0.13.7 beta               main.asm    2-17-2025  18:00:35          PAGE  7
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+ 
+               00322 ;IOCA
+0000 00323 #define                 IOCA7           IOCA,7
+0000 00324 #define                 IOCA6           IOCA,6
+0000 00325 #define                 IOCA5           IOCA,5
+0000 00326 #define                 IOCA4           IOCA,4
+0000 00327 #define                 IOCA3           IOCA,3
+0000 00328 #define                 IOCA2           IOCA,2
+0000 00329 #define                 IOCA1           IOCA,1
+0000 00330 #define                 IOCA0           IOCA,0
+               00331 ;IOCC
+0000 00332 #define                 IOCC7           IOCC,7
+0000 00333 #define                 IOCC6           IOCC,6
+0000 00334 #define                 IOCC5           IOCC,5
+0000 00335 #define                 IOCC4           IOCC,4
+0000 00336 #define                 IOCC3           IOCC,3
+0000 00337 #define                 IOCC2           IOCC,2
+0000 00338 #define                 IOCC1           IOCC,1
+0000 00339 #define                 IOCC0           IOCC,0
+               00340 ;IOCF
+0000 00341 #define                 IOCF7           IOCF,7
+0000 00342 #define                 IOCF6           IOCF,6
+0000 00343 #define                 IOCF5           IOCF,5
+0000 00344 #define                 IOCF4           IOCF,4
+0000 00345 #define                 IOCF3           IOCF,3
+0000 00346 #define                 IOCF2           IOCF,2
+0000 00347 #define                 IOCF1           IOCF,1
+0000 00348 #define                 IOCF0           IOCF,0
+               00349 
+               00350 
+               00351 
+               00352 
+               00353 
+               00354 ;----- PMCON Bits ----------------------------------------------------------
+               00355 
+0000 00356 #define                 RDON            PMCON,0
+               00357 
+               00358 
+               00359 
+               00360 
+               00361 
+               00362 ;**********************************************
+               00363 ;*****************PWM**************************
+               00364 ;**********************************************
+               00365 ;PWM0C
+0000 00366 #define                 FLTS            PWM0C,5
+0000 00367 #define                 FLTC            PWM0C,4
+0000 00368 #define                 PWM0S1          PWM0C,3
+0000 00369 #define                 PWM0S0          PWM0C,2
+0000 00370 #define                 CK01            PWM0C,1
+0000 00371 #define                 CK00            PWM0C,0
+               00372 ;FLTM
+0000 00373 #define                 FLT0M1          FLTM,1
+0000 00374 #define                 FLT0M0          FLTM,0
+               00375 ;PWMEN
+hcasm-0.13.7 beta               main.asm    2-17-2025  18:00:35          PAGE  8
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+ 
+0000 00376 #define                 EFLT            PWM0C,6
+0000 00377 #define                 EPWM01          PWM0C,3
+0000 00378 #define                 EPWM0           PWM0C,0
+               00379 ;***************PWM END***********************
+               00380 
+               00381 
+               00382 ;**********************************************
+               00383 ;*****************ADC**************************
+               00384 ;**********************************************
+               00385 ;ANSELL
+0000 00386 #define                 ANSEL7          ANSELL,7
+0000 00387 #define                 ANSEL6          ANSELL,6
+0000 00388 #define                 ANSEL5          ANSELL,5
+0000 00389 #define                 ANSEL4          ANSELL,4
+0000 00390 #define                 ANSEL3          ANSELL,3
+0000 00391 #define                 ANSEL2          ANSELL,2
+0000 00392 #define                 ANSEL1          ANSELL,1
+0000 00393 #define                 ANSEL0          ANSELL,0
+               00394 ;ANSELH
+0000 00395 #define                 ANSEL14         ANSELH,6
+0000 00396 #define                 ANSEL13         ANSELH,5
+0000 00397 #define                 ANSEL12         ANSELH,4
+0000 00398 #define                 ANSEL11         ANSELH,3
+0000 00399 #define                 ANSEL10         ANSELH,2
+0000 00400 #define                 ANSEL9          ANSELH,1
+0000 00401 #define                 ANSEL8          ANSELH,0
+               00402 ;ADCON0
+0000 00403 #define                 VHS1            ADCON0,7
+0000 00404 #define                 VHS0            ADCON0,6
+0000 00405 #define                 CHS3            ADCON0,5
+0000 00406 #define                 CHS2            ADCON0,4
+0000 00407 #define                 CHS1            ADCON0,3
+0000 00408 #define                 CHS0            ADCON0,2
+0000 00409 #define                 ADON            ADCON0,1
+0000 00410 #define                 ADEN            ADCON0,0
+               00411 ;ADCON1
+0000 00412 #define                 ADFM            ADCON1,7
+0000 00413 #define                 ADCS2           ADCON1,6
+0000 00414 #define                 ADCS1           ADCON1,5
+0000 00415 #define                 ADCS0           ADCON1,4
+0000 00416 #define                 ADREF           ADCON1,0
+               00417 ;ADCLK
+0000 00418 #define                 ADCLK2          ADCLK,2
+0000 00419 #define                 ADCLK1          ADCLK,1
+0000 00420 #define                 ADCLK0          ADCLK,0
+               00421 ;***************ADC END***********************
+               00422 
+               00423 ;**********************************************
+               00424 ;*****************LCD**************************
+               00425 ;**********************************************
+               00426 ;LCDCON
+0000 00427 #define                 LCDEN           LCDCON,7
+0000 00428 #define                 RLCD1           LCDCON,6
+0000 00429 #define                 RLCD0           LCDCON,5
+hcasm-0.13.7 beta               main.asm    2-17-2025  18:00:35          PAGE  9
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+ 
+0000 00430 #define                 FRAM            LCDCON,4
+               00431 ;***************LCD END***********************
+               00432 
+               00433 
+               00434 ;**********************************************
+               00435 ;*****************UART**************************
+               00436 ;**********************************************
+               00437 ;AUXR
+0000 00438 #define                 UARTEN          AUXR,6
+0000 00439 #define                 UARTM0          AUXR,5
+0000 00440 #define                 BRTR            AUXR,4
+0000 00441 #define                 BRTX12          AUXR,3
+0000 00442 #define                 S1BRS           AUXR,2
+0000 00443 #define                 SMOD            AUXR,1
+0000 00444 #define                 SMOD0           AUXR,0
+               00445 ;SCON
+0000 00446 #define                 SM0                     SCON,7
+0000 00447 #define                 SM1                     SCON,6
+0000 00448 #define                 SM2                     SCON,5
+0000 00449 #define                 REN                     SCON,4
+0000 00450 #define                 TR8                     SCON,3
+0000 00451 #define                 RB8                     SCON,2
+0000 00452 #define                 RXWK            SCON,1
+               00453 ;***************UART END***********************
+               00454 
+               00455 ;==========================================================================
+               00456 errorlevel -306
+               00457 ; File End
+               00458 ;
+               00459 ;==========================================================================
+               00004 
+               00005 include RAM_DEF.inc
+               00001 cblock                          100H
+               00002 ; 用于现场保护的寄存器备份
+               00003 W_BAK
+               00004 STATUS_BAK
+               00005 PCLATH_BAK
+               00006 
+               00007 ; 变址寻址专用变量
+               00008 R_X
+               00009 
+               00010 ; T0定时器计数
+               00011 T0_Counter
+               00012 ; T1定时器计数
+               00013 T1_Counter
+               00014 
+               00015 Calendar_Flag
+               00016 
+               00017 Clock_Flag
+               00018 
+               00019 Time_Flag
+               00020 ;bit0=1 1Hz标志         |走时
+               00021 ;bit1=1 2Hz标志         |走时
+               00022 ;bit2=1 4Hz标志         |快加
+hcasm-0.13.7 beta               main.asm    2-17-2025  18:00:35          PAGE 10
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+ 
+               00023 ;bit3=1 16Hz标志        |响铃
+               00024 ;bit4=1 32Hz标志        |扫键
+               00025 
+               00026 TimeFlag_SW
+               00027 ;bit0=1 4Hz标志开启
+               00028 ;bit1=1 16Hz标志开启
+               00029 ;bit2=1 32Hz标志开启
+               00030 
+               00031 Primary_Status
+               00032 ;bit0=1 时钟显示
+               00033 ;bit1=1 闹钟显示
+               00034 ;bit2=1 设置时钟
+               00035 ;bit3=1 设置闹钟
+               00036 Secondary_Status
+               00037 ;子状态序号
+               00038 
+               00039 Key_Flag
+               00040 ;bit0=1 存在压键事件
+               00041 ;bit1=1 存在松键事件
+               00042 ;bit2=1 首次触发标志
+               00043 ;bit3=1 快加标志
+               00044 ;bit4=1 按键音标志
+               00045 ;bit5=1 SNZ键长按
+               00046 ;bit6=1 长按1S标志
+               00047 
+               00048 SpecialKey_Flag
+               00049 ;bit0 = 1 Mode键待处理                          |特殊按键
+               00050 ;bit1 = 1 Alarm键待处理                         |特殊按键
+               00051 ;bit2 = 1 SNZ/Backlight键待处理         |特殊按键
+               00052 ;bit3 = 1 Up键待处理                            |特殊按键
+               00053 ;bit4 = 1 Down键待处理                          |特殊按键
+               00054 
+               00055 Power_Flag
+               00056 
+               00057 PORTA_BackUp
+               00058 
+               00059 QuickAdd_Counter
+               00060 
+               00061 Beep_Serial
+               00062 
+               00063 ; COM计数
+               00064 COM_Counter
+               00065 ; 发送位数计数
+               00066 L_Send_Counter
+               00067 
+               00068 ; 显存
+               00069 DRAM:
+               00070 DRAM1
+               00071 DRAM2
+               00072 DRAM3
+               00073 
+               00074 DRAM_Buffer:
+               00075 DRAM_Buffer0
+               00076 DRAM_Buffer1
+hcasm-0.13.7 beta               main.asm    2-17-2025  18:00:35          PAGE 11
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+ 
+               00077 
+               00078 ; 临时变量
+               00079 P_Temp:
+               00080 P_Temp1
+               00081 P_Temp2
+               00082 P_Temp3
+               00083 P_Temp4
+               00084 P_Temp5
+               00085 P_Temp6
+               00086 P_Temp7
+               00087 
+               00088 endc
+               00089 
+               00090 cblock  300H
+               00091 endc
+               00006 
+               00007         org     0000H
+0000 8000      00008         goto    START
+               00009         org     0004H
+0004 8000      00010         goto    IRQ
+               00011 
+0005 00012 START:
+0005 0000      00013         nop
+0006 0000      00014         nop
+               00015 
+0007 A000      00016         call    System_Init
+               00017 
+               00018         ; movlw led_d1
+               00019         ; movwf R_X
+               00020         ; movlw 2
+               00021         ; call  F_7Digit_Dis
+               00022 
+0008 A000      00023         call    F_FillScreen
+               00024 
+0009 0403      00025         movlw   3
+000A 6703      00026         movwf   R_X
+000B A000      00027         call    F_6Digit_Dis
+               00028 
+000C 041B      00029         movlw   led_col
+000D 6703      00030         movwf   R_X
+000E A000      00031         call    F_DisSymbol
+000F 00032 MAIN:
+               00033         
+000F 8000      00034         goto    MAIN
+               00035 
+               00036 
+               00037 
+0010 00038 IRQ:
+0010 6700      00039         movwf   W_BAK
+0011 5C03      00040         swapf   STATUS,W
+0012 6701      00041         movwf   STATUS_BAK
+0013 4408      00042         movf    PCLATH,W
+0014 6702      00043         movwf   PCLATH_BAK
+               00044 
+hcasm-0.13.7 beta               main.asm    2-17-2025  18:00:35          PAGE 12
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+ 
+0015 D409      00045         btfsc   T0IF
+0016 8000      00046         goto    T0_IRQ_Handler
+               00047 
+0017 D054      00048         btfsc   T1IF
+0018 8000      00049         goto    T1_IRQ_Handler
+               00050 
+0019 D056      00051         btfsc   RAIF
+001A 8000      00052         goto    PA_IRQ_Handler
+               00053 
+001B D009      00054         btfsc   RBIF
+001C 8000      00055         goto    PB_IRQ_Handler
+               00056 
+001D D856      00057         btfsc   RFIF
+001E 8000      00058         goto    PF_IRQ_Handler
+               00059 
+001F 00060 IRQ_EXIT:
+001F 4502      00061         movf    PCLATH_BAK,W
+0020 6608      00062         movwf   PCLATH
+0021 5D01      00063         swapf   STATUS_BAK,W
+0022 6603      00064         movwf   STATUS
+0023 5F00      00065         swapf   W_BAK,F
+0024 5D00      00066         swapf   W_BAK,W
+               00067 
+0025 0001      00068         retfie
+               00069 
+               00070 include Init.inc
+0026 00001 System_Init:
+0026 FA03      00002         bcf             RP0
+0027 6209      00003         clrf    INTCON                  ; 清所有外设的中断使能
+0028 6279      00004         clrf    PCON
+0029 624C      00005         clrf    PORCTR                  ; 重置引脚配置寄存器
+002A 628C      00006         clrf    ANSELL                  ; 设置IO口为数字IO模式
+002B 628D      00007         clrf    ANSELH
+002C 6278      00008         clrf    OPTION                  ; 重置功能选择寄存器
+002D 6210      00009         clrf    TRISA                   ; 重置PORTA为输出
+002E 6212      00010         clrf    TRISC                   ; 重置PORTC为输出
+002F 6215      00011         clrf    TRISF                   ; 重置PORTF为输出
+               00012 
+0030 F07A      00013         bcf             SCS
+0031 04B1      00014         movlw   0xb1
+0032 6678      00015         movwf   OPTION
+               00016 
+0033 A000      00017         call    RamInitial
+               00018 
+0034 A000      00019         call    PortInitial
+               00020 
+0035 A000      00021         call    PWM_Initial
+               00022 
+0036 A000      00023         call    TIM_Initial
+               00024 
+0037 EE09      00025         bsf             GIE                             ; 开启总中断
+0038 EC09      00026         bsf             PEIE                    ; 使能外设中断
+               00027 
+0039 0002      00028         return
+hcasm-0.13.7 beta               main.asm    2-17-2025  18:00:35          PAGE 13
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+ 
+               00029 
+               00030 
+               00031 ; 上电初始化RAM
+003A 00032 RamInitial:
+003A FA03      00033         bcf             RP0
+003B 0400      00034         movlw   00H                             ; 清零0X100~0X1FF
+003C 6604      00035         movwf   FSR0L
+003D 0401      00036         movlw   0X01
+003E 6605      00037         movwf   FSR0H                   ; FSR 指向100h 地址 
+003F 00038 NEXTBYTE:
+003F 6200      00039         clrf    INDF0                   ; 对FSR 指向的数据存储器清零
+0040 5A04      00040         incfsz  FSR0L,F                 ; FSR0L + 1,指向下一个地址。注意这里的边界值为欲操作RAM 最大地址+1
+               00041                                                         ; 利用间接寻址，注意意外指向特殊寄存器的情况
+0041 8000      00042         goto    NEXTBYTE                ; FSR0L 的值加一不溢出,循环清零下一个地址
+               00043 
+0042 0400      00044         movlw   00H                             ; 清零0X300~0X3FF
+0043 6606      00045         movwf   FSR1L                   ; FSR 指向300h 地址
+0044 0403      00046         movlw   0X03
+0045 6607      00047         movwf   FSR1H
+0046 00048 NEXTBYTE_1:
+0046 6201      00049         clrf    INDF1                   ; 对FSR 指向的数据存储器清零 
+0047 5A06      00050         incfsz  FSR1L,F                 ; FSR1L,指向下一个地址 
+               00051                                                         ; 注意这里的边界值为欲操作RAM 最大地址+1 
+               00052                                                         ; 利用间接寻址，注意意外指向特殊寄存器的情况 
+0048 8000      00053         goto    NEXTBYTE_1              ; FSR1L 的值加不溢出,循环清零下一个地址
+               00054 
+               00055 ; 用户变量初始化
+0049 0420      00056         movlw   32
+004A 6704      00057         movwf   T0_Counter              ; 从32开始计数到0
+               00058 
+004B 0002      00059         return
+               00060 
+               00061 
+               00062 ; GPIO初始化
+004C 00063 PortInitial:
+004C FA03      00064         bcf             RP0
+004D 047C      00065         movlw   0x7c
+004E 6610      00066         movwf   TRISA                   ; 配置PA2~6为输入
+004F 0483      00067         movlw   0x83
+0050 6634      00068         movwf   WPDA                    ; 配置为下拉
+0051 047C      00069         movlw   0x7c
+0052 6640      00070         movwf   IOCA                    ; 启用PA2~5电平变化中断
+               00071 
+0053 EA11      00072         bsf             TRISB,5                 ; PB5配置为输入
+0054 EA41      00073         bsf             IOCB,5                  ; 启用PB5电平变化中断
+               00074 
+0055 0448      00075         movlw   0x48
+0056 6615      00076         movwf   TRISF                   ; 配置PF3、6为输入
+0057 04B7      00077         movlw   0xb7
+0058 6639      00078         movwf   WPDF                    ; 配置为下拉
+0059 0448      00079         movlw   0x48
+005A 6645      00080         movwf   IOCF                    ; 启用PF3、6电平变化中断
+               00081 
+005B EE78      00082         bsf             RBPUB
+hcasm-0.13.7 beta               main.asm    2-17-2025  18:00:35          PAGE 14
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+ 
+               00083 
+005C 041C      00084         movlw   PORTA
+005D 0E7C      00085         andlw   0x7c
+005E 670F      00086         movwf   PORTA_BackUp    ; 按键IO口初始状态保存
+               00087 
+005F 0002      00088         return
+               00089 
+               00090 ; ADC初始化
+0060 00091 ADC_Initial:
+0060 FA03      00092         bcf             RP0
+               00093 
+0061 E011      00094         bsf             TRISB,0                 ; PB0配置为输入
+0062 E28D      00095         bsf             ANSELH,1                ; PB0设为模拟IO
+               00096 
+0063 0430      00097         movlw   0x30
+0064 6695      00098         movwf   ADCON1                  ; 数据格式左对齐12位ADC，时钟源为Fsys8M/4T
+0065 0401      00099         movlw   0x01
+0066 6696      00100         movwf   ADCLK
+               00101 
+0067 04E4      00102         movlw   0xe4
+0068 6694      00103         movwf   ADCON0                  ; 启用模拟通道9，参考电压内部VDD
+               00104 
+0069 0002      00105         return
+               00106 
+               00107 ; PWM初始化
+006A 00108 PWM_Initial:
+006A FA03      00109         bcf             RP0
+006B E84C      00110         bsf             PORCTR,4                ; 配置CCP2为PA7，输出PWM
+006C 04FC      00111         movlw   0xfc
+Message [305] : Using default destination of 1 (file).
+006D 7210      00112         andwf   TRISA
+               00113 
+006E EA03      00114         bsf             RP0
+006F 625E      00115         clrf    PWMEN                   ; PWM模块使能寄存器
+0070 040F      00116         movlw   0x0f
+0071 665D      00117         movwf   PWM0C                   ; PWM模块控制寄存器
+               00118 
+0072 04E8      00119         movlw   0xe8
+0073 665B      00120         movwf   PWM0PL
+0074 0403      00121         movlw   0x03
+0075 665C      00122         movwf   PWM0PH                  ; 周期寄存器
+               00123 
+0076 04F4      00124         movlw   0xf4
+0077 6659      00125         movwf   PWM0DL                  ; 先设置低位
+0078 0401      00126         movlw   0x01
+0079 665A      00127         movwf   PWM0DH                  ; 占空比寄存器
+               00128 
+007A FA03      00129         bcf             RP0
+007B EE10      00130         bsf             TRISA,7                 ; PA7先关闭输出
+               00131 
+007C 0416      00132         movlw   0x16
+007D 665E      00133         movwf   T2CON                   ; Fcpu预分频为4作为时钟源
+               00134 
+007E 04F9      00135         movlw   0xf9
+hcasm-0.13.7 beta               main.asm    2-17-2025  18:00:35          PAGE 15
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+ 
+007F 665D      00136         movwf   PR2                             ; 250个脉冲为1个周期（2KHz）
+               00137 
+0080 040F      00138         movlw   0x0f
+0081 6682      00139         movwf   CCP2CON                 ; 配置CCP模块为PWM模式
+               00140 
+0082 047D      00141         movlw   0x7d
+0083 6680      00142         movwf   CCPR2L                  ; 占空比寄存器的高8位，低2位在CCP2CON的[6:5]位
+               00143 
+0084 E45E      00144         bsf             T2ON                    ; 开启TIM2
+0085 E01C      00145         bsf             PORTA,0
+0086 E21C      00146         bsf             PORTA,1
+               00147         ;bcf            TRISA,7                 ; PA7输出启用
+               00148 
+0087 0002      00149         return
+               00150 
+               00151 ; 定时器初始化
+0088 00152 TIM_Initial:
+0088 FA03      00153         bcf             RP0
+               00154         ; Tim0
+0089 0431      00155         movlw   0x31
+008A 7678      00156         iorwf   OPTION,F
+008B 04F1      00157         movlw   0xf1
+008C 7278      00158         andwf   OPTION,F                ; 设置8分频，PSA=0，T0CS=1,T0SE=1
+008D EE7A      00159         bsf             T0OSCEN                 ; T0OSCEN = 1
+               00160 
+008E 625B      00161         clrf    T0                              ; T0从0计到256,32Hz溢出一次
+008F EA09      00162         bsf             T0IE
+0090 F409      00163         bcf             T0IF                    ; 开启TIM0中断并清中断标志位
+               00164 
+               00165         ; Tim1
+0091 0489      00166         movlw   0x89
+0092 665A      00167         movwf   T1CON                   ; Tim1配置为同步计数器模式，预分频系数设为不分频
+               00168 
+0093 6258      00169         clrf    T1L
+0094 6259      00170         clrf    T1H                             ; 清空Tim1计数
+0095 04FF      00171         movlw   0xff
+0096 6659      00172         movwf   T1H
+0097 047F      00173         movlw   0xff-0x80
+0098 6658      00174         movwf   T1L                             ; 只计128个数
+               00175 
+0099 E070      00176         bsf             T1IE
+009A F054      00177         bcf             T1IF                    ; 开启TIM1中断并清中断标志位
+               00178 
+009B 0002      00179         return
+               00071 include IRQHandler.inc
+009C 00001 T0_IRQ_Handler:
+009C F409      00002         bcf             T0IF
+Message [305] : Using default destination of 1 (file).
+009D 6B04      00003         decf    T0_Counter
+               00004 
+009E 00005 L_32Hz_Juge:
+009E C509      00006         btfss   TimeFlag_SW,2                   ; 32Hz标志开关
+009F 8000      00007         goto    L_16Hz_Juge
+00A0 E908      00008         bsf             Time_Flag,4                             ; 32Hz标志位
+hcasm-0.13.7 beta               main.asm    2-17-2025  18:00:35          PAGE 16
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+ 
+               00009 
+00A1 00010 L_16Hz_Juge:
+00A1 C309      00011         btfss   TimeFlag_SW,1
+00A2 8000      00012         goto    L_4Hz_Juge
+00A3 4504      00013         movf    T0_Counter,W
+00A4 0E01      00014         andlw   0x01                                    ; 对2求余
+00A5 D403      00015         btfsc   Z
+00A6 E708      00016         bsf             Time_Flag,3                             ; 16Hz标志位
+               00017 
+00A7 00018 L_4Hz_Juge:
+00A7 C109      00019         btfss   TimeFlag_SW,0
+00A8 8000      00020         goto    L_2Hz_Juge
+00A9 4504      00021         movf    T0_Counter,W
+00AA 0E07      00022         andlw   0x07                                    ; 对8求余
+00AB D403      00023         btfsc   Z
+00AC E508      00024         bsf             Time_Flag,2                             ; 4Hz标志位
+               00025 
+00AD 00026 L_2Hz_Juge:
+00AD 4504      00027         movf    T0_Counter,W
+00AE 0E0F      00028         andlw   0x0f                                    ; 对16求余
+00AF D403      00029         btfsc   Z
+00B0 E308      00030         bsf             Time_Flag,1                             ; 2Hz标志位
+               00031 
+00B1 4704      00032         movf    T0_Counter,F                    ; 判0
+00B2 D403      00033         btfsc   Z
+00B3 A000      00034         call    T0_Counter_Reload
+               00035 
+00B4 8000      00036         goto    IRQ_EXIT
+               00037 
+00B5 00038 T0_Counter_Reload:
+00B5 0420      00039         movlw   32
+00B6 6704      00040         movwf   T0_Counter                              ; 重装载T0计数
+00B7 E108      00041         bsf             Time_Flag,0                             ; 1Hz标志
+00B8 ED0C      00042         bsf             Key_Flag,6                              ; 长按1S标志
+00B9 8000      00043         goto    IRQ_EXIT
+               00044 
+               00045 
+               00046 
+               00047 
+00BA 00048 T1_IRQ_Handler:
+00BA F054      00049         bcf             T1IF
+00BB 04FF      00050         movlw   0xff
+00BC 6659      00051         movwf   T1H
+00BD 047F      00052         movlw   0xff-0x80
+00BE 6658      00053         movwf   T1L                                             ; 重装载T1计数器的计数值
+               00054 
+00BF 0401      00055         movlw   0x01
+00C0 7E1E      00056         xorwf   PORTC,F
+               00057 
+00C1 D112      00058         btfsc   COM_Counter,0
+00C2 8000      00059         goto    COM_Display
+00C3 6312      00060         clrf    COM_Counter
+00C4 00061 COM_Display:
+00C4 A000      00062         call    L_Send_Buffer_COM
+hcasm-0.13.7 beta               main.asm    2-17-2025  18:00:35          PAGE 17
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+ 
+00C5 4F12      00063         incf    COM_Counter,F
+00C6 8000      00064         goto    IRQ_EXIT
+               00065 
+               00066 
+               00067 
+               00068 
+00C7 00069 PA_IRQ_Handler:
+00C7 F056      00070         bcf             RAIF
+               00071 
+00C8 047C      00072         movlw   0x7c
+00C9 701C      00073         andwf   PORTA,W                                 ; PA2~6有1个为1则有键压下
+00CA C403      00074         btfss   Z
+00CB A000      00075         call    PortA_PressKey
+               00076 
+00CC C10C      00077         btfss   Key_Flag,0                              ; 只有在压键事件存在时，才会判断有无松键事件
+00CD A000      00078         call    PortA_ReleaseKey
+               00079 
+00CE 8000      00080         goto    IRQ_EXIT
+               00081 
+00CF 00082 PortA_PressKey:
+00CF E10C      00083         bsf             Key_Flag,0                              ; 压键事件标志位
+00D0 E50C      00084         bsf             Key_Flag,2                              ; 首次触发标志位
+00D1 0002      00085         return
+               00086 
+00D2 00087 PortA_ReleaseKey:
+00D2 047C      00088         movlw   0x7c
+00D3 701C      00089         andwf   PORTA,W
+00D4 C403      00090         btfss   Z
+00D5 8000      00091         goto    PortA_ReleaseKey_Exit   ; 若PA2~6都为0，则为抬起
+00D6 E30C      00092         bsf             Key_Flag,1                              ; 松键事件标志位
+00D7 F10C      00093         bcf             Key_Flag,0
+00D8 00094 PortA_ReleaseKey_Exit:
+00D8 0002      00095         return
+               00096 
+               00097 
+               00098 
+               00099 
+00D9 00100 PB_IRQ_Handler:
+00D9 F009      00101         bcf             RBIF
+               00102         
+00DA 8000      00103         goto    IRQ_EXIT
+               00104 
+               00105 
+               00106 
+               00107 
+00DB 00108 PF_IRQ_Handler:
+00DB F856      00109         bcf             RFIF
+               00110         
+00DC 8000      00111         goto    IRQ_EXIT
+               00072 include KeyHandler.inc
+               00001 ; 按键处理
+00DD 00002 F_KeyHandler:
+00DD D70C      00003         btfsc   Key_Flag,3
+00DE 8000      00004         goto    L_Key4Hz                                        ; 存在快加则4Hz进一次按键功能
+hcasm-0.13.7 beta               main.asm    2-17-2025  18:00:35          PAGE 18
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+ 
+00DF C50C      00005         btfss   Key_Flag,2
+00E0 8000      00006         goto    L_KeyScan                                       ; 非首次触发直接跳到长按等待
+00E1 F50C      00007         bcf             Key_Flag,2                                      ; 清首次触发
+               00008 
+00E2 A000      00009         call    F_KeyDelay                                      ; 延时消抖
+               00010 
+00E3 041C      00011         movlw   PORTA
+00E4 0E7C      00012         andlw   0x7c
+00E5 D403      00013         btfsc   Z
+00E6 8000      00014         goto    L_KeyExit                                       ; 消抖后无按键则退出
+               00015 
+00E7 E509      00016         bsf             TimeFlag_SW,2
+00E8 670F      00017         movwf   PORTA_BackUp                            ; 更新按键IO历史状态
+00E9 8000      00018         goto    L_KeyHandle
+               00019 
+00EA 00020 L_Key4Hz:
+00EA C508      00021         btfss   Time_Flag,2
+00EB 8000      00022         goto    L_KeyExit
+00EC F508      00023         bcf             Time_Flag,2                                     ; 清4Hz标志
+               00024 
+00ED 00025 L_KeyScan:
+00ED D30C      00026         btfsc   Key_Flag,1
+00EE 8000      00027         goto    F_SpecialKey_Handle                     ; 检测到松键，进特殊按键处理
+               00028 
+00EF D70C      00029         btfsc   Key_Flag,3
+00F0 8000      00030         goto    L_QuikAdd
+               00031 
+00F1 D81C      00032         btfsc   PORTA,4
+00F2 EB0C      00033         bsf             Key_Flag,5
+               00034 
+00F3 C908      00035         btfss   Time_Flag,4                                     ; 长按1S计时
+00F4 8000      00036         goto    L_KeyExit
+               00037 
+00F5 F908      00038         bcf             Time_Flag,4                                     ; 清除32Hz标志
+00F6 4F10      00039         incf    QuickAdd_Counter,F
+00F7 DB0C      00040         btfsc   Key_Flag,5
+00F8 8000      00041         goto    L_SNZ_LongPress
+00F9 0440      00042         movlw   64                                                      ; 非SNZ键长按计时2S
+00FA 8000      00043         goto    LongPress
+00FB 00044 L_SNZ_LongPress:
+00FB 0460      00045         movlw   96                                                      ; SNZ键长按计时3S
+00FC 00046 LongPress:
+00FC 6D10      00047         subwf   QuickAdd_Counter,W
+00FD C003      00048         btfss   C
+00FE 8000      00049         goto    L_KeyExit                                       ; 未到达长按计数
+               00050 
+00FF E70C      00051         bsf             Key_Flag,3                                      ; 设置快加标志
+0100 F509      00052         bcf             TimeFlag_SW,2                           ; 关闭32Hz计时，开启4Hz计时
+0101 E109      00053         bsf             TimeFlag_SW,0
+0102 6310      00054         clrf    QuickAdd_Counter                        ; 清长按计数
+               00055 
+0103 00056 L_QuikAdd:
+0103 C70C      00057         btfss   Key_Flag,3
+0104 A000      00058         call    L_Key_Beep
+hcasm-0.13.7 beta               main.asm    2-17-2025  18:00:35          PAGE 19
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+ 
+               00059 
+               00060 
+0105 00061 L_KeyHandle:
+0105 D41C      00062         btfsc   PORTA,2
+0106 8000      00063         goto    L_KeyMTrigger
+0107 D61C      00064         btfsc   PORTA,3
+0108 8000      00065         goto    L_KeyATrigger
+0109 D81C      00066         btfsc   PORTA,4
+010A 8000      00067         goto    L_KeyBTrigger
+010B DA1C      00068         btfsc   PORTA,5
+010C 8000      00069         goto    L_KeyUTrigger
+010D DC1C      00070         btfsc   PORTA,6
+010E 8000      00071         goto    L_KeyDTrigger
+               00072 
+010F 00073 L_KeyHandle_Over:
+010F 6309      00074         clrf    TimeFlag_SW
+0110 630C      00075         clrf    Key_Flag
+0111 630D      00076         clrf    SpecialKey_Flag
+0112 F508      00077         bcf             Time_Flag,2                                     ; 清4Hz标志
+0113 F908      00078         bcf             Time_Flag,4                                     ; 清32Hz标志
+               00079 
+0114 00080 L_KeyExit:
+0114 0002      00081         return
+               00082 
+               00083 
+               00084 ; 特殊功能按键处理
+0115 00085 F_SpecialKey_Handle:
+0115 470D      00086         movf    SpecialKey_Flag,F
+0116 D403      00087         btfsc   Z
+0117 0002      00088         return
+               00089 
+0118 C70C      00090         btfss   Key_Flag,3
+0119 A000      00091         call    L_Key_Beep
+               00092 
+011A D10D      00093         btfsc   SpecialKey_Flag,0
+011B 8000      00094         goto    L_KeyM_ShortHandle
+011C D30D      00095         btfsc   SpecialKey_Flag,1
+011D 8000      00096         goto    L_KeyA_ShortHandle
+011E D50D      00097         btfsc   SpecialKey_Flag,2
+011F 8000      00098         goto    L_KeyB_ShortHandle
+0120 D70D      00099         btfsc   SpecialKey_Flag,3
+0121 8000      00100         goto    L_KeyU_ShortHandle
+0122 D90D      00101         btfsc   SpecialKey_Flag,4
+0123 8000      00102         goto    L_KeyD_ShortHandle
+0124 0002      00103         return
+               00104 
+               00105 
+0125 00106 L_KeyM_ShortHandle:
+0125 0002      00107         return
+               00108 
+0126 00109 L_KeyA_ShortHandle:
+0126 0002      00110         return
+               00111 
+0127 00112 L_KeyB_ShortHandle:
+hcasm-0.13.7 beta               main.asm    2-17-2025  18:00:35          PAGE 20
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+ 
+0127 0002      00113         return
+               00114 
+0128 00115 L_KeyU_ShortHandle:
+0128 0002      00116         return
+               00117 
+0129 00118 L_KeyD_ShortHandle:
+0129 0002      00119         return
+               00120 
+               00121 
+               00122 
+               00123 
+               00124 ; 按键触发函数，处理每个按键触发后的响应条件
+012A 00125 L_KeyMTrigger:
+012A 0002      00126         return
+               00127 
+               00128 
+012B 00129 L_KeyATrigger:
+012B 0002      00130         return
+               00131 
+               00132 
+012C 00133 L_KeyBTrigger:
+012C 0002      00134         return
+               00135 
+               00136 
+012D 00137 L_KeyUTrigger:
+012D 0002      00138         return
+               00139 
+               00140 
+012E 00141 L_KeyDTrigger:
+012E 0002      00142         return
+               00143 
+               00144 
+               00145 
+               00146 
+012F 00147 F_KeyDelay:
+012F FA03      00148         bcf             RP0
+               00149 
+0130 0450      00150         movlw   80
+0131 671B      00151         movwf   P_Temp
+               00152 
+0132 4B1B      00153         decfsz  P_Temp,F
+0133 8000      00154         goto    $-1
+0134 0002      00155         return
+               00156 
+0135 00157 L_Key_Beep:
+0135 0402      00158         movlw   B'10'
+0136 6711      00159         movwf   Beep_Serial
+0137 0002      00160         return
+               00073 include LedTable.inc
+0138 00001 Led_byte:
+  00000000     00002 led_d0  equ     $-Led_byte
+0138 0100      00003         db      1                               ; 0a
+0139 0100      00004         db      1                               ; 0b
+013A 0300      00005         db      3                               ; 0c
+hcasm-0.13.7 beta               main.asm    2-17-2025  18:00:35          PAGE 21
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+ 
+013B 0300      00006         db      3                               ; 0d
+013C 0300      00007         db      3                               ; 0e
+013D 0300      00008         db      3                               ; 0g
+  00000006     00009 led_d1  equ     $-Led_byte
+013E 0100      00010         db      1                               ; 1a
+013F 0100      00011         db      1                               ; 1b
+0140 0300      00012         db      3                               ; 1c
+0141 0300      00013         db      3                               ; 1d
+0142 0300      00014         db      3                               ; 1e
+0143 0100      00015         db      1                               ; 1f
+0144 0100      00016         db      1                               ; 1g
+  0000000D     00017 led_d2  equ     $-Led_byte
+0145 0000      00018         db      0                               ; 2a
+0146 0000      00019         db      0                               ; 2b
+0147 0200      00020         db      2                               ; 2c
+0148 0200      00021         db      2                               ; 2d
+0149 0200      00022         db      2                               ; 2e
+014A 0000      00023         db      0                               ; 2f
+014B 0000      00024         db      0                               ; 2g
+  00000014     00025 led_d3  equ     $-Led_byte
+014C 0000      00026         db      0                               ; 3a
+014D 0000      00027         db      0                               ; 3b
+014E 0200      00028         db      2                               ; 3c
+014F 0200      00029         db      2                               ; 3d
+0150 0200      00030         db      2                               ; 3e
+0151 0000      00031         db      0                               ; 3f
+0152 0000      00032         db      0                               ; 3g
+  0000001B     00033 led_col equ     $-Led_byte
+0153 0200      00034         db      2                               ; COL
+  0000001C     00035 led_al  equ     $-Led_byte
+0154 0100      00036         db      1                               ; AL
+  0000001D     00037 led_pm  equ     $-Led_byte
+0155 0100      00038         db      1                               ; PM
+  0000001E     00039 led_c   equ     $-Led_byte
+0156 0300      00040         db      3                               ; C
+  0000001F     00041 led_f   equ     $-Led_byte
+0157 0200      00042         db      2                               ; F
+               00043 
+               00044 
+0158 00045 Led_bit:
+0158 0100      00046         db      0x1                             ; 0a
+0159 0200      00047         db      0x2                             ; 0b
+015A 0800      00048         db      0x8                             ; 0c
+015B 0400      00049         db      0x4                             ; 0d
+015C 0100      00050         db      0x1                             ; 0e
+015D 0200      00051         db      0x2                             ; 0g
+               00052 
+015E 0800      00053         db      0x8                             ; 1a
+015F 2000      00054         db      0x20                    ; 1b
+0160 4000      00055         db      0x40                    ; 1c
+0161 2000      00056         db      0x20                    ; 1d
+0162 1000      00057         db      0x10                    ; 1e
+0163 0400      00058         db      0x4                             ; 1f
+0164 1000      00059         db      0x10                    ; 1g
+hcasm-0.13.7 beta               main.asm    2-17-2025  18:00:35          PAGE 22
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+ 
+               00060 
+0165 4000      00061         db      0x40                    ; 2a
+0166 1000      00062         db      0x10                    ; 2b
+0167 0800      00063         db      0x8                             ; 2c
+0168 1000      00064         db      0x10                    ; 2d
+0169 2000      00065         db      0x20                    ; 2e
+016A 8000      00066         db      0x80                    ; 2f
+016B 2000      00067         db      0x20                    ; 2g
+               00068 
+016C 0400      00069         db      0x4                             ; 3a
+016D 0100      00070         db      0x1                             ; 3b
+016E 0100      00071         db      0x1                             ; 3c
+016F 0200      00072         db      0x2                             ; 3d
+0170 0400      00073         db      0x4                             ; 3e
+0171 0800      00074         db      0x8                             ; 3f
+0172 0200      00075         db      0x2                             ; 3g
+               00076 
+0173 8000      00077         db      0x80                    ; COL
+0174 4000      00078         db      0x40                    ; AL
+0175 8000      00079         db      0x80                    ; PM
+0176 8000      00080         db      0x80                    ; C
+0177 4000      00081         db      0x40                    ; F
+               00074 include Dis.inc
+0178 00001 F_FillScreen:
+0178 FA03      00002         bcf             RP0
+0179 04FF      00003         movlw   0xff
+017A 8000      00004         goto    L_FillLed
+017B 00005 F_ClearScreen:
+017B FA03      00006         bcf             RP0
+017C 0400      00007         movlw   0x00
+017D 00008 L_FillLed:
+017D 6714      00009         movwf   DRAM
+017E 6715      00010         movwf   DRAM+1
+017F 6716      00011         movwf   DRAM+2
+0180 6717      00012         movwf   DRAM+3
+0181 0002      00013         return
+               00014 
+               00015 
+               00016 
+               00017 
+               00018 ; 显示七段数字
+               00019 ; W==要显示的数字，X==要显示位码的偏移
+0182 00020 F_7Digit_Dis:
+0182 FA03      00021         bcf             RP0
+               00022 
+0183 671B      00023         movwf   P_Temp
+0184 0400      00024         movlw   High(Table_7bit_Digit)  ; 先查表得出a~g的码对应的二进制位
+0185 669D      00025         movwf   PMADRH
+0186 0400      00026         movlw   Low(Table_7bit_Digit)
+0187 791B      00027         addwf   P_Temp,W
+0188 669C      00028         movwf   PMADRL
+0189 E09E      00029         bsf             RDON
+018A 0000      00030         nop
+018B 0000      00031         nop
+hcasm-0.13.7 beta               main.asm    2-17-2025  18:00:35          PAGE 23
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+ 
+018C 449B      00032         movf    PMDATH,W
+018D 671C      00033         movwf   P_Temp1                                 ; 目标数字的a-g码放入Temp1中
+               00034 
+018E 4503      00035         movf    R_X,W
+018F 671B      00036         movwf   P_Temp
+               00037 
+0190 0407      00038         movlw   7
+0191 671D      00039         movwf   P_Temp2                                 ; 循环位移7次计数
+               00040 
+0192 00041 L_DRAM_OprationStart:
+0192 0400      00042         movlw   High(Led_bit)                   ; 查表得出显存中bit偏移
+0193 669D      00043         movwf   PMADRH
+0194 0400      00044         movlw   Low(Led_bit)
+0195 791B      00045         addwf   P_Temp,W                                ; 加上位码的偏移
+0196 669C      00046         movwf   PMADRL
+0197 E09E      00047         bsf             RDON
+0198 0000      00048         nop
+0199 0000      00049         nop
+019A 449B      00050         movf    PMDATH,W
+019B 671E      00051         movwf   P_Temp3                                 ; 要操作的显存位存进Temp3
+               00052 
+019C 0400      00053         movlw   High(Led_byte)                  ; 查表得出显存中byte偏移
+019D 669D      00054         movwf   PMADRH
+019E 0400      00055         movlw   Low(Led_byte)
+019F 791B      00056         addwf   P_Temp,W                                ; 加上位码的偏移
+01A0 669C      00057         movwf   PMADRL
+01A1 E09E      00058         bsf             RDON
+01A2 0000      00059         nop
+01A3 0000      00060         nop
+01A4 449B      00061         movf    PMDATH,W
+01A5 6703      00062         movwf   R_X                                             ; 显存偏移暂存进X
+               00063 
+01A6 571C      00064         rrf             P_Temp1,F
+01A7 C003      00065         btfss   C
+01A8 8000      00066         goto    L_DRAM_ClrBit
+01A9 0414      00067         movlw   Low(DRAM)
+01AA 7903      00068         addwf   R_X,W
+01AB 6604      00069         movwf   FSR0L
+01AC 0401      00070         movlw   High(DRAM)
+01AD 6605      00071         movwf   FSR0H
+01AE 451E      00072         movf    P_Temp3,W
+01AF 7600      00073         iorwf   INDF0,F
+01B0 8000      00074         goto    L_DRAM_OprationJuge
+01B1 00075 L_DRAM_ClrBit:
+01B1 0414      00076         movlw   Low(DRAM)
+01B2 7903      00077         addwf   R_X,W
+01B3 6604      00078         movwf   FSR0L
+01B4 0401      00079         movlw   High(DRAM)
+01B5 6605      00080         movwf   FSR0H
+01B6 451E      00081         movf    P_Temp3,W
+01B7 7600      00082         iorwf   INDF0,F
+01B8 7E00      00083         xorwf   INDF0,F
+01B9 00084 L_DRAM_OprationJuge:
+01B9 4F1B      00085         incf    P_Temp,F
+hcasm-0.13.7 beta               main.asm    2-17-2025  18:00:35          PAGE 24
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+ 
+Message [305] : Using default destination of 1 (file).
+01BA 4B1D      00086         decfsz  P_Temp2
+01BB 8000      00087         goto    L_DRAM_OprationStart
+01BC 0002      00088         return
+               00089 
+               00090 
+               00091 
+               00092 
+01BD 00093 F_6Digit_Dis:
+01BD 04FC      00094         movlw   0xfc
+01BE 7315      00095         andwf   DRAM+1,F
+01BF 04F0      00096         movlw   0xf0
+01C0 7317      00097         andwf   DRAM+3,F
+               00098 
+01C1 0400      00099         movlw   High(Table_6Digit_Jump)
+01C2 6608      00100         movwf   PCLATH
+01C3 4503      00101         movf    R_X,W
+01C4 00102 Table_6Digit_Jump:
+01C4 7A02      00103         addwf   PCL,F
+01C5 8000      00104         goto    L_D0_Dis0
+01C6 8000      00105         goto    L_D0_Dis1
+01C7 8000      00106         goto    L_D0_Dis2
+01C8 8000      00107         goto    L_D0_DisMinus
+01C9 0002      00108         return
+01CA 00109 L_D0_Dis0:
+               00110 
+01CA 0002      00111         return
+01CB 00112 L_D0_Dis1:
+01CB 0402      00113         movlw   0x02
+01CC 7715      00114         iorwf   DRAM+1,F
+01CD 0408      00115         movlw   0x08
+01CE 7717      00116         iorwf   DRAM+3,F
+01CF 0002      00117         return
+01D0 00118 L_D0_Dis2:
+01D0 0403      00119         movlw   0x03
+01D1 7715      00120         iorwf   DRAM+1,F
+01D2 0407      00121         movlw   0x07
+01D3 7717      00122         iorwf   DRAM+3,F
+01D4 0002      00123         return
+01D5 00124 L_D0_DisMinus:
+01D5 0402      00125         movlw   0x02
+01D6 7717      00126         iorwf   DRAM+3,F
+01D7 0002      00127         return
+               00128 
+               00129 
+               00130 
+               00131 
+               00132 ; 画点、清点函数
+               00133 ; X==要显示位码的偏移
+01D8 00134 F_DisSymbol:
+01D8 FA03      00135         bcf             RP0
+01D9 A000      00136         call    F_DisSymbol_Com
+01DA 0002      00137         return
+               00138 
+hcasm-0.13.7 beta               main.asm    2-17-2025  18:00:35          PAGE 25
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+ 
+01DB 00139 F_ClrSymbol:
+01DB FA03      00140         bcf             RP0
+01DC A000      00141         call    F_DisSymbol_Com
+01DD 7E00      00142         xorwf   INDF0,F
+01DE 0002      00143         return
+               00144 
+01DF 00145 F_DisSymbol_Com:
+01DF 0400      00146         movlw   High(Led_bit)                   ; 查表得出显存中bit偏移
+01E0 669D      00147         movwf   PMADRH
+01E1 0400      00148         movlw   Low(Led_bit)
+01E2 7903      00149         addwf   R_X,W                                   ; 加上位码的偏移
+01E3 669C      00150         movwf   PMADRL
+01E4 E09E      00151         bsf             RDON
+01E5 0000      00152         nop
+01E6 0000      00153         nop
+01E7 449B      00154         movf    PMDATH,W
+01E8 671B      00155         movwf   P_Temp                                  ; 要操作的显存位存进Temp0
+               00156 
+01E9 0400      00157         movlw   High(Led_byte)                  ; 查表得出显存中byte偏移
+01EA 669D      00158         movwf   PMADRH
+01EB 0400      00159         movlw   Low(Led_byte)
+01EC 7903      00160         addwf   R_X,W                                   ; 加上位码的偏移
+01ED 669C      00161         movwf   PMADRL
+01EE E09E      00162         bsf             RDON
+01EF 0000      00163         nop
+01F0 0000      00164         nop
+01F1 449B      00165         movf    PMDATH,W
+01F2 6703      00166         movwf   R_X
+               00167 
+01F3 0414      00168         movlw   Low(DRAM)
+01F4 7903      00169         addwf   R_X,W
+01F5 6604      00170         movwf   FSR0L
+01F6 0401      00171         movlw   High(DRAM)
+01F7 6605      00172         movwf   FSR0H
+01F8 451B      00173         movf    P_Temp,W
+01F9 7600      00174         iorwf   INDF0,F
+01FA 0002      00175         return
+               00176 
+               00177 
+               00178 
+               00179 
+               00180 ; 发送显存里一个COM的内容
+01FB 00181 L_Send_Buffer_COM:
+01FB FA03      00182         bcf             RP0
+               00183 
+01FC F021      00184         bcf             PORTF,0                                 ; 拉低LE锁存5020数据
+01FD F421      00185         bcf             PORTF,2                                 ; SDI空闲时低电平
+01FE F221      00186         bcf             PORTF,1                                 ; CLK空闲时低电平
+01FF F003      00187         bcf             C
+0200 5112      00188         rlf             COM_Counter,W                   ; 用COM序号乘以2算出显存的偏移
+0201 6703      00189         movwf   R_X
+0202 0414      00190         movlw   low(DRAM)
+0203 7903      00191         addwf   R_X,W
+0204 6604      00192         movwf   FSR0L
+hcasm-0.13.7 beta               main.asm    2-17-2025  18:00:35          PAGE 26
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+ 
+0205 0401      00193         movlw   High(DRAM)
+0206 6605      00194         movwf   FSR0H
+0207 4400      00195         movf    INDF0,W
+0208 6718      00196         movwf   DRAM_Buffer
+               00197 
+0209 4F03      00198         incf    R_X,F
+020A 0414      00199         movlw   low(DRAM)
+020B 7903      00200         addwf   R_X,W
+020C 6604      00201         movwf   FSR0L
+020D 0401      00202         movlw   High(DRAM)
+020E 6605      00203         movwf   FSR0H
+020F 4400      00204         movf    INDF0,W
+0210 6719      00205         movwf   DRAM_Buffer+1                   ; 将显存的值取出，放入发送缓存中
+               00206 
+0211 0410      00207         movlw   16
+0212 6713      00208         movwf   L_Send_Counter
+0213 00209 L_Sending_Loop:                                         ; 由于5020是MSB，发送必须高位先发
+0213 5318      00210         rlf             DRAM_Buffer,F
+0214 5319      00211         rlf             DRAM_Buffer+1,F
+0215 C003      00212         btfss   C
+0216 8000      00213         goto    L_Send_0
+0217 E421      00214         bsf             PORTF,2                                 ; SDI输出1
+0218 8000      00215         goto    L_CLK_Change
+0219 00216 L_Send_0:
+0219 F421      00217         bcf             PORTF,2                                 ; SDI输出0
+021A 00218 L_CLK_Change:
+021A F221      00219         bcf             PORTF,1
+021B 0000      00220         nop
+021C 0000      00221         nop
+021D 0000      00222         nop
+021E E221      00223         bsf             PORTF,1                                 ; CLK产生一次上升沿，让5020内数据开始位移
+Message [305] : Using default destination of 1 (file).
+021F 4B13      00224         decfsz  L_Send_Counter
+0220 8000      00225         goto    L_Sending_Loop
+               00226 
+0221 EA03      00227         bsf             RP0                                             ; PWM寄存器在BANK1
+0222 625E      00228         clrf    PWMEN                                   ; 先关闭所有COM，避免漏光
+0223 FA03      00229         bcf             RP0                                             ; 切回BACNK0
+0224 F421      00230         bcf             PORTF,2                                 ; SDI空闲时低电平
+0225 F221      00231         bcf             PORTF,1                                 ; CLK空闲时低电平
+0226 E01C      00232         bsf             PORTA,0
+0227 E21C      00233         bsf             PORTA,1
+0228 E021      00234         bsf             PORTF,0                                 ; 拉高LE，5020开始显示数据
+0229 0000      00235         nop
+022A 0000      00236         nop
+022B F021      00237         bcf             PORTF,0                                 ; 重新锁存数据，防止意外改变
+               00238 
+022C 4712      00239         movf    COM_Counter,F                   ; 根据COM号重新打开一个COM的输出
+022D EA03      00240         bsf             RP0                                             ; PWM寄存器在BANK1
+022E C403      00241         btfss   Z
+022F 8000      00242         goto    L_COM0_Send
+0230 E65E      00243         bsf             PWMEN,3
+0231 FA03      00244         bcf             RP0
+0232 0002      00245         return
+hcasm-0.13.7 beta               main.asm    2-17-2025  18:00:35          PAGE 27
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+ 
+0233 00246 L_COM0_Send:
+0233 E05E      00247         bsf             PWMEN,0
+0234 FA03      00248         bcf             RP0
+0235 0002      00249         return
+               00250 
+               00251 
+0236 00252 Table_7bit_Digit:
+0236 3F00      00253         db      0x3f    ; 0
+0237 0600      00254         db      0x06    ; 1
+0238 5B00      00255         db      0x5b    ; 2
+0239 4F00      00256         db      0x4f    ; 3
+023A 6600      00257         db      0x66    ; 4
+023B 6D00      00258         db      0x6d    ; 5
+023C 7D00      00259         db      0x7d    ; 6
+023D 0700      00260         db      0x07    ; 7
+023E 7F00      00261         db      0x7f    ; 8
+023F 6F00      00262         db      0x6f    ; 9
+0240 0000      00263         db      0x00    ; undisplay
+               00075 
+hcasm-0.13.7 beta               main.asm    2-17-2025  18:00:35          PAGE 28
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+ADCLK                             00000096
+ADCON0                            00000094
+ADCON1                            00000095
+ADC_Initial                       00000060
+ADRESH                            00000093
+ADRESL                            00000092
+ANSELH                            0000008D
+ANSELL                            0000008C
+AUXR                              0000023B
+BRT                               0000023A
+Beep_Serial                       00000111
+CCP1CON                           00000085
+CCP2CON                           00000082
+CCPR1H                            00000084
+CCPR1L                            00000083
+CCPR2H                            00000081
+CCPR2L                            00000080
+COMAEN                            000002B1
+COMBEN                            000002B2
+COMCEN                            000002B3
+COMFEN                            000002B6
+COM_Counter                       00000112
+COM_Display                       000000C4
+Calendar_Flag                     00000106
+Clock_Flag                        00000107
+DRAM                              00000114
+DRAM1                             00000115
+DRAM2                             00000116
+DRAM3                             00000117
+DRAM_Buffer                       00000118
+DRAM_Buffer0                      00000119
+DRAM_Buffer1                      0000011A
+DRENAH                            000000A0
+DRENAL                            0000004D
+DRENBH                            000000A1
+DRENBL                            0000004E
+DRENCH                            000000A2
+DRENCL                            0000004F
+DRENFH                            000000A5
+DRENFL                            00000052
+F                                 00000001
+FLTM                              0000025F
+FSR0H                             00000005
+FSR0L                             00000004
+FSR1H                             00000007
+FSR1L                             00000006
+F_6Digit_Dis                      000001BD
+F_7Digit_Dis                      00000182
+F_ClearScreen                     0000017B
+F_ClrSymbol                       000001DB
+F_DisSymbol                       000001D8
+F_DisSymbol_Com                   000001DF
+F_FillScreen                      00000178
+hcasm-0.13.7 beta               main.asm    2-17-2025  18:00:35          PAGE 29
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+ 
+F_KeyDelay                        0000012F
+F_KeyHandler                      000000DD
+F_SpecialKey_Handle               00000115
+INDF0                             00000000
+INDF1                             00000001
+INTCON                            00000009
+IOCA                              00000040
+IOCB                              00000041
+IOCC                              00000042
+IOCF                              00000045
+IRQ                               00000010
+IRQ_EXIT                          0000001F
+Key_Flag                          0000010C
+LCDCON                            000002B0
+L_16Hz_Juge                       000000A1
+L_2Hz_Juge                        000000AD
+L_32Hz_Juge                       0000009E
+L_4Hz_Juge                        000000A7
+L_CLK_Change                      0000021A
+L_COM0_Send                       00000233
+L_D0_Dis0                         000001CA
+L_D0_Dis1                         000001CB
+L_D0_Dis2                         000001D0
+L_D0_DisMinus                     000001D5
+L_DRAM_ClrBit                     000001B1
+L_DRAM_OprationJuge               000001B9
+L_DRAM_OprationStart              00000192
+L_FillLed                         0000017D
+L_Key4Hz                          000000EA
+L_KeyATrigger                     0000012B
+L_KeyA_ShortHandle                00000126
+L_KeyBTrigger                     0000012C
+L_KeyB_ShortHandle                00000127
+L_KeyDTrigger                     0000012E
+L_KeyD_ShortHandle                00000129
+L_KeyExit                         00000114
+L_KeyHandle                       00000105
+L_KeyHandle_Over                  0000010F
+L_KeyMTrigger                     0000012A
+L_KeyM_ShortHandle                00000125
+L_KeyScan                         000000ED
+L_KeyUTrigger                     0000012D
+L_KeyU_ShortHandle                00000128
+L_Key_Beep                        00000135
+L_QuikAdd                         00000103
+L_SNZ_LongPress                   000000FB
+L_Send_0                          00000219
+L_Send_Buffer_COM                 000001FB
+L_Send_Counter                    00000113
+L_Sending_Loop                    00000213
+Led_bit                           00000158
+Led_byte                          00000138
+LongPress                         000000FC
+MAIN                              0000000F
+hcasm-0.13.7 beta               main.asm    2-17-2025  18:00:35          PAGE 30
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+ 
+NEXTBYTE                          0000003F
+NEXTBYTE_1                        00000046
+OPTION                            00000078
+OSCCON                            0000007A
+PA_IRQ_Handler                    000000C7
+PB_IRQ_Handler                    000000D9
+PCL                               00000002
+PCLATH                            00000008
+PCLATH_BAK                        00000102
+PCON                              00000079
+PF_IRQ_Handler                    000000DB
+PIE1                              00000070
+PIE2                              00000071
+PIE3                              00000072
+PIR1                              00000054
+PIR2                              00000055
+PIR3                              00000056
+PMADRH                            0000009D
+PMADRL                            0000009C
+PMCON                             0000009E
+PMDATH                            0000009B
+PMDATL                            0000009A
+PORCTR                            0000004C
+PORTA                             0000001C
+PORTA_BackUp                      0000010F
+PORTB                             0000001D
+PORTC                             0000001E
+PORTF                             00000021
+PR1CON                            00000060
+PR1L                              0000005F
+PR2                               0000005D
+PWM0C                             0000025D
+PWM0DH                            0000025A
+PWM0DL                            00000259
+PWM0DT                            00000258
+PWM0PH                            0000025C
+PWM0PL                            0000025B
+PWMEN                             0000025E
+PWM_Initial                       0000006A
+P_Temp                            0000011B
+P_Temp1                           0000011C
+P_Temp2                           0000011D
+P_Temp3                           0000011E
+P_Temp4                           0000011F
+P_Temp5                           00000120
+P_Temp6                           00000121
+P_Temp7                           00000122
+PortA_PressKey                    000000CF
+PortA_ReleaseKey                  000000D2
+PortA_ReleaseKey_Exit             000000D8
+PortInitial                       0000004C
+Power_Flag                        0000010E
+Primary_Status                    0000010A
+QuickAdd_Counter                  00000110
+hcasm-0.13.7 beta               main.asm    2-17-2025  18:00:35          PAGE 31
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+ 
+R_X                               00000103
+RamInitial                        0000003A
+SADDR                             0000023F
+SADEN                             0000023E
+SBUF                              0000023D
+SCON                              0000023C
+START                             00000005
+STATUS                            00000003
+STATUS_BAK                        00000101
+Secondary_Status                  0000010B
+SpecialKey_Flag                   0000010D
+System_Init                       00000026
+T0                                0000005B
+T0_Counter                        00000104
+T0_Counter_Reload                 000000B5
+T0_IRQ_Handler                    0000009C
+T1CON                             0000005A
+T1H                               00000059
+T1L                               00000058
+T1_Counter                        00000105
+T1_IRQ_Handler                    000000BA
+T2                                0000005C
+T2CON                             0000005E
+TIM_Initial                       00000088
+TRISA                             00000010
+TRISB                             00000011
+TRISC                             00000012
+TRISD                             00000013
+TRISE                             00000014
+TRISF                             00000015
+Table_6Digit_Jump                 000001C4
+Table_7bit_Digit                  00000236
+TimeFlag_SW                       00000109
+Time_Flag                         00000108
+W                                 00000000
+WPDA                              00000034
+WPDB                              00000035
+WPDC                              00000036
+WPDF                              00000039
+WPUA                              00000028
+WPUB                              00000029
+WPUC                              0000002A
+WPUF                              0000002D
+W_BAK                             00000100
+_.org_4_000133                    00000133
+__HC18P134L                       00000001
+led_al                            0000001C
+led_c                             0000001E
+led_col                           0000001B
+led_d0                            00000000
+led_d1                            00000006
+led_d2                            0000000D
+led_d3                            00000014
+led_f                             0000001F
+hcasm-0.13.7 beta               main.asm    2-17-2025  18:00:35          PAGE 32
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+ 
+led_pm                            0000001D
+ADCLK0                            ADCLK,0
+ADCLK1                            ADCLK,1
+ADCLK2                            ADCLK,2
+ADCS0                             ADCON1,4
+ADCS1                             ADCON1,5
+ADCS2                             ADCON1,6
+ADEN                              ADCON0,0
+ADFM                              ADCON1,7
+ADIE                              PIE1,6
+ADIF                              PIR1,6
+ADON                              ADCON0,1
+ADREF                             ADCON1,0
+ANSEL0                            ANSELL,0
+ANSEL1                            ANSELL,1
+ANSEL10                           ANSELH,2
+ANSEL11                           ANSELH,3
+ANSEL12                           ANSELH,4
+ANSEL13                           ANSELH,5
+ANSEL14                           ANSELH,6
+ANSEL2                            ANSELL,2
+ANSEL3                            ANSELL,3
+ANSEL4                            ANSELL,4
+ANSEL5                            ANSELL,5
+ANSEL6                            ANSELL,6
+ANSEL7                            ANSELL,7
+ANSEL8                            ANSELH,0
+ANSEL9                            ANSELH,1
+BOR                               PCON,0
+BRTR                              AUXR,4
+BRTX12                            AUXR,3
+C                                 STATUS,0
+CCP1IE                            PIE1,2
+CCP1IF                            PIR1,2
+CCP1M0                            CCP1CON,0
+CCP1M1                            CCP1CON,1
+CCP1M2                            CCP1CON,2
+CCP1M3                            CCP1CON,3
+CCP2IE                            PIE2,0
+CCP2IF                            PIR2,0
+CCP2M0                            CCP2CON,0
+CCP2M1                            CCP2CON,1
+CCP2M2                            CCP2CON,2
+CCP2M3                            CCP2CON,3
+CHS0                              ADCON0,2
+CHS1                              ADCON0,3
+CHS2                              ADCON0,4
+CHS3                              ADCON0,5
+CK00                              PWM0C,0
+CK01                              PWM0C,1
+DC                                STATUS,1
+DC1B0                             CCP1CON,4
+DC1B1                             CCP1CON,5
+DC2B0                             CCP2CON,4
+hcasm-0.13.7 beta               main.asm    2-17-2025  18:00:35          PAGE 33
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+ 
+DC2B1                             CCP2CON,5
+EFLT                              PWM0C,6
+EPWM0                             PWM0C,0
+EPWM01                            PWM0C,3
+FLT0M0                            FLTM,0
+FLT0M1                            FLTM,1
+FLTC                              PWM0C,4
+FLTS                              PWM0C,5
+FRAM                              LCDCON,4
+GIE                               INTCON,7
+HXEN                              OSCCON,1
+INTE                              INTCON,4
+INTEDG                            OPTION,6
+INTF                              INTCON,1
+IOCA0                             IOCA,0
+IOCA1                             IOCA,1
+IOCA2                             IOCA,2
+IOCA3                             IOCA,3
+IOCA4                             IOCA,4
+IOCA5                             IOCA,5
+IOCA6                             IOCA,6
+IOCA7                             IOCA,7
+IOCB0                             IOCB,0
+IOCB1                             IOCB,1
+IOCB2                             IOCB,2
+IOCB3                             IOCB,3
+IOCB4                             IOCB,4
+IOCB5                             IOCB,5
+IOCB6                             IOCB,6
+IOCB7                             IOCB,7
+IOCC0                             IOCC,0
+IOCC1                             IOCC,1
+IOCC2                             IOCC,2
+IOCC3                             IOCC,3
+IOCC4                             IOCC,4
+IOCC5                             IOCC,5
+IOCC6                             IOCC,6
+IOCC7                             IOCC,7
+IOCF0                             IOCF,0
+IOCF1                             IOCF,1
+IOCF2                             IOCF,2
+IOCF3                             IOCF,3
+IOCF4                             IOCF,4
+IOCF5                             IOCF,5
+IOCF6                             IOCF,6
+IOCF7                             IOCF,7
+LCDEN                             LCDCON,7
+LVD1EN                            PCON,6
+LVD1F                             PCON,2
+LVD2EN                            PCON,7
+LVD2F                             PCON,3
+PD                                STATUS,3
+PEIE                              INTCON,6
+POR                               PCON,1
+hcasm-0.13.7 beta               main.asm    2-17-2025  18:00:35          PAGE 34
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+ 
+PS0                               OPTION,0
+PS1                               OPTION,1
+PS2                               OPTION,2
+PSA                               OPTION,3
+PWM0IE                            PIE2,5
+PWM0IF                            PIR2,5
+PWM0S0                            PWM0C,2
+PWM0S1                            PWM0C,3
+PWM1IE                            PIE2,6
+PWM1IF                            PIR2,6
+PWM2IE                            PIE2,7
+PWM2IF                            PIR2,7
+RAIE                              PIE3,0
+RAIF                              PIR3,0
+RB8                               SCON,2
+RBIE                              INTCON,3
+RBIF                              INTCON,0
+RBPUB                             OPTION,7
+RCIE                              PIE3,1
+RCIF                              PIR3,1
+RDON                              PMCON,0
+REN                               SCON,4
+RFIF                              PIR3,4
+RLCD0                             LCDCON,5
+RLCD1                             LCDCON,6
+RP0                               STATUS,5
+RXIF                              PIR2,3
+RXWK                              SCON,1
+S1BRS                             AUXR,2
+SCS                               OSCCON,0
+SM0                               SCON,7
+SM1                               SCON,6
+SM2                               SCON,5
+SMOD                              AUXR,1
+SMOD0                             AUXR,0
+SPIE                              PIE2,1
+SPIF                              PIR2,1
+T0CS                              OPTION,5
+T0IE                              INTCON,5
+T0IF                              INTCON,2
+T0OSCEN                           OSCCON,7
+T0SE                              OPTION,4
+T1CKPS0                           T1CON,4
+T1CKPS1                           T1CON,5
+T1CS0                             T1CON,6
+T1CS1                             T1CON,7
+T1IE                              PIE1,0
+T1IF                              PIR1,0
+T1ON                              T1CON,0
+T1OSCEN                           T1CON,3
+T1SYNC                            T1CON,2
+T2CKPS0                           T2CON,3
+T2CKPS1                           T2CON,4
+T2CKPS2                           T2CON,5
+hcasm-0.13.7 beta               main.asm    2-17-2025  18:00:35          PAGE 35
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+ 
+T2CKPS3                           T2CON,6
+T2IE                              PIE1,1
+T2IF                              PIR1,1
+T2ON                              T2CON,2
+TO                                STATUS,4
+TR8                               SCON,3
+TXIF                              PIR2,2
+UARTEN                            AUXR,6
+UARTIE                            PIE2,2
+UARTM0                            AUXR,5
+USBIE                             PIE2,4
+VHS0                              ADCON0,6
+VHS1                              ADCON0,7
+WDTENS                            PCON,4
+WPDA0                             WPDA,0
+WPDA1                             WPDA,1
+WPDA2                             WPDA,2
+WPDA3                             WPDA,3
+WPDA4                             WPDA,4
+WPDA5                             WPDA,5
+WPDA6                             WPDA,6
+WPDA7                             WPDA,7
+WPDB0                             WPDB,0
+WPDB1                             WPDB,1
+WPDB2                             WPDB,2
+WPDB3                             WPDB,3
+WPDB4                             WPDB,4
+WPDB5                             WPDB,5
+WPDB6                             WPDB,6
+WPDB7                             WPDB,7
+WPDC0                             WPDC,0
+WPDC1                             WPDC,1
+WPDC2                             WPDC,2
+WPDC3                             WPDC,3
+WPDC4                             WPDC,4
+WPDC5                             WPDC,5
+WPDC6                             WPDC,6
+WPDC7                             WPDC,7
+WPDF0                             WPDF,0
+WPDF1                             WPDF,1
+WPDF2                             WPDF,2
+WPDF3                             WPDF,3
+WPDF4                             WPDF,4
+WPDF5                             WPDF,5
+WPDF6                             WPDF,6
+WPDF7                             WPDF,7
+WPUA0                             WPUA,0
+WPUA1                             WPUA,1
+WPUA2                             WPUA,2
+WPUA3                             WPUA,3
+WPUA4                             WPUA,4
+WPUA5                             WPUA,5
+WPUA6                             WPUA,6
+WPUA7                             WPUA,7
+hcasm-0.13.7 beta               main.asm    2-17-2025  18:00:35          PAGE 36
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+ 
+WPUB0                             WPUB,0
+WPUB1                             WPUB,1
+WPUB2                             WPUB,2
+WPUB3                             WPUB,3
+WPUB4                             WPUB,4
+WPUB5                             WPUB,5
+WPUB6                             WPUB,6
+WPUB7                             WPUB,7
+WPUC0                             WPUC,0
+WPUC1                             WPUC,1
+WPUC2                             WPUC,2
+WPUC3                             WPUC,3
+WPUC4                             WPUC,4
+WPUC5                             WPUC,5
+WPUC6                             WPUC,6
+WPUC7                             WPUC,7
+WPUF0                             WPUF,0
+WPUF1                             WPUF,1
+WPUF2                             WPUF,2
+WPUF3                             WPUF,3
+WPUF4                             WPUF,4
+WPUF5                             WPUF,5
+WPUF6                             WPUF,6
+WPUF7                             WPUF,7
+Z                                 STATUS,2
+
+
+Errors   :       0
+Warnings :       0 reported,       0 suppressed
+Messages :       4 reported,       0 suppressed
+

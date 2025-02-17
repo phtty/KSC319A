@@ -1,0 +1,108 @@
+cblock				100H
+; 用于现场保护的寄存器备份
+W_BAK
+STATUS_BAK
+PCLATH_BAK
+
+; 变址寻址专用变量
+R_X
+
+; T0定时器计数
+T0_Counter
+; T1定时器计数
+T1_Counter
+
+Calendar_Flag
+
+Clock_Flag
+
+Time_Flag
+;bit0=1 1Hz标志		|走时
+;bit1=1 2Hz标志		|走时
+;bit2=1 4Hz标志		|快加
+;bit3=1 16Hz标志	|响铃
+;bit4=1 32Hz标志	|扫键
+
+TimeFlag_SW
+;bit0=1 4Hz标志开启
+;bit1=1 16Hz标志开启
+;bit2=1 32Hz标志开启
+
+Primary_Status
+;bit0=1 时钟显示
+;bit1=1 闹钟显示
+;bit2=1 设置时钟
+;bit3=1 设置闹钟
+Secondary_Status
+;子状态序号
+
+Key_Flag
+;bit0=1 存在压键事件
+;bit1=1 存在松键事件
+;bit2=1 首次触发标志
+;bit3=1 快加标志
+;bit4=1 按键音标志
+;bit5=1 SNZ键长按
+;bit6=1 长按1S标志
+
+SpecialKey_Flag
+;bit0 = 1 Mode键待处理				|特殊按键
+;bit1 = 1 Alarm键待处理				|特殊按键
+;bit2 = 1 SNZ/Backlight键待处理		|特殊按键
+;bit3 = 1 Up键待处理				|特殊按键
+;bit4 = 1 Down键待处理				|特殊按键
+
+Power_Flag
+
+PORTA_BackUp
+
+QuickAdd_Counter
+
+Beep_Serial
+
+R_Time_Sec				;时间秒
+R_Time_Min				;时间分
+R_Time_Hour				;时间小时
+R_Alarm_Min				;触发闹钟分
+R_Alarm_Hour			;触发闹钟小时
+R_Date_Day				;日期，从1开始
+R_Date_Month			;月份，从1开始
+R_Date_Year				;年份，由于只计2000-2099，所以由0-99代替
+
+R_Alarm_Min				;闹钟分
+R_Alarm_Hour			;闹钟小时
+
+R_Snooze_Min			;贪睡闹钟分钟
+R_Snooze_Hour			;贪睡闹钟小时
+
+R_Snooze_Time			;贪睡闹钟小时
+
+; COM计数
+COM_Counter
+; 发送位数计数
+L_Send_Counter
+
+; 显存
+DRAM:
+DRAM1
+DRAM2
+DRAM3
+
+DRAM_Buffer:
+DRAM_Buffer0
+DRAM_Buffer1
+
+; 临时变量
+P_Temp:
+P_Temp1
+P_Temp2
+P_Temp3
+P_Temp4
+P_Temp5
+P_Temp6
+P_Temp7
+
+endc
+
+cblock	300H
+endc
