@@ -15,20 +15,23 @@ START:
 
 	call	System_Init
 
-	; movlw	led_d1
-	; movwf	R_X
-	; movlw	2
-	; call	F_7Digit_Dis
+	call	F_ClearScreen
+	
+	bsf		Clock_Flag,0
 
-	call	F_FillScreen
-
-	movlw	3
-	movwf	R_X
-	call	F_6Digit_Dis
-
-	movlw	led_col
-	movwf	R_X
-	call	F_DisSymbol
+	; movlw	11
+	; movwf	R_Time_Min
+	; movlw	22
+	; movwf	R_Time_Hour
+	; call	L_DisTime_Min
+	; call	L_DisTime_Hour
+	movlw	25
+	movwf	R_Date_Year
+	movlw	2
+	movwf	R_Date_Month
+	movlw	18
+	movwf	R_Date_Day
+	call	L_DisDate_Year
 MAIN:
 	
 	goto	MAIN

@@ -49,7 +49,7 @@ T1_IRQ_Handler:
 	bcf		T1IF
 	movlw	0xff
 	movwf	T1H
-	movlw	0xff-0x80
+	movlw	0xff-0x7f
 	movwf	T1L						; 重装载T1计数器的计数值
 
 	movlw	0x01

@@ -15,6 +15,13 @@ T1_Counter
 Calendar_Flag
 
 Clock_Flag
+;bit0=1 12H模式
+;bit1=1 闹钟触发
+;bit2=1 响闹模式
+;bit3=1 贪睡模式
+;bit4=1 响闹阻塞标志，防止短时间内关闭响闹继续进闹钟触发
+;bit5	上次的响闹模式，判断是响闹结束还是未响闹
+;bit6=1 贪睡按键触发导致的响闹结束
 
 Time_Flag
 ;bit0=1 1Hz标志		|走时
@@ -63,14 +70,11 @@ Beep_Serial
 R_Time_Sec				;时间秒
 R_Time_Min				;时间分
 R_Time_Hour				;时间小时
-R_Alarm_Min				;触发闹钟分
-R_Alarm_Hour			;触发闹钟小时
+R_Alarm_Min				;闹钟分
+R_Alarm_Hour			;闹钟小时
 R_Date_Day				;日期，从1开始
 R_Date_Month			;月份，从1开始
 R_Date_Year				;年份，由于只计2000-2099，所以由0-99代替
-
-R_Alarm_Min				;闹钟分
-R_Alarm_Hour			;闹钟小时
 
 R_Snooze_Min			;贪睡闹钟分钟
 R_Snooze_Hour			;贪睡闹钟小时
