@@ -31,7 +31,7 @@ L_2Hz_Juge:
 
 	movf	T0_Counter,F			; 判0
 	btfsc	Z
-	call	T0_Counter_Reload
+	goto	T0_Counter_Reload
 
 	goto	IRQ_EXIT
 
@@ -52,8 +52,6 @@ T1_IRQ_Handler:
 	movlw	0xff-0x7f
 	movwf	T1L						; 重装载T1计数器的计数值
 
-	movlw	0x01
-	xorwf	PORTC,F
 
 	btfsc	COM_Counter,0
 	goto	COM_Display
@@ -67,23 +65,20 @@ COM_Display:
 
 
 PA_IRQ_Handler:
+	movf	PORTA,F
 	bcf		RAIF
 
 	movlw	0x7c
 	andwf	PORTA,W					; PA2~6有1个为1则有键压下
 	btfss	Z
-	call	PortA_PressKey
-
-	btfss	Key_Flag,0				; 只有在压键事件存在时，才会判断有无松键事件
-	call	PortA_ReleaseKey
-
+	goto	PortA_PressKey
+	btfsc	Key_Flag,0				; 只有在压键事件存在时，才会判断有无松键事件
+	goto	PortA_ReleaseKey
 	goto	IRQ_EXIT
-
 PortA_PressKey:
 	bsf		Key_Flag,0				; 压键事件标志位
 	bsf		Key_Flag,2				; 首次触发标志位
-	return
-
+	goto	IRQ_EXIT
 PortA_ReleaseKey:
 	movlw	0x7c
 	andwf	PORTA,W
@@ -92,12 +87,13 @@ PortA_ReleaseKey:
 	bsf		Key_Flag,1				; 松键事件标志位
 	bcf		Key_Flag,0
 PortA_ReleaseKey_Exit:
-	return
+	goto	IRQ_EXIT
 
 
 
 
 PB_IRQ_Handler:
+	movf	PORTB,F
 	bcf		RBIF
 	
 	goto	IRQ_EXIT
@@ -106,6 +102,7 @@ PB_IRQ_Handler:
 
 
 PF_IRQ_Handler:
+	movf	PORTF,F
 	bcf		RFIF
-	
+
 	goto	IRQ_EXIT

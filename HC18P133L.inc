@@ -206,6 +206,9 @@ COMFEN		EQU		0x2B6
 #define			CCP2IE		PIE2,0
 
 ;PIE3
+#define			RFIE		PIE3,4
+#define			REIE		PIE3,3
+#define			RDIE		PIE3,2
 #define			RCIE		PIE3,1
 #define			RAIE		PIE3,0
 

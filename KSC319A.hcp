@@ -1,7 +1,7 @@
 [HC-IDE]
 Version=3.0.11.S
 [File Count]
-Count=9
+Count=11
 [MCU]
 PowerSupply=2
 [Settings]
@@ -14,20 +14,27 @@ PostBuild=0
 PostBuildCommand=
 Library=
 [Files]
-OpenFileCounts=9
-File0=KeyHandler.inc|3 0 1451 0 472
-File1=Dis.inc|1 182 1633 182 654
-File2=Display.inc|1 208 1659 208 680
-File3=main.asm|1 0 1447 0 468
+OpenFileCounts=11
+File0=ADCTable.inc|3 52 1503 52 524
+File1=main.asm|1 0 1447 0 468
+File2=Temper.inc|1 234 1685 234 706
+File3=KeyHandler.inc|1 0 1451 0 472
 File4=IRQHandler.inc|1 156 1607 156 628
-File5=RAM_DEF.inc|1 52 1503 52 524
-File6=Init.inc|1 78 1529 78 550
-File7=HC18P133L.inc|1 130 1581 130 602
-File8=LedTable.inc|1 182 1633 182 654
+File5=Display.inc|1 208 1659 208 680
+File6=Dis.inc|1 182 1633 182 654
+File7=Init.inc|1 78 1529 78 550
+File8=HC18P133L.inc|1 130 1581 130 602
+File9=LedTable.inc|1 182 1633 182 654
+File10=RAM_DEF.inc|1 52 1503 52 524
 [Break]
 Count=0
-BP0=5 2 1
-BP1=5 12 1
+BP0=5 131 1
+BP1=5 136 1
+BP2=5 141 1
+BP3=5 146 1
+BP4=5 151 1
+BP5=7 41 1
+BP6=4 68 1
 [Watch0]
 Count=6
 Watch0=0x114 0
@@ -41,12 +48,14 @@ Count=0
 [Watch2]
 Count=0
 [Project Files]
-File0=Dis.inc
-File1=Display.inc
-File2=HC18P133L.inc
-File3=Init.inc
-File4=IRQHandler.inc
-File5=KeyHandler.inc
-File6=LedTable.inc
-File7=main.asm
-File8=RAM_DEF.inc
+File0=ADCTable.inc
+File1=Dis.inc
+File2=Display.inc
+File3=HC18P133L.inc
+File4=Init.inc
+File5=IRQHandler.inc
+File6=KeyHandler.inc
+File7=LedTable.inc
+File8=main.asm
+File9=RAM_DEF.inc
+File10=Temper.inc

@@ -85,7 +85,7 @@ L_KeyExit:
 F_SpecialKey_Handle:
 	movf	SpecialKey_Flag,F
 	btfsc	Z
-	return
+	goto	L_KeyHandle_Over
 
 	btfss	Key_Flag,3
 	call	L_Key_Beep
@@ -100,45 +100,100 @@ F_SpecialKey_Handle:
 	goto	L_KeyU_ShortHandle
 	btfsc	SpecialKey_Flag,4
 	goto	L_KeyD_ShortHandle
-	return
-
 
 L_KeyM_ShortHandle:
-	return
+	nop
+	goto	L_KeyHandle_Over
 
 L_KeyA_ShortHandle:
-	return
+	nop
+	goto	L_KeyHandle_Over
 
 L_KeyB_ShortHandle:
-	return
+	nop
+	goto	L_KeyHandle_Over
 
 L_KeyU_ShortHandle:
-	return
+	nop
+	goto	L_KeyHandle_Over
 
 L_KeyD_ShortHandle:
-	return
+	nop
+	goto	L_KeyHandle_Over
 
 
 
 
 ; 按键触发函数，处理每个按键触发后的响应条件
 L_KeyMTrigger:
+	call	L_Universal_TriggerHandle
+	call	L_Key_NoSnoozeLoud
+	btfsc	Key_Flag,7					; 判断是否需要直接退出整个按键处理
+	goto	L_KeyHandle_Over
+	bsf		SpecialKey_Flag,0
+	nop
 	return
+	goto	L_KeyHandle_Over
 
 
 L_KeyATrigger:
+	call	L_Universal_TriggerHandle
+	call	L_Key_NoSnoozeLoud
+	btfsc	Key_Flag,7
+	goto	L_KeyHandle_Over
+ 	bsf		SpecialKey_Flag,1
+	nop
 	return
+	goto	L_KeyHandle_Over
 
 
 L_KeyBTrigger:
+	call	L_Universal_TriggerHandle
+	bsf		SpecialKey_Flag,2
+	nop
 	return
+	goto	L_KeyHandle_Over
 
 
 L_KeyUTrigger:
+	call	L_Universal_TriggerHandle
+	call	L_Key_NoSnoozeLoud
+	btfsc	Key_Flag,7
+	goto	L_KeyHandle_Over
+	bsf		SpecialKey_Flag,3
+	nop
 	return
+	goto	L_KeyHandle_Over
 
 
 L_KeyDTrigger:
+	call	L_Universal_TriggerHandle
+	call	L_Key_NoSnoozeLoud
+	btfsc	Key_Flag,7
+	goto	L_KeyHandle_Over
+	bsf		SpecialKey_Flag,4
+	nop
+	return
+	goto	L_KeyHandle_Over
+
+
+
+
+L_Universal_TriggerHandle:
+	nop									; 返回计时
+	nop									; 亮屏唤醒判断
+	return
+
+
+
+L_Key_NoSnoozeLoud:
+	movlw	B'00001100'
+	andwf	Clock_Flag,W
+	bcf		Key_Flag,7
+	btfsc	Z
+	return
+	bsf		Key_Flag,7
+	nop									; 打断响闹和贪睡
 	return
 
 

@@ -68,18 +68,26 @@ PortInitial:
 	movwf	WPDA			; 配置为下拉
 	movlw	0x7c
 	movwf	IOCA			; 启用PA2~5电平变化中断
+	bsf		RAIE
 
-	bsf		TRISB,5			; PB5配置为输入
+	movlw	0x21
+	movwf	TRISB			; PB0、5配置为输入悬空
 	bsf		IOCB,5			; 启用PB5电平变化中断
+	bsf		RBIE
 
 	movlw	0x48
-	movwf	TRISF			; 配置PF3、6为输入
-	movlw	0xb7
-	movwf	WPDF			; 配置为下拉
+	movwf	TRISF			; 配置PF3、6为输入悬空
 	movlw	0x48
 	movwf	IOCF			; 启用PF3、6电平变化中断
+	bsf		RFIE
 
 	bsf		RBPUB
+
+	movlw	0x03
+	movwf	PORTA
+	clrf	PORTB
+	clrf	PORTC
+	clrf	PORTF
 
 	movlw	PORTA
 	andlw	0x7c
@@ -94,13 +102,15 @@ ADC_Initial:
 	bsf		TRISB,0			; PB0配置为输入
 	bsf		ANSELH,1		; PB0设为模拟IO
 
-	movlw	0x30
+	movlw	0x20
 	movwf	ADCON1			; 数据格式左对齐12位ADC，时钟源为Fsys8M/4T
-	movlw	0x01
+	movlw	0x02
 	movwf	ADCLK
 
 	movlw	0xe4
 	movwf	ADCON0			; 启用模拟通道9，参考电压内部VDD
+
+	bsf		ADEN
 
 	return
 

@@ -51,6 +51,7 @@ Key_Flag
 ;bit4=1 按键音标志
 ;bit5=1 SNZ键长按
 ;bit6=1 长按1S标志
+;bit7=1 按键处理终止
 
 SpecialKey_Flag
 ;bit0 = 1 Mode键待处理				|特殊按键

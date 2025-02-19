@@ -232,6 +232,12 @@ F_UnDisplay_D2_3:
 
 
 
+F_SymbolRegulate:
+	return
+
+
+
+
 F_Display_Temper:
 	return
 
