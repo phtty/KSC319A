@@ -14,6 +14,9 @@ T1_Counter
 
 Calendar_Flag
 
+Beep_Flag
+;bit0=1 开启蜂鸣
+
 Clock_Flag
 ;bit0=1 12H模式
 ;bit1=1 闹钟触发
@@ -54,13 +57,17 @@ Key_Flag
 ;bit7=1 按键处理终止
 
 SpecialKey_Flag
-;bit0 = 1 Mode键待处理				|特殊按键
-;bit1 = 1 Alarm键待处理				|特殊按键
-;bit2 = 1 SNZ/Backlight键待处理		|特殊按键
-;bit3 = 1 Up键待处理				|特殊按键
-;bit4 = 1 Down键待处理				|特殊按键
+;bit0=1 Mode键待处理				|特殊按键
+;bit1=1 Alarm键待处理				|特殊按键
+;bit2=1 SNZ/Backlight键待处理		|特殊按键
+;bit3=1 Up键待处理					|特殊按键
+;bit4=1 Down键待处理				|特殊按键
 
 Power_Flag
+
+ADC_Flag
+;bit0=1 负温度标志
+;bit1=1 华氏度模式标志
 
 PORTA_BackUp
 
@@ -68,14 +75,19 @@ QuickAdd_Counter
 
 Beep_Serial
 
-R_Time_Sec				;时间秒
-R_Time_Min				;时间分
-R_Time_Hour				;时间小时
-R_Alarm_Min				;闹钟分
-R_Alarm_Hour			;闹钟小时
-R_Date_Day				;日期，从1开始
-R_Date_Month			;月份，从1开始
-R_Date_Year				;年份，由于只计2000-2099，所以由0-99代替
+R_ADC_L
+R_ADC_H
+R_Temperature			; 温度（摄氏）
+R_Temperature_F			; 温度（华氏）
+
+R_Time_Sec				; 时间秒
+R_Time_Min				; 时间分
+R_Time_Hour				; 时间小时
+R_Alarm_Min				; 闹钟分
+R_Alarm_Hour			; 闹钟小时
+R_Date_Day				; 日期，从1开始
+R_Date_Month			; 月份，从1开始
+R_Date_Year				; 年份，由于只计2000-2099，所以由0-99代替
 
 R_Snooze_Min			;贪睡闹钟分钟
 R_Snooze_Hour			;贪睡闹钟小时

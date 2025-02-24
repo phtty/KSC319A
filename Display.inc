@@ -239,13 +239,63 @@ F_SymbolRegulate:
 
 
 F_Display_Temper:
+	call	F_ClearScreen				; 先清屏
+
+	btfss	ADC_Flag,1
+	goto	Display_CelsiusDegree
+	goto	Display_FahrenheitDegree
+
+Display_CelsiusDegree:
+	movlw	led_c
+	movwf	R_X
+	call	F_DisSymbol					; 显示摄氏度符号
+
+	movf	R_Temperature,W
+	call	F_Hex2BCD
+	movlw	led_d2
+	movwf	R_X
+	movf	P_Temp5,W
+	call	F_7Digit_Dis				; 显示温度个位
+
+	movlw	led_d1
+	movwf	R_X
+	movf	P_Temp6,W
+	call	F_7Digit_Dis				; 显示温度十位
+
+	btfss	ADC_Flag,0					; 若有负号则显示负号
+	return
+	movlw	3
+	movwf	R_X
+	call	F_6Digit_Dis				; D0显示负号
+	return
+
+Display_FahrenheitDegree:
+	movlw	led_f
+	movwf	R_X
+	call	F_DisSymbol					; 显示华氏度符号
+
+	movf	R_Temperature_F,W
+	call	F_Hex2BCD
+	movlw	led_d2
+	movwf	R_X
+	movf	P_Temp5,W
+	call	F_7Digit_Dis				; 显示温度个位
+
+	movlw	led_d1
+	movwf	R_X
+	movf	P_Temp6,W
+	call	F_7Digit_Dis				; 显示温度十位
+
+	movf	P_Temp7,W
+	movwf	R_X
+	call	F_6Digit_Dis				; 显示温度百位
 	return
 
 
 
 
 ; W==要转化的值
-; P_Temp1、2、3为个、十、百位
+; P_Temp5、6、7为个、十、百位
 F_Hex2BCD:
 	movwf	P_Temp
 	clrf	P_Temp+5

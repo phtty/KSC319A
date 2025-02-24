@@ -15,11 +15,19 @@ START:
 
 	call	System_Init
 
-	call	F_ClearScreen
-	
-	
+	; call	F_ClearScreen
+	; call	F_Temperature_Get
+	; call	F_Display_Temper
+
+	bsf		Beep_Flag,0
+	bsf		TimeFlag_SW,1
+	movlw	B'100'
+	movwf	Beep_Serial
+
 MAIN:
+	call	F_BeepManage
 	call	F_KeyHandler
+	
 	goto	MAIN
 
 
@@ -63,5 +71,7 @@ include LedTable.inc
 include Dis.inc
 include Display.inc
 include Temper.inc
+include ADCTable.inc
+include Beep.inc
 
 end

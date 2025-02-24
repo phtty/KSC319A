@@ -16,7 +16,9 @@ System_Init:
 
 	call	RamInitial
 
-	call	PortInitial
+	call	Port_Initial
+
+	call	ADC_Initial
 
 	call	PWM_Initial
 
@@ -60,7 +62,7 @@ NEXTBYTE_1:
 
 
 ; GPIO初始化
-PortInitial:
+Port_Initial:
 	bcf		RP0
 	movlw	0x7c
 	movwf	TRISA			; 配置PA2~6为输入
@@ -73,13 +75,13 @@ PortInitial:
 	movlw	0x21
 	movwf	TRISB			; PB0、5配置为输入悬空
 	bsf		IOCB,5			; 启用PB5电平变化中断
-	bsf		RBIE
+	;bsf		RBIE
 
 	movlw	0x48
 	movwf	TRISF			; 配置PF3、6为输入悬空
 	movlw	0x48
 	movwf	IOCF			; 启用PF3、6电平变化中断
-	bsf		RFIE
+	;bsf		RFIE
 
 	bsf		RBPUB
 
@@ -104,6 +106,7 @@ ADC_Initial:
 
 	movlw	0x20
 	movwf	ADCON1			; 数据格式左对齐12位ADC，时钟源为Fsys8M/4T
+
 	movlw	0x02
 	movwf	ADCLK
 
@@ -111,6 +114,7 @@ ADC_Initial:
 	movwf	ADCON0			; 启用模拟通道9，参考电压内部VDD
 
 	bsf		ADEN
+	call	F_KeyDelay		; 等待电路稳定
 
 	return
 
@@ -151,9 +155,9 @@ PWM_Initial:
 	movlw	0x7d
 	movwf	CCPR2L			; 占空比寄存器的高8位，低2位在CCP2CON的[6:5]位
 
-	bsf		T2ON			; 开启TIM2
 	bsf		PORTA,0
 	bsf		PORTA,1
+	bsf		T2ON			; 开启TIM2
 	;bcf		TRISA,7			; PA7输出启用
 
 	return
