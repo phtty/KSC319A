@@ -1,7 +1,7 @@
 [HC-IDE]
 Version=3.0.11.S
 [File Count]
-Count=12
+Count=15
 [MCU]
 PowerSupply=2
 [Settings]
@@ -52,13 +52,16 @@ Count=0
 [Project Files]
 File0=ADCTable.inc
 File1=Beep.inc
-File2=Dis.inc
-File3=Display.inc
-File4=HC18P133L.inc
-File5=Init.inc
-File6=IRQHandler.inc
-File7=KeyHandler.inc
-File8=LedTable.inc
-File9=main.asm
-File10=RAM_DEF.inc
-File11=Temper.inc
+File2=Calendar.inc
+File3=Dis.inc
+File4=Display.inc
+File5=HC18P133L.inc
+File6=Init.inc
+File7=IRQHandler.inc
+File8=KeyHandler.inc
+File9=LedTable.inc
+File10=main.asm
+File11=RAM_DEF.inc
+File12=Temper.inc
+File13=Time.inc
+File14=VoiceSwitch.inc

@@ -232,6 +232,22 @@ F_UnDisplay_D2_3:
 
 
 
+; 显示和清除秒点
+F_DisCol:
+	movlw	led_col
+	movwf	R_X
+	call	F_DisSymbol
+	return
+
+F_ClrCol
+	movlw	led_col
+	movwf	R_X
+	call	F_ClrSymbol
+	return
+
+
+
+
 F_SymbolRegulate:
 	return
 
@@ -289,6 +305,37 @@ Display_FahrenheitDegree:
 	movf	P_Temp7,W
 	movwf	R_X
 	call	F_6Digit_Dis				; 显示温度百位
+	return
+
+
+
+
+L_Dis_xxHr:
+	call	F_UnDisplay_D2_3
+	movlw	0xb2
+	iorwf	DRAM,F
+	movlw	0x2c
+	iorwf	DRAM2,F						; 显示Hr
+
+	btfsc	Clock_Flag,0				; 根据当前是24h模式还是12h模式显示数字
+	goto	L_24hMode_Set
+	movlw	led_d0
+	movwf	R_X
+	movlw	1
+	call	F_7Digit_Dis
+	movlw	led_d0
+	movwf	R_X
+	movlw	2
+	call	F_7Digit_Dis
+L_24hMode_Set:
+	movlw	led_d0
+	movwf	R_X
+	movlw	2
+	call	F_7Digit_Dis
+	movlw	led_d0
+	movwf	R_X
+	movlw	4
+	call	F_7Digit_Dis
 	return
 
 

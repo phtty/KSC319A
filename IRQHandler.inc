@@ -40,6 +40,7 @@ T0_Counter_Reload:
 	movwf	T0_Counter				; 重装载T0计数
 	bsf		Time_Flag,0				; 1Hz标志
 	bsf		Key_Flag,6				; 长按1S标志
+	bsf		Time_Flag,5				; 增S标志
 	goto	IRQ_EXIT
 
 

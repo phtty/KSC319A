@@ -13,6 +13,8 @@ T0_Counter
 T1_Counter
 
 Calendar_Flag
+;bit0=1 闰年
+;bit1=1 增日期
 
 Beep_Flag
 ;bit0=1 开启蜂鸣
@@ -27,11 +29,12 @@ Clock_Flag
 ;bit6=1 贪睡按键触发导致的响闹结束
 
 Time_Flag
-;bit0=1 1Hz标志		|走时
-;bit1=1 2Hz标志		|走时
+;bit0=1 1Hz标志		|走时显示
+;bit1=1 2Hz标志		|走时显示
 ;bit2=1 4Hz标志		|快加
 ;bit3=1 16Hz标志	|响铃
 ;bit4=1 32Hz标志	|扫键
+;bit5=1 增S标志		|增时走时
 
 TimeFlag_SW
 ;bit0=1 4Hz标志开启

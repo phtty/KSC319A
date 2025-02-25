@@ -13,23 +13,52 @@ START:
 	nop
 	nop
 
-	call	System_Init
+	call	System_Init						; 上电初始化
 
 	; call	F_ClearScreen
 	; call	F_Temperature_Get
 	; call	F_Display_Temper
 
-	bsf		Beep_Flag,0
-	bsf		TimeFlag_SW,1
-	movlw	B'100'
-	movwf	Beep_Serial
+	; bsf		Beep_Flag,0
+	; bsf		TimeFlag_SW,1
+	; movlw	B'100'
+	; movwf	Beep_Serial
+	movlw	1
+	movwf	Primary_Status					; 设置系统状态
+	movwf	Secondary_Status
 
 MAIN:
-	call	F_BeepManage
+
+Global_Run:									; 全局生效的功能
 	call	F_KeyHandler
+	call	F_BeepManage
+	call	F_Time_Run						; 走时
+
+Status_Juge:
+	btfsc	Primary_Status,0
+	goto	Status_DisClock
+	btfsc	Primary_Status,1
+	goto	Status_DisAlarm
+	btfsc	Primary_Status,2
+	goto	Status_SetClock
+	btfsc	Primary_Status,3
+	goto	Status_SetAlarm
+	goto	MAIN
+
+Status_DisClock:
+	call	F_Clock_Display
+
+	goto	MAIN
+
+Status_DisAlarm:
 	
 	goto	MAIN
 
+Status_SetClock:
+	goto	MAIN
+
+Status_SetAlarm:
+	goto	MAIN
 
 
 IRQ:
@@ -73,5 +102,7 @@ include Display.inc
 include Temper.inc
 include ADCTable.inc
 include Beep.inc
+include VoiceSwitch.inc
+include Time.inc
 
 end
