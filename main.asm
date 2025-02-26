@@ -25,7 +25,7 @@ START:
 	; movwf	Beep_Serial
 	movlw	1
 	movwf	Primary_Status					; …Ë÷√œµÕ≥◊¥Ã¨
-	movwf	Secondary_Status
+	clrf	Secondary_Status
 
 MAIN:
 
@@ -104,5 +104,6 @@ include ADCTable.inc
 include Beep.inc
 include VoiceSwitch.inc
 include Time.inc
+include Calendar.inc
 
 end

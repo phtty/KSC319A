@@ -1,4 +1,5 @@
 F_Display_Time:
+	bcf		RP0
 	call	L_DisTime_Min
 	call	L_DisTime_Hour
 	return
@@ -140,6 +141,7 @@ L_Start_DisAlarm_Hour:
 
 
 
+; œ‘ æ»’∆⁄
 F_Display_Date:
 	call	L_DisDate_Day
 	call	L_DisDate_Month

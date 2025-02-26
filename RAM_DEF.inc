@@ -11,6 +11,8 @@ R_X
 T0_Counter
 ; T1定时器计数
 T1_Counter
+; 闹钟响铃计数
+AlarmLoud_Counter
 
 Calendar_Flag
 ;bit0=1 闰年
@@ -18,6 +20,7 @@ Calendar_Flag
 
 Beep_Flag
 ;bit0=1 开启蜂鸣
+;bit1=1 按键音标志位
 
 Clock_Flag
 ;bit0=1 12H模式
@@ -91,6 +94,7 @@ R_Alarm_Hour			; 闹钟小时
 R_Date_Day				; 日期，从1开始
 R_Date_Month			; 月份，从1开始
 R_Date_Year				; 年份，由于只计2000-2099，所以由0-99代替
+R_Date_Week				; 星期
 
 R_Snooze_Min			;贪睡闹钟分钟
 R_Snooze_Hour			;贪睡闹钟小时

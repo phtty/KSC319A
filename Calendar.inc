@@ -49,7 +49,7 @@ L_month_Overflow:
 	return
 
 ; 判断平闰年函数
-F_Is_Leap_Year:
+Is_Leap_Year:
 	bcf		RP0
 	movlw	B'0011'
 	andwf	R_Date_Year
@@ -64,8 +64,143 @@ L_Set_LeapYear_Flag:
 
 ; 通过当前日期计算当前星期数
 L_GetWeek:
+	bcf		RP0
 	call	Is_Leap_Year
+	decf	R_Date_Day,W
+	call	L_MOD_A_7
+	movwf	P_Temp+1						; 当前日期相对当月首日的星期偏移
 
+	decf	R_Date_Month,W
+	movwf	R_X
+
+	btfsc	Calendar_Flag,0
+	goto	L_DateToWeek_Leap
+
+	movlw	High(L_Table_Gap_CommonMonth)
+	movwf	PMADRH
+	movlw	low(L_Table_Gap_CommonMonth)	; 平年当月首日的星期
+	goto	L_Get_Week
+L_DateToWeek_Leap:
+	movlw	High(L_Table_Gap_LeapMonth)
+	movwf	PMADRH
+	movlw	low(L_Table_Gap_LeapMonth)		; 闰年当月首日的星期偏移
+L_Get_Week:
+	addwf	R_X,W
+	movwf	PMADRL
+	bsf		RDON
+	nop
+	nop
+	movf	PMDATH,W
+	movwf	P_Temp+2
+
+	bcf		C
+	iorwf	R_Date_Year,W
+	movwf	R_X
+	movlw	High(L_Table_WeekInYear)
+	movwf	PMADRH
+	movlw	low(L_Table_WeekInYear)			; 查询当年首日的星期
+	addwf	R_X
+	movwf	PMADRL
+	bsf		RDON
+	nop
+	nop
+	movf	PMDATH,W
+	btfsc	R_Date_Year,0
+	goto	L_Odd_Year						; 奇数年份取低四位
+	andlw	B'00000111'
+	goto	L_Get_Weak_YearFirstDay
+L_Odd_Year:
+	movwf	P_Temp+3
+	swapf	P_Temp+3						; 偶数年份取高四位
+	movlw	B'00000111'
+	andwf	P_Temp+3,W
+L_Get_Weak_YearFirstDay:
+	addwf	P_Temp+1,W
+	addwf	P_Temp+2,W						; 将所有年月日的星期偏移加在一起对7求余即为当前星期
+	call	L_MOD_A_7
+	movwf	R_Date_Week
+	return
+
+
+
+
+; 日期显示
+F_Date_Display:
+	bcf		RP0
+	call	F_ClrCol
+	movlw	led_pm
+	movwf	R_X
+	call	F_ClrSymbol
+	call	F_Display_Date
+	return
+
+
+
+
+; 年份设置
+F_DisYear_Set:
+	bcf		RP0
+	btfsc	Key_Flag,3
+	goto	L_KeyTrigger_NoBlink_Year			; 存在快加时常亮
+	btfss	Time_Flag,1
+	return
+
+	bcf		Time_Flag,1
+	btfsc	Time_Flag,0
+	goto	L_Year_Clear
+L_KeyTrigger_NoBlink_Year:
+	call	L_DisDate_Year
+	return
+L_Year_Clear:
+	bcf		Time_Flag,0
+	call	F_UnDisplay_D0_1
+	call	F_UnDisplay_D2_3
+	return
+
+
+
+
+; 月份设置
+F_DisMonth_Set:
+	bcf		RP0
+	btfsc	Key_Flag,3
+	goto	L_KeyTrigger_NoBlink_Month			; 存在快加时常亮
+	btfss	Time_Flag,1
+	return
+
+	bcf		Time_Flag,1
+	btfsc	Time_Flag,0
+	goto	L_Month_Clear
+L_KeyTrigger_NoBlink_Month:
+	call	L_DisDate_Month
+	call	L_DisDate_Day
+	return
+L_Month_Clear:
+	bcf		Time_Flag,0
+	call	F_UnDisplay_D0_1
+	return
+
+
+
+
+; 日期设置
+F_DisDay_Set:
+	bcf		RP0
+	btfsc	Key_Flag,3
+	goto	L_KeyTrigger_NoBlink_Day			; 存在快加时常亮
+	btfss	Time_Flag,1
+	return
+
+	bcf		Time_Flag,1
+	btfsc	Time_Flag,0
+	goto	L_Day_Clear
+L_KeyTrigger_NoBlink_Day:
+	call	L_DisDate_Month
+	call	L_DisDate_Day
+	return
+L_Day_Clear:
+	bcf		Time_Flag,0
+	call	F_UnDisplay_D2_3
 	return
 
 

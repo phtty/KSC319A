@@ -33,10 +33,12 @@ F_Time_Run:
 
 F_Clock_Display:
 	bcf		RP0
-	btfsc	Secondary_Status,L_DisDate_Mode
-	goto	F_Time_Display
+	btfsc	Secondary_Status,0
+	goto	L_DisDate_Mode
+	goto	F_Time_Display						; 若子模式序号为0，则显示时间
 L_DisDate_Mode:
-	goto	F_Date_Display
+	; 之后应该加一个显示温度的部分
+	goto	F_Date_Display						; 子模式序号为1则显示日期
 
 F_Time_Display:
 	btfss	Time_Flag,1
@@ -61,17 +63,17 @@ L_Dot_Clear:
 F_Clock_Set:
 	bcf		RP0
 
-	movf	Primary_Status,W
+	movf	Secondary_Status,W
 	btfsc	Z
 	goto	F_TimeMode_Switch					; 12/24h模式切换
 	movlw	1
-	subwf	Primary_Status,W
+	subwf	Secondary_Status,W
 	btfsc	Z
-	goto	F_DisHour_Set
+	goto	F_DisHour_Set						; 小时设置
 	movlw	2
-	subwf	Primary_Status,W
+	subwf	Secondary_Status,W
 	btfsc	Z
-	goto	F_DisMin_Set
+	goto	F_DisMin_Set						; 分钟设置
 	return
 
 
@@ -95,7 +97,7 @@ L_TMSwitch_Clr:
 
 ; 小时设置
 F_DisHour_Set:
-	btfss	Key_Flag,3
+	btfsc	Key_Flag,3
 	goto	L_KeyTrigger_NoBlink_Hour			; 存在快加时常亮
 	btfss	Time_Flag,1
 	return
@@ -105,8 +107,7 @@ F_DisHour_Set:
 	btfsc	Time_Flag,0
 	goto	L_Hour_Clear
 L_KeyTrigger_NoBlink_Hour:
-	call	L_DisTime_Hour						; 半S亮
-	call	L_DisTime_Min
+	call	F_Display_Time						; 半S亮
 	return
 L_Hour_Clear:
 	bcf		Time_Flag,0
@@ -115,7 +116,7 @@ L_Hour_Clear:
 
 ; 分钟设置
 F_DisMin_Set:
-	btfss	Key_Flag,3
+	btfsc	Key_Flag,3
 	goto	L_KeyTrigger_NoBlink_Min			; 存在快加时常亮
 	btfss	Time_Flag,1
 	return
@@ -125,8 +126,7 @@ F_DisMin_Set:
 	btfsc	Time_Flag,0
 	goto	L_Min_Clear
 L_KeyTrigger_NoBlink_Min:
-	call	L_DisTime_Hour						; 半S亮
-	call	L_DisTime_Min
+	call	F_Display_Time						; 半S亮
 	return
 L_Min_Clear:
 	bcf		Time_Flag,0

@@ -41,6 +41,7 @@ T0_Counter_Reload:
 	bsf		Time_Flag,0				; 1Hz标志
 	bsf		Key_Flag,6				; 长按1S标志
 	bsf		Time_Flag,5				; 增S标志
+	bcf		Clock_Flag,4			; 清除响闹阻塞标志
 	goto	IRQ_EXIT
 
 

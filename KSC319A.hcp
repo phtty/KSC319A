@@ -1,7 +1,7 @@
 [HC-IDE]
 Version=3.0.11.S
 [File Count]
-Count=15
+Count=16
 [MCU]
 PowerSupply=2
 [Settings]
@@ -14,23 +14,25 @@ PostBuild=0
 PostBuildCommand=
 Library=
 [Files]
-OpenFileCounts=12
-File0=Beep.inc|3 52 1503 52 524
-File1=main.asm|1 0 1447 0 468
-File2=KeyHandler.inc|1 0 1451 0 472
-File3=HC18P133L.inc|1 130 1581 130 602
-File4=LedTable.inc|1 182 1633 182 654
-File5=ADCTable.inc|1 52 1503 52 524
-File6=Init.inc|1 78 1529 78 550
-File7=Temper.inc|1 234 1685 234 706
-File8=RAM_DEF.inc|1 52 1503 52 524
-File9=Dis.inc|1 182 1633 182 654
-File10=IRQHandler.inc|1 156 1607 156 628
-File11=Display.inc|1 208 1659 208 680
+OpenFileCounts=14
+File0=Calendar.inc|3 78 1529 78 550
+File1=Time.inc|1 52 1503 52 524
+File2=main.asm|1 0 1447 0 468
+File3=Beep.inc|1 52 1503 52 524
+File4=KeyHandler.inc|1 0 1451 0 472
+File5=HC18P133L.inc|1 130 1581 130 602
+File6=LedTable.inc|1 182 1633 182 654
+File7=ADCTable.inc|1 52 1503 52 524
+File8=Init.inc|1 78 1529 78 550
+File9=Temper.inc|1 234 1685 234 706
+File10=RAM_DEF.inc|1 52 1503 52 524
+File11=Dis.inc|1 182 1633 182 654
+File12=IRQHandler.inc|1 156 1607 156 628
+File13=Display.inc|1 208 1659 208 680
 [Break]
 Count=2
-BP0=11 29 1
-BP1=11 82 1
+BP0=12 29 1
+BP1=12 82 1
 BP2=5 141 1
 BP3=5 146 1
 BP4=5 151 1
@@ -51,17 +53,18 @@ Count=0
 Count=0
 [Project Files]
 File0=ADCTable.inc
-File1=Beep.inc
-File2=Calendar.inc
-File3=Dis.inc
-File4=Display.inc
-File5=HC18P133L.inc
-File6=Init.inc
-File7=IRQHandler.inc
-File8=KeyHandler.inc
-File9=LedTable.inc
-File10=main.asm
-File11=RAM_DEF.inc
-File12=Temper.inc
-File13=Time.inc
-File14=VoiceSwitch.inc
+File1=Alarm.inc
+File2=Beep.inc
+File3=Calendar.inc
+File4=Dis.inc
+File5=Display.inc
+File6=HC18P133L.inc
+File7=Init.inc
+File8=IRQHandler.inc
+File9=KeyHandler.inc
+File10=LedTable.inc
+File11=main.asm
+File12=RAM_DEF.inc
+File13=Temper.inc
+File14=Time.inc
+File15=VoiceSwitch.inc
