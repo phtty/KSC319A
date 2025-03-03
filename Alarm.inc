@@ -76,10 +76,16 @@ L_AlarmMin_Clear:
 F_Alarm_Handler:
 	call	Is_AlarmTrigger						; 判断闹钟是否触发
 	btfsc	Clock_Flag,2						; 存在响闹标志位才会进处理
-	call	L_Alarm_Process
+	goto	L_Alarm_Process
 
-	btfss	Beep_Flag,1							; 如果有按键提示音，则不关闭蜂鸣器
+	btfsc	Beep_Flag,1							; 如果有按键提示音，则不关闭蜂鸣器
+	goto	L_LoudingNoClose
+
+	bcf		Time_Flag,3
+	bcf		Time_Flag,6
+	bcf		TimeFlag_SW,1
 	call	L_NoBeep_Serial_Mode
+L_LoudingNoClose:
 	clrf	AlarmLoud_Counter
 	return
 
@@ -105,6 +111,63 @@ Is_Snooze:
 	subwf	R_Snooze_Hour,W
 	btfsc	Z
 	goto	L_Snooze_CloseLoud
+
+L_AlarmTrigger:									; 闹钟被触发时的处理
+	bsf		Time_Flag,6
+	bsf		TimeFlag_SW,1						; 开启蜂鸣器定时器
+	bsf		Clock_Flag,2						; 置位响闹标志位
+	bcf		Clock_Flag,1						; 关闭闹钟触发标志位，避免重复触发闹钟
+
+L_Alarm_NoStop:									; 响闹时进闹钟判断执行的操作
+	btfss	Clock_Flag,5
+	bsf		Clock_Flag,5						; 保存这次的响闹模式，用于贪睡闹钟判断
+	return
+
+L_Snooze_CloseLoud:								; 贪睡导致的响闹结束
+	btfss	Clock_Flag,5
+	return										; last==1 && now==0
+
+	bcf		Clock_Flag,5						; 响闹结束时同步响闹标志位到Backup
+	btfss	Clock_Flag,6						; 无贪睡键 && 处于贪睡模式 && 响闹结束
+	goto	L_NoSnooze_CloseLoud				; 才会结束贪睡并关闭响闹
+
+	bcf		Clock_Flag,6						; 清除贪睡触发标志
+	goto	L_CloseLoud
+L_NoSnooze_CloseLoud:
+	bcf		Clock_Flag,3
+	bcf		Clock_Flag,6
+L_CloseLoud:
+	clrf	AlarmLoud_Counter
+	movlw	B'11011001'							; Clock_Flag 1、2、5 Bit置0
+	andwf	Clock_Flag,F						; 关闭闹钟触发标志，关闭响闹模式
+
+	btfsc	Key_Flag,4							; 如果有按键提示音，则不关闭蜂鸣器
+	return
+
+	bcf		TimeFlag_SW,1
+	call	L_NoBeep_Serial_Mode
+	
+	bcf		Time_Flag,3
+	bcf		Time_Flag,6
+	return
+
+
+
+
+L_Alarm_Process:
+	bcf		RP0
+	btfss	Time_Flag,6
+	return
+
+	bcf		Time_Flag,6
+	movlw	60
+	subwf	AlarmLoud_Counter,W
+	btfsc	Z
+	goto	L_NoSnooze_CloseLoud				; 响铃60S后关闭
+
+	movlw	8
+	movwf	Beep_Serial							; 重装载响铃序列
+	incf	AlarmLoud_Counter					; 增加响铃计时
 	return
 
 

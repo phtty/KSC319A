@@ -13,6 +13,8 @@ T0_Counter
 T1_Counter
 ; 闹钟响铃计数
 AlarmLoud_Counter
+; 返回时显模式的时间
+Return_MaxTime
 
 Calendar_Flag
 ;bit0=1 闰年
@@ -30,6 +32,7 @@ Clock_Flag
 ;bit4=1 响闹阻塞标志，防止短时间内关闭响闹继续进闹钟触发
 ;bit5	上次的响闹模式，判断是响闹结束还是未响闹
 ;bit6=1 贪睡按键触发导致的响闹结束
+;bit7=1 闹钟关闭
 
 Time_Flag
 ;bit0=1 1Hz标志		|走时显示
@@ -38,6 +41,7 @@ Time_Flag
 ;bit3=1 16Hz标志	|响铃
 ;bit4=1 32Hz标志	|扫键
 ;bit5=1 增S标志		|增时走时
+;bit6=1 蜂鸣1S标志	|蜂鸣器
 
 TimeFlag_SW
 ;bit0=1 4Hz标志开启
@@ -45,10 +49,12 @@ TimeFlag_SW
 ;bit2=1 32Hz标志开启
 
 Primary_Status
-;bit0=1 时钟显示
-;bit1=1 闹钟显示
-;bit2=1 设置时钟
-;bit3=1 设置闹钟
+;bit0=1 时钟显示	|全局
+;bit1=1 闹钟显示	|全局
+;bit2=1 设置时钟	|通过时钟显示进入
+;bit3=1 设置闹钟	|通过闹钟显示进入
+;bit4=1 设置日期	|通过时钟设置进入
+;bit5=1 设置夜间时段|通过时钟设置进入
 Secondary_Status
 ;子状态序号
 
@@ -56,9 +62,9 @@ Key_Flag
 ;bit0=1 存在压键事件
 ;bit1=1 存在松键事件
 ;bit2=1 首次触发标志
-;bit3=1 快加标志
+;bit3=1 快加/长按标志
 ;bit4=1 按键音标志
-;bit5=1 SNZ键长按
+;bit5=1 
 ;bit6=1 长按1S标志
 ;bit7=1 按键处理终止
 
@@ -70,6 +76,7 @@ SpecialKey_Flag
 ;bit4=1 Down键待处理				|特殊按键
 
 Power_Flag
+;bit0=1 
 
 ADC_Flag
 ;bit0=1 负温度标志
