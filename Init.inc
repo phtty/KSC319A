@@ -57,6 +57,8 @@ NEXTBYTE_1:
 ; 用户变量初始化
 	movlw	32
 	movwf	T0_Counter		; 从32开始计数到0
+	movlw	5
+	movwf	R_Snooze_Time	; 贪睡时间默认为5分钟
 
 	return
 

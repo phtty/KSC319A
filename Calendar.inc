@@ -20,13 +20,11 @@ L_Day_Juge:
 	bsf		RDON
 	nop
 	nop
-	movf	PMDATH,W
-	movwf	P_Temp							; 查表得出当月最大天数
-	movf	R_Date_Day
-	subwf	P_Temp,W
-	btfss	C
+	movf	PMDATH,W						; 查表得出当月最大天数
+	subwf	R_Date_Day,W
+	btfsc	C
 	goto	L_Day_Overflow					; 当前日期天数溢出
-	incf	R_Date_Day,F					; 天数为溢出，日期增加
+	incf	R_Date_Day,F					; 天数未溢出，日期增加
 	return
 L_Day_Overflow:
 	movlw	1
