@@ -34,6 +34,11 @@ Clock_Flag
 ;bit6=1 贪睡按键触发导致的响闹结束
 ;bit7=1 闹钟关闭
 
+WorkDay_Alarm
+;bit0=1 1~7
+;bit1=1 1~6
+;bit2=1 1~5
+
 Time_Flag
 ;bit0=1 1Hz标志		|走时显示
 ;bit1=1 2Hz标志		|走时显示
@@ -68,6 +73,9 @@ Key_Flag
 ;bit6=1 长按1S标志
 ;bit7=1 按键处理终止
 
+NightPeriod_Flag
+;bit0=1 夜间模式开启
+
 SpecialKey_Flag
 ;bit0=1 Mode键待处理				|特殊按键
 ;bit1=1 Alarm键待处理				|特殊按键
@@ -98,6 +106,10 @@ R_Time_Min				; 时间分
 R_Time_Hour				; 时间小时
 R_Alarm_Min				; 闹钟分
 R_Alarm_Hour			; 闹钟小时
+R_Night_StartHour		; 夜间开始小时
+R_Night_EndHour			; 夜间结束小时
+R_Night_StartMin		; 夜间开始分钟
+R_Night_EndMin			; 夜间结束分钟
 R_Date_Day				; 日期，从1开始
 R_Date_Month			; 月份，从1开始
 R_Date_Year				; 年份，由于只计2000-2099，所以由0-99代替

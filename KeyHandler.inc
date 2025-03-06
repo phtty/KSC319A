@@ -134,6 +134,7 @@ L_KeyMTrigger:
 	btfsc	Key_Flag,7					; 判断是否需要直接退出整个按键处理
 	goto	L_KeyHandle_Over
 
+; 压键有效处理
 	movlw	B'00001010'
 	andwf	Primary_Status,W
 	btfss	Z
@@ -145,17 +146,17 @@ L_KeyMTrigger:
 	btfss	Primary_Status,0			; 处于时钟显示状态，M键才会进行松键处理
 	goto	Depress_Event
 
+; 也是压键有效处理
 	goto	SetMode_CHG					; 根据当前模式去切换不同的子模式
-
+; 松键有效处理
 Depress_Event:
 	bsf		SpecialKey_Flag,0
 	return								; 短按在按键触发部分只置标志位就退出
-
+; 长按处理（仅单次有效）
 L_KeyMTrigger_LongTri:
 	btfsc	Primary_Status,0
 	goto	CD_SetMode_CHG				; 时钟显示模式下根据子模式切换到对应的设置
 
-	goto	L_KeyHandle_Over			; 非时钟显示模式直接退出
 
 
 L_KeyATrigger:
@@ -164,23 +165,25 @@ L_KeyATrigger:
 	btfsc	Key_Flag,7
 	goto	L_KeyHandle_Over
 
+; 压键有效处理
 	movlw	B'00001010'
 	andwf	Primary_Status,W
 	btfsc	Z
-	goto	SwitchState_AlarmDis		; 非闹钟设置或显示模式，A键会直接回到时钟显示
+	goto	SwitchState_AlarmDis		; 非闹钟设置或显示模式，A键为压键有效，回到闹钟显示模式
+
+	btfsc	Primary_Status,3
+	goto	SwitchState_AlarmSet		; 若在闹钟设置模式也是压键有效,更改闹钟子模式
 
 	btfsc	Key_Flag,3
 	goto	L_KeyATrigger_LongTri
-	bsf		SpecialKey_Flag,1			; 长按标志到来前置位标志位，交给短按函数处理
-	return								; 短按在按键触发部分只置标志位就退出
 
-L_KeyATrigger_LongTri:					; 长按部分处理
-	btfsc	Primary_Status,1
-	nop									; 切换到闹钟设置
-	btfsc	Primary_Status,3
-	nop									; 根据子模式进不同的长按处理或者进模式切换
+; 松键有效处理
+	bsf		SpecialKey_Flag,1			; 长按标志到来前置位标志位，让松键函数处理
 	return
-	goto	L_KeyHandle_Over
+; 长按处理（仅单次有效）
+L_KeyATrigger_LongTri:					; 能触发长按说明模式已经在闹钟显示模式了
+	goto	SwitchState_AlarmSet		; 切换到闹钟设置
+
 
 
 L_KeyBTrigger:
@@ -197,14 +200,8 @@ L_KeyUTrigger:
 	goto	L_KeyHandle_Over
 
 	btfsc	Primary_Status,0
-	nop									; 时钟显示模式下，U键调亮度
+	goto	CDMode_KeyU_Handle
 
-	btfss	Key_Flag,3
-	goto	L_KeyUTrigger_LongTri:
-	bsf		SpecialKey_Flag,0			; 长按标志到来前置位标志位，交给短按函数处理
-	return
-
-L_KeyUTrigger_LongTri:
 	btfsc	Primary_Status,2
 	goto	AddNum_CS
 	btfsc	Primary_Status,3
@@ -213,8 +210,16 @@ L_KeyUTrigger_LongTri:
 	goto	AddNum_DS
 	btfsc	Primary_Status,5
 	goto	AddNum_NS
-	return
+
 	goto	L_KeyHandle_Over
+
+CDMode_KeyU_Handle:
+	movlw	3
+	subwf	Secondary_Status			; 时钟显示模式下，其他子模式U键调亮度，夜间模式U键为开关
+	btfss	Z
+	goto	BackLight_Level_CHG
+	goto	NMode_Swtich
+
 
 
 L_KeyDTrigger:
@@ -224,14 +229,8 @@ L_KeyDTrigger:
 	goto	L_KeyHandle_Over
 	
 	btfsc	Primary_Status,0
-	nop									; 时钟显示模式下，U键调亮度
+	goto	CDMode_KeyD_Handle
 
-	btfss	Key_Flag,3
-	goto	L_KeyDTrigger_LongTri:
-	bsf		SpecialKey_Flag,0			; 长按标志到来前置位标志位，交给短按函数处理
-	return
-
-L_KeyDTrigger_LongTri:
 	btfsc	Primary_Status,2
 	goto	SubNum_CS
 	btfsc	Primary_Status,3
@@ -240,8 +239,21 @@ L_KeyDTrigger_LongTri:
 	goto	SubNum_DS
 	btfsc	Primary_Status,5
 	goto	SubNum_NS
-	return
+
 	goto	L_KeyHandle_Over
+
+CDMode_KeyD_Handle:
+	movlw	2
+	subwf	Secondary_Status
+	btfsc	Z
+	goto	TemperMode_Change			; 时钟显示模式下，夜间子模式D键为开关，温度子模式D键为切换摄氏华氏度
+
+	movlw	3
+	subwf	Secondary_Status
+	btfsc	Z
+	goto	NMode_Swtich
+	goto	L_KeyHandle_Over
+
 
 
 
@@ -277,14 +289,14 @@ SwitchState_ClockDis:
 	movlw	4
 	subwf	Secondary_Status,W
 	btfsc	C
-L_CLR_SS:
 	clrf	Secondary_Status			; 超过最后一个子模式序号则清零回到第一个
-	goto	L_KeyHandle_Over			; 状态切换的功能会结束按键处理
+	return
 
 SW2CD:
 	movlw	B'00000001'
 	movwf	Primary_Status
-	goto	L_CLR_SS
+	clrf	Secondary_Status			; 清空子模式序号
+	goto	L_KeyHandle_Over			; 从别的模式切入会结束按键处理
 
 
 
@@ -314,14 +326,14 @@ SwitchState_ClockSet:
 	andwf	Primary_Status,W
 	btfsc	Z
 	goto	SW2CS						; 若当前非时钟设置则只切换到时钟设置
-	
+
 	incf	Secondary_Status			; 时钟设置模式的子模式切换
 	movlw	3
 	subwf	Secondary_Status,W
 	btfsc	C
-	goto	L_KeyHandle_Over			; 状态切换的功能会结束按键处理
-
 	goto	SwitchState_ClockDis		; 子模式溢出后退出设置模式，回到时显模式
+
+	goto	L_KeyHandle_Over			; 状态切换的功能会结束按键处理
 
 SW2CS:
 	movlw	B'00000100'
@@ -383,6 +395,9 @@ SW2DS:
 
 ; 切换到夜间时段设置模式
 SwitchState_NightPeriodSet:
+	btfss	NightPeriod_Flag,0
+	goto	L_KeyHandle_Over			; 如果夜间模式没有开启则不会进夜间时段设置模式
+
 	movlw	B'00100000'
 	andwf	Primary_Status,W
 	btfsc	Z
@@ -431,6 +446,8 @@ SetMode_CHG:
 	goto	SwitchState_NightPeriodSet	; 切换夜间时段设置下的子模式
 	goto	L_KeyHandle_Over			; 非法值，退出按键处理
 
+
+;======================================================================================
 
 ; 时设模式增数
 AddNum_CS:
@@ -541,7 +558,7 @@ Time_Mode_SW:
 	xorwf	Clock_Flag,F				; 取反12/24h标志位
 
 	call	F_Display_Time				; 刷新显示的时间
-	goto	L_KeyHandle_Over			; 切换时间显示模式没有快加
+	goto	L_KeyHandle_Over			; 切换时间显示模式为压键生效
 
 ; 时增加
 Time_Hour_Add:
@@ -710,6 +727,234 @@ L_Day_Juge2:
 
 ;======================================================================================
 
+; 夜间模式开关
+NMode_Swtich:
+	movlw	1
+	xorwf	NightPeriod_Flag
+
+	call	F_Display_NightPeriod_SW
+	goto	L_KeyHandle_Over			; 切换夜间模式开关压键生效
+
+
+; 夜间模式开始时增加
+NMode_Start_Hour_Add:
+	movlw	23
+	subwf	R_Night_StartHour,W
+	btfsc	C
+	goto	NMode_StartHour_AddOverflow
+	incf	R_Night_StartHour
+	goto	NMode_StartHour_Add_Exit:
+NMode_StartHour_AddOverflow:
+	clrf	R_Night_StartHour
+NMode_StartHour_Add_Exit:
+	call	F_Display_NMode_StartTime
+	return
+
+; 夜间模式开始时减少
+NMode_Start_Hour_Sub:
+	movf	R_Night_StartHour,F
+	btfsc	Z
+	goto	NMode_StartHour_SubOverflow
+	decf	R_Night_StartHour,F
+	goto	NMode_StartHour_Sub_Exit
+NMode_StartHour_SubOverflow:
+	movlw	23
+	movwf	R_Night_StartHour
+NMode_StartHour_Sub_Exit:
+	call	F_Display_NMode_StartTime
+	return
+
+; 夜间模式开始分增加
+NMode_Start_Min_Add:
+	movlw	59
+	subwf	R_Night_StartMin,W
+	btfsc	C
+	goto	NMode_StartMin_AddOverflow
+	incf	R_Night_StartMin,F
+	goto	NMode_StartMin_Add_Exit:
+NMode_StartMin_AddOverflow:
+	clrf	R_Night_StartMin
+NMode_StartMin_Add_Exit:
+	call	F_Display_NMode_StartTime
+	return
+
+; 夜间模式开始分减少
+NMode_Start_Min_Sub:
+	movf	R_Night_StartMin,F
+	btfsc	Z
+	goto	NMode_StartMin_SubOverflow
+	decf	R_Night_StartMin,F
+	goto	NMode_StartMin_Sub_Exit
+NMode_StartMin_SubOverflow:
+	movlw	59
+	movwf	R_Night_StartMin
+NMode_StartMin_Sub_Exit:
+	call	F_Display_NMode_StartTime
+	return
+
+
+; 夜间模式结束时增加
+NMode_End_Hour_Add:
+	movlw	23
+	subwf	R_Night_EndHour,W
+	btfsc	C
+	goto	NMode_EndHour_AddOverflow
+	incf	R_Night_EndHour
+	goto	NMode_EndHour_Add_Exit:
+NMode_EndHour_AddOverflow:
+	clrf	R_Night_EndHour
+NMode_EndHour_Add_Exit:
+	call	F_Display_NMode_EndTime
+	return
+
+; 夜间模式结束时减少
+NMode_End_Hour_Sub:
+	movf	R_Night_EndHour,F
+	btfsc	Z
+	goto	NMode_EndHour_SubOverflow
+	decf	R_Night_EndHour,F
+	goto	NMode_EndHour_Sub_Exit
+NMode_EndHour_SubOverflow:
+	movlw	23
+	movwf	R_Night_EndHour
+NMode_EndHour_Sub_Exit:
+	call	F_Display_NMode_EndTime
+	return
+
+; 夜间模式结束分增加
+NMode_End_Min_Add:
+	movlw	59
+	subwf	R_Night_EndMin,W
+	btfsc	C
+	goto	NMode_EndMin_AddOverflow
+	incf	R_Night_EndMin,F
+	goto	NMode_EndMin_Add_Exit:
+NMode_EndMin_AddOverflow:
+	clrf	R_Night_EndMin
+NMode_EndMin_Add_Exit:
+	call	F_Display_NMode_EndTime
+	return
+
+; 夜间模式结束分减少
+NMode_End_Min_Sub:
+	movf	R_Night_EndMin,F
+	btfsc	Z
+	goto	NMode_EndMin_SubOverflow
+	decf	R_Night_EndMin,F
+	goto	NMode_EndMin_Sub_Exit
+NMode_EndMin_SubOverflow:
+	movlw	59
+	movwf	R_Night_EndMin
+NMode_EndMin_Sub_Exit:
+	call	F_Display_NMode_EndTime
+	return
+
+
+;======================================================================================
+
+; 闹钟开关
+Alarm_Switch:
+	movlw	0x80
+	xorwf	Clock_Flag,F				; 取反闹钟开关标志位
+
+	movlw	led_al
+	movwf	R_X
+	btfsc	Clock_Flag,7
+	goto	AlarmSwitch_OFF
+	call	F_DisSymbol					; 亮ALARM点
+	goto	L_KeyHandle_Over			; 闹钟开关是压键生效
+AlarmSwitch_OFF:
+	call	F_ClrSymbol					; 灭ALARM点
+	goto	L_KeyHandle_Over			; 闹钟开关是压键生效
+
+; 闹钟时增加
+Alarm_Hour_Add:
+	movlw	23
+	subwf	R_Alarm_Hour,W
+	btfsc	C
+	goto	AlarmHour_AddOverflow
+	incf	R_Alarm_Hour
+	goto	AlarmHour_Add_Exit:
+AlarmHour_AddOverflow:
+	clrf	R_Alarm_Hour
+AlarmHour_Add_Exit:
+	nop									; 夜间模式的处理
+	call	F_Display_Alarm
+	return
+
+; 闹钟时减少
+Alarm_Hour_Sub:
+	movf	R_Alarm_Hour,F
+	btfsc	Z
+	goto	AlarmHour_SubOverflow
+	decf	R_Alarm_Hour,F
+	goto	AlarmHour_Sub_Exit
+AlarmHour_SubOverflow:
+	movlw	23
+	movwf	R_Alarm_Hour
+AlarmHour_Sub_Exit:
+	nop									; 夜间模式的处理
+	call	F_Display_Alarm
+	return
+
+; 闹钟分增加
+Alarm_Min_Add:
+	movlw	59
+	subwf	R_Alarm_Min,W
+	btfsc	C
+	goto	AlarmMin_AddOverflow
+	incf	R_Alarm_Min,F
+	goto	AlarmMin_Add_Exit:
+AlarmMin_AddOverflow:
+	clrf	R_Alarm_Min
+AlarmMin_Add_Exit:
+	call	F_Display_Alarm
+	return
+
+; 闹钟分减少
+Alarm_Min_Sub:
+	movf	R_Alarm_Min,F
+	btfsc	Z
+	goto	AlarmMin_SubOverflow
+	decf	R_Alarm_Min,F
+	goto	AlarmMin_Sub_Exit
+AlarmMin_SubOverflow:
+	movlw	59
+	movwf	R_Alarm_Min
+AlarmMin_Sub_Exit:
+	call	F_Display_Alarm
+	return
+
+; 变更工作日闹钟
+Alarm_WorkDay_CHG:
+	movf	8
+	subwf	WorkDay_Alarm
+	btfsc	C
+	goto	WorkDay_Overflow
+
+	bcf		C
+	rlf		WorkDay_Alarm,F
+	goto	L_KeyHandle_Over
+WorkDay_Overflow:
+	movlw	1
+	movwf	WorkDay_Alarm
+	goto	L_KeyHandle_Over
+
+
+;======================================================================================
+
+; 切换温度单位
+TemperMode_Change:
+	movlw	2
+	xorwf	ADC_Flag					; 取反温度单位标志位，切换显示的温度单位
+	goto	L_KeyHandle_Over
+
+; 调整亮度
+BackLight_Level_CHG:
+	goto	L_KeyHandle_Over
+
+
+
 L_DayOverflow_Juge:
 	bcf		RP0
 	call	Is_Leap_Year				; 判断当前是平年还是闰年
@@ -778,8 +1023,6 @@ Day_Overflow_Yes1:
 	movlw	1
 	movwf	R_Date_Day					; 溢出后天数清空
 	return
-
-
 
 
 
