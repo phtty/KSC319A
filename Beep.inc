@@ -17,5 +17,5 @@ F_BeepManage:
 	return
 L_NoBeep_Serial_Mode:
 	bcf		T2ON						; ¹Ø±ÕTIM2
-	bsf		TRISA,7
+	bsf		TRISA,7						; PA7Êä³ö¹Ø±Õ
 	return
