@@ -205,6 +205,214 @@ L_DisDate_Year:
 
 
 
+F_Display_NightPeriod_SW:
+	call	F_ClrScreen_HoldAL					; 显示ON/OFF需要清除了al之外的所有点
+
+	btfsc	NightPeriod_Flag,0
+	goto	Display_NightPeriod_ON
+
+	movlw	0xee								; 显示OFF
+	iorwf	DRAM,F
+	movlw	0x2c
+	iorwf	DRAM+1,F
+	movlw	0x24
+	iorwf	DRAM+2,F
+	movlw	0x70
+	iorwf	DRAM+3,F
+	return
+
+Display_NightPeriod_ON:
+	movlw	0xdd								; 显示ON
+	iorwf	DRAM,F
+	movlw	0x3d
+	iorwf	DRAM+2,F
+	return
+
+
+
+; 显示夜间模式开始时间
+F_Display_NMode_StartTime:
+	bcf		RP0
+	call	L_DisNStartTime_Min
+	call	L_DisNStartTime_Hour
+	return
+
+; 显示分钟
+L_DisNStartTime_Min:
+	movlw	led_d3
+	movwf	R_X
+	movf	R_Night_StartMin,W
+	call	F_Hex2BCD
+	movf	P_Temp5,W
+	call	F_7Digit_Dis
+
+	movlw	led_d2
+	movwf	R_X
+	movf	R_Night_StartMin,W
+	call	F_Hex2BCD
+	movf	P_Temp6,W
+	call	F_7Digit_Dis
+	return
+
+; 根据12H或24H模式显示小时
+L_DisNStartTime_Hour:
+	btfss	Clock_Flag,0
+	goto	L_24hMode_NStartTime
+
+	movlw	12
+	subwf	R_Night_StartHour,W				; 判断当前时间是上午或下午
+	btfsc	C
+	goto	L_NStartTime12h_PM
+	movlw	led_pm
+	movwf	R_X
+	call	F_ClrSymbol						; 上午需灭PM点
+
+	movf	R_Night_StartHour,W				; 再判断是否在0点
+	btfsc	Z
+	goto	L_NStartTime_0Hour
+	goto	L_Start_DisNStartTime_Hour
+L_NStartTime12h_PM:
+	movlw	led_pm
+	movwf	R_X
+	call	F_DisSymbol						; 下午亮PM点
+	movlw	12
+	subwf	R_Night_StartHour,W				; 调整为12h模式显示
+	btfss	Z
+	goto	L_Start_DisNStartTime_Hour
+L_NStartTime_0Hour:
+	movlw	12								; 0点在12h模式里是12点
+	goto	L_Start_DisNStartTime_Hour
+
+L_24hMode_NStartTime:
+	movlw	led_pm
+	movwf	R_X
+	call	F_ClrSymbol						; 24h模式下没有PM点
+	movf	R_Night_StartHour,W
+L_Start_DisNStartTime_Hour:
+	call	F_Hex2BCD						; 显示最终的结果
+	movlw	led_d1
+	movwf	R_X
+	movf	P_Temp5,W
+	call	F_7Digit_Dis
+
+	movf	P_Temp6,W
+	movwf	R_X
+	call	F_6Digit_Dis
+	return
+
+
+
+
+; 显示夜间模式结束时间
+F_Display_NMode_EndTime:
+	bcf		RP0
+	call	L_DisNEndTime_Min
+	call	L_DisNEndTime_Hour
+	return
+
+; 显示分钟
+L_DisNEndTime_Min:
+	movlw	led_d3
+	movwf	R_X
+	movf	R_Night_EndMin,W
+	call	F_Hex2BCD
+	movf	P_Temp5,W
+	call	F_7Digit_Dis
+
+	movlw	led_d2
+	movwf	R_X
+	movf	R_Night_EndMin,W
+	call	F_Hex2BCD
+	movf	P_Temp6,W
+	call	F_7Digit_Dis
+	return
+
+; 根据12H或24H模式显示小时
+L_DisNEndTime_Hour:
+	btfss	Clock_Flag,0
+	goto	L_24hMode_NEndTime
+
+	movlw	12
+	subwf	R_Night_EndHour,W				; 判断当前时间是上午或下午
+	btfsc	C
+	goto	L_NEndTime12h_PM
+	movlw	led_pm
+	movwf	R_X
+	call	F_ClrSymbol						; 上午需灭PM点
+
+	movf	R_Night_EndHour,W				; 再判断是否在0点
+	btfsc	Z
+	goto	L_NEndTime_0Hour
+	goto	L_Start_DisNEndTime_Hour
+L_NEndTime12h_PM:
+	movlw	led_pm
+	movwf	R_X
+	call	F_DisSymbol						; 下午亮PM点
+	movlw	12
+	subwf	R_Night_EndHour,W				; 调整为12h模式显示
+	btfss	Z
+	goto	L_Start_DisNEndTime_Hour
+L_NEndTime_0Hour:
+	movlw	12								; 0点在12h模式里是12点
+	goto	L_Start_DisNEndTime_Hour
+
+L_24hMode_NEndTime:
+	movlw	led_pm
+	movwf	R_X
+	call	F_ClrSymbol						; 24h模式下没有PM点
+	movf	R_Night_StartHour,W
+L_Start_DisNEndTime_Hour:
+	call	F_Hex2BCD						; 显示最终的结果
+	movlw	led_d1
+	movwf	R_X
+	movf	P_Temp5,W
+	call	F_7Digit_Dis
+
+	movf	P_Temp6,W
+	movwf	R_X
+	call	F_6Digit_Dis
+	return
+
+
+; 显示贪睡时间
+F_Display_SNZ:
+	movlw	led_d2
+	movwf	R_X
+	movf	R_Snooze_Time,W
+	call	F_Hex2BCD
+	movf	P_Temp5,W
+	call	F_7Digit_Dis
+
+	movlw	led_d1
+	movwf	R_X
+	movf	R_Snooze_Time,W
+	call	F_Hex2BCD
+	movf	P_Temp6,W
+	call	F_7Digit_Dis
+	return
+
+
+; 显示工作日闹钟
+F_AlarmWorkDay_Dis:
+	call	F_ClrScreen_HoldAL
+	movlw	0x20
+	iorwf	DRAM,F
+	movlw	0x28
+	iorwf	DRAM+1,F						; 显示固定的“1-”
+
+	movlw	led_d3
+	movwf	R_X
+	btfsc	WorkDay_Alarm,0
+	movlw	7
+	btfsc	WorkDay_Alarm,1
+	movlw	6
+	btfsc	WorkDay_Alarm,2
+	movlw	5
+	call	F_7Digit_Dis					; 根据工作日闹钟的设置值显示7~5
+	return
+
+
+
 F_UnDisplay_D0_1:
 	movlw	led_d1
 	movwf	R_X
@@ -229,6 +437,18 @@ F_UnDisplay_D2_3:
 	movwf	R_X
 	movlw	10
 	call	F_7Digit_Dis
+	return
+
+
+; 除了AL点全清屏
+F_ClrScreen_HoldAL:
+	call	F_ClearScreen					; 先全清屏
+	btfss	Clock_Flag,7
+	return
+
+	movlw	led_al							; 再根据闹钟是否开启决定亮不亮AL点
+	movwf	R_X
+	call	F_DisSymbol
 	return
 
 

@@ -9,7 +9,7 @@ F_Alarm_Display:
 
 
 ; 闹钟设置模式
-F_Clock_Set:
+F_Alarm_Set:
 	bcf		RP0
 
 	movf	Secondary_Status,W
@@ -22,11 +22,11 @@ F_Clock_Set:
 	movlw	2
 	subwf	Secondary_Status,W
 	btfsc	Z
-	goto	F_AlarmSnz_Set						; 贪睡时间
+	goto	F_Display_SNZ						; 贪睡时间
 	movlw	3
 	subwf	Secondary_Status,W
 	btfsc	Z
-	goto	F_AlarmWorkDay_Set					; 工作日闹钟
+	goto	F_AlarmWorkDay_Dis					; 工作日闹钟
 	return
 
 

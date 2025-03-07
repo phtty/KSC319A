@@ -471,7 +471,7 @@ AS_AddNumMode_JumpTable:
 	goto	Alarm_Hour_Add				; 闹钟小时设置
 	goto	Alarm_Min_Add				; 闹钟分钟设置
 	goto	Alarm_SNZ_Time_Add			; 闹钟贪睡时间设置
-	goto	Alarm_WorkClock_Add			; 工作日闹钟设置
+	goto	Alarm_WorkDay_CHG			; 工作日闹钟设置
 	goto	L_KeyHandle_Over
 
 ; 日设模式增数
@@ -522,7 +522,7 @@ AS_SubNumMode_JumpTable:
 	goto	Alarm_Hour_Sub				; 闹钟小时设置
 	goto	Alarm_Min_Sub				; 闹钟分钟设置
 	goto	Alarm_SNZ_Time_Sub			; 闹钟贪睡时间设置
-	goto	Alarm_WorkClock_Sub			; 工作日闹钟设置
+	goto	Alarm_WorkDay_CHG			; 工作日闹钟设置
 	goto	L_KeyHandle_Over
 
 ; 日设模式减数
@@ -567,7 +567,7 @@ Time_Hour_Add:
 	btfsc	C
 	goto	TimeHour_AddOverflow
 	incf	R_Time_Hour
-	goto	TimeHour_Add_Exit:
+	goto	TimeHour_Add_Exit
 TimeHour_AddOverflow:
 	clrf	R_Time_Hour
 TimeHour_Add_Exit:
@@ -598,7 +598,7 @@ Time_Min_Add:
 	btfsc	C
 	goto	TimeMin_AddOverflow
 	incf	R_Time_Min,F
-	goto	TimeMin_Add_Exit:
+	goto	TimeMin_Add_Exit
 TimeMin_AddOverflow:
 	clrf	R_Time_Min
 TimeMin_Add_Exit:
@@ -635,7 +635,7 @@ DateYear_AddOverflow:
 	clrf	R_Date_Year
 DateYear_Add_Exit:
 	call	L_DayOverflow_Juge
-	call	F_Is_Leap_Year
+	call	Is_Leap_Year
 	call	L_DisDate_Year
 	return
 
@@ -651,7 +651,7 @@ DateYear_SubOverflow:
 	movwf	R_Date_Year
 DateYear_Sub_Exit:
 	call	L_DayOverflow_Juge
-	call	F_Is_Leap_Year
+	call	Is_Leap_Year
 	call	L_DisDate_Year
 	return
 
@@ -721,6 +721,7 @@ L_Day_Juge2:
 	nop
 	movf	PMDATH,W					; 查表得出当月最大天数
 	movwf	R_Date_Day
+DateDay_Sub_Exit:
 	call	F_Date_Display
 	return
 
@@ -731,6 +732,8 @@ L_Day_Juge2:
 NMode_Swtich:
 	movlw	1
 	xorwf	NightPeriod_Flag
+
+	nop									; 根据当前夜间时段调整亮度
 
 	call	F_Display_NightPeriod_SW
 	goto	L_KeyHandle_Over			; 切换夜间模式开关压键生效
@@ -743,7 +746,7 @@ NMode_Start_Hour_Add:
 	btfsc	C
 	goto	NMode_StartHour_AddOverflow
 	incf	R_Night_StartHour
-	goto	NMode_StartHour_Add_Exit:
+	goto	NMode_StartHour_Add_Exit
 NMode_StartHour_AddOverflow:
 	clrf	R_Night_StartHour
 NMode_StartHour_Add_Exit:
@@ -771,7 +774,7 @@ NMode_Start_Min_Add:
 	btfsc	C
 	goto	NMode_StartMin_AddOverflow
 	incf	R_Night_StartMin,F
-	goto	NMode_StartMin_Add_Exit:
+	goto	NMode_StartMin_Add_Exit
 NMode_StartMin_AddOverflow:
 	clrf	R_Night_StartMin
 NMode_StartMin_Add_Exit:
@@ -800,7 +803,7 @@ NMode_End_Hour_Add:
 	btfsc	C
 	goto	NMode_EndHour_AddOverflow
 	incf	R_Night_EndHour
-	goto	NMode_EndHour_Add_Exit:
+	goto	NMode_EndHour_Add_Exit
 NMode_EndHour_AddOverflow:
 	clrf	R_Night_EndHour
 NMode_EndHour_Add_Exit:
@@ -828,7 +831,7 @@ NMode_End_Min_Add:
 	btfsc	C
 	goto	NMode_EndMin_AddOverflow
 	incf	R_Night_EndMin,F
-	goto	NMode_EndMin_Add_Exit:
+	goto	NMode_EndMin_Add_Exit
 NMode_EndMin_AddOverflow:
 	clrf	R_Night_EndMin
 NMode_EndMin_Add_Exit:
@@ -874,7 +877,7 @@ Alarm_Hour_Add:
 	btfsc	C
 	goto	AlarmHour_AddOverflow
 	incf	R_Alarm_Hour
-	goto	AlarmHour_Add_Exit:
+	goto	AlarmHour_Add_Exit
 AlarmHour_AddOverflow:
 	clrf	R_Alarm_Hour
 AlarmHour_Add_Exit:
@@ -904,7 +907,7 @@ Alarm_Min_Add:
 	btfsc	C
 	goto	AlarmMin_AddOverflow
 	incf	R_Alarm_Min,F
-	goto	AlarmMin_Add_Exit:
+	goto	AlarmMin_Add_Exit
 AlarmMin_AddOverflow:
 	clrf	R_Alarm_Min
 AlarmMin_Add_Exit:
@@ -925,6 +928,34 @@ AlarmMin_Sub_Exit:
 	call	F_Display_Alarm
 	return
 
+; 贪睡时间增加
+Alarm_SNZ_Time_Add:
+	movlw	60
+	subwf	R_Snooze_Time,W
+	btfsc	C
+	goto	AlarmSNZ_AddOverflow
+	incf	R_Snooze_Time,F
+	goto	AlarmSNZ_Add_Exit
+AlarmSNZ_AddOverflow:
+	clrf	R_Snooze_Time
+AlarmSNZ_Add_Exit:
+	call	F_Display_SNZ
+	return
+
+; 贪睡时间减少
+Alarm_SNZ_Time_Sub:
+	movf	R_Snooze_Time,F
+	btfsc	Z
+	goto	AlarmSNZ_SubOverflow
+	decf	R_Snooze_Time,F
+	goto	AlarmSNZ_Sub_Exit
+AlarmSNZ_SubOverflow:
+	movlw	60
+	movwf	R_Snooze_Time
+AlarmSNZ_Sub_Exit:
+	call	F_Display_SNZ
+	return
+
 ; 变更工作日闹钟
 Alarm_WorkDay_CHG:
 	movf	8
@@ -934,10 +965,12 @@ Alarm_WorkDay_CHG:
 
 	bcf		C
 	rlf		WorkDay_Alarm,F
-	goto	L_KeyHandle_Over
+	goto	Alarm_WorkDay_CHG_Exit
 WorkDay_Overflow:
 	movlw	1
 	movwf	WorkDay_Alarm
+Alarm_WorkDay_CHG_Exit:
+	call	F_AlarmWorkDay_Dis
 	goto	L_KeyHandle_Over
 
 
@@ -951,6 +984,37 @@ TemperMode_Change:
 
 ; 调整亮度
 BackLight_Level_CHG:
+	movlw	High(BackLight_Level_JumpTable)
+	movwf	PCLATH
+	movf	BackLight_Level,W			; 通过BackLight Level值来跳转
+BackLight_Level_JumpTable:
+	addwf	PCL,F
+	goto	BackLight_Level0
+	goto	BackLight_Level1
+	goto	BackLight_Level2
+BackLight_Level0:						; 当前亮度为低亮，下一亮度为高亮
+	movlw	2
+	movwf	BackLight_Level
+	movlw	0xe8
+	movwf	PWM0DL						; 调整占空比，先设置低位
+	movlw	0x03
+	movwf	PWM0DH
+	goto	L_KeyHandle_Over
+BackLight_Level1:						; 当前亮度为半亮，下一亮度为低亮
+	movlw	0
+	movwf	BackLight_Level
+	movlw	0x4e
+	movwf	PWM0DL						; 调整占空比，先设置低位
+	movlw	0x01
+	movwf	PWM0DH
+	goto	L_KeyHandle_Over
+BackLight_Level2:						; 当前亮度为高亮，下一亮度为半亮
+	movlw	1
+	movwf	BackLight_Level
+	movlw	0x9b
+	movwf	PWM0DL						; 调整占空比，先设置低位
+	movlw	0x02
+	movwf	PWM0DH
 	goto	L_KeyHandle_Over
 
 
@@ -1003,11 +1067,11 @@ L_DayOverflow_To_1:
 	movwf	PMADRH
 	movlw	Low(L_Table_Month_Common)
 	goto	L_Day_Juge1
-L_LeapYear_Handle:
+L_LeapYear_Handle1:
 	movlw	High(L_Table_Month_Leap)
 	movwf	PMADRH
 	movlw	Low(L_Table_Month_Leap)
-L_Day_Juge1:
+L_Day_Juge3:
 	addwf	R_X,W
 	movwf	PMADRL
 	bsf		RDON

@@ -32,7 +32,7 @@ Clock_Flag
 ;bit4=1 响闹阻塞标志，防止短时间内关闭响闹继续进闹钟触发
 ;bit5	上次的响闹模式，判断是响闹结束还是未响闹
 ;bit6=1 贪睡按键触发导致的响闹结束
-;bit7=1 闹钟关闭
+;bit7=1 闹钟开启
 
 WorkDay_Alarm
 ;bit0=1 1~7
@@ -96,6 +96,11 @@ QuickAdd_Counter
 
 Beep_Serial
 
+BackLight_Level
+;Level=0 低亮
+;Level=1 半亮
+;Level=2 高亮
+
 R_ADC_L
 R_ADC_H
 R_Temperature			; 温度（摄氏）
@@ -115,10 +120,10 @@ R_Date_Month			; 月份，从1开始
 R_Date_Year				; 年份，由于只计2000-2099，所以由0-99代替
 R_Date_Week				; 星期
 
-R_Snooze_Min			;贪睡闹钟分钟
-R_Snooze_Hour			;贪睡闹钟小时
+R_Snooze_Min			; 贪睡闹钟分钟
+R_Snooze_Hour			; 贪睡闹钟小时
 
-R_Snooze_Time			;贪睡闹钟小时
+R_Snooze_Time			; 贪睡闹钟小时
 
 ; COM计数
 COM_Counter

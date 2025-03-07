@@ -105,5 +105,6 @@ include Beep.inc
 include VoiceSwitch.inc
 include Time.inc
 include Calendar.inc
+include Alarm.inc
 
 end

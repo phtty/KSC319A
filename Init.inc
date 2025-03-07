@@ -60,6 +60,31 @@ NEXTBYTE_1:
 	movlw	5
 	movwf	R_Snooze_Time	; 贪睡时间默认为5分钟
 
+	movlw	2
+	movwf	BackLight_Level	; 上电默认高亮
+
+	movlw	12
+	movwf	R_Time_Hour		; 设置上电时间
+	movlw	0
+	movwf	R_Time_Min
+	movlw	0
+	movwf	R_Time_Sec
+
+	movlw	6
+	movwf	R_Alarm_Hour	; 设置上电闹钟
+	movlw	0
+	movwf	R_Alarm_Min
+
+	movlw	18
+	movwf	R_Night_StartHour
+	movlw	0
+	movwf	R_Night_StartMin; 设置默认夜间模式开始时间
+
+	movlw	7
+	movwf	R_Night_EndHour
+	movlw	0
+	movwf	R_Night_EndMin	; 设置默认夜间模式结束时间
+
 	return
 
 
@@ -129,18 +154,19 @@ PWM_Initial:
 
 	bsf		RP0
 	clrf	PWMEN			; PWM模块使能寄存器
-	movlw	0x0f
-	movwf	PWM0C			; PWM模块控制寄存器
 
 	movlw	0xe8
 	movwf	PWM0PL
 	movlw	0x03
 	movwf	PWM0PH			; 周期寄存器
 
-	movlw	0xf4
+	movlw	0xe8
 	movwf	PWM0DL			; 先设置低位
-	movlw	0x01
+	movlw	0x03
 	movwf	PWM0DH			; 占空比寄存器
+
+	movlw	0x0b
+	movwf	PWM0C			; PWM模块控制寄存器
 
 	bcf		RP0
 	bsf		TRISA,7			; PA7先关闭输出
