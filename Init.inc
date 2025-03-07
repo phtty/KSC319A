@@ -70,6 +70,13 @@ NEXTBYTE_1:
 	movlw	0
 	movwf	R_Time_Sec
 
+	movlw	25
+	movwf	R_Date_Year		; 设置上电日期
+	movlw	1
+	movwf	R_Date_Month
+	movlw	1
+	movwf	R_Date_Day
+
 	movlw	6
 	movwf	R_Alarm_Hour	; 设置上电闹钟
 	movlw	0

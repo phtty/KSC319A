@@ -15,14 +15,8 @@ START:
 
 	call	System_Init						; 上电初始化
 
-	; call	F_ClearScreen
-	; call	F_Temperature_Get
-	; call	F_Display_Temper
+	call	L_GetWeek
 
-	; bsf		Beep_Flag,0
-	; bsf		TimeFlag_SW,1
-	; movlw	B'100'
-	; movwf	Beep_Serial
 	movlw	1
 	movwf	Primary_Status					; 设置系统状态
 	clrf	Secondary_Status

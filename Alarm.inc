@@ -8,32 +8,32 @@ F_Alarm_Display:
 
 
 
-; é—¹é’Ÿè®¾ç½®æ¨¡å¼
+; ÄÖÖÓÉèÖÃÄ£Ê½
 F_Alarm_Set:
 	bcf		RP0
 
 	movf	Secondary_Status,W
 	btfsc	Z
-	goto	F_AlarmHour_Set						; é—¹é’Ÿæ—¶è®¾
+	goto	F_AlarmHour_Set						; ÄÖÖÓÊ±Éè
 	movlw	1
 	subwf	Secondary_Status,W
 	btfsc	Z
-	goto	F_AlarmMin_Set						; å°æ—¶è®¾ç½®
+	goto	F_AlarmMin_Set						; Ğ¡Ê±ÉèÖÃ
 	movlw	2
 	subwf	Secondary_Status,W
 	btfsc	Z
-	goto	F_Display_SNZ						; è´ªç¡æ—¶é—´
+	goto	F_Display_SNZ						; Ì°Ë¯Ê±¼ä
 	movlw	3
 	subwf	Secondary_Status,W
 	btfsc	Z
-	goto	F_AlarmWorkDay_Dis					; å·¥ä½œæ—¥é—¹é’Ÿ
+	goto	F_AlarmWorkDay_Dis					; ¹¤×÷ÈÕÄÖÖÓ
 	return
 
 
 F_AlarmHour_Set:
 	bcf		RP0
 	btfsc	Key_Flag,3
-	goto	L_KeyTrigger_NoBlink_AlarmHour		; å­˜åœ¨å¿«åŠ æ—¶å¸¸äº®
+	goto	L_KeyTrigger_NoBlink_AlarmHour		; ´æÔÚ¿ì¼ÓÊ±³£ÁÁ
 	btfss	Time_Flag,1
 	return
 
@@ -42,18 +42,18 @@ F_AlarmHour_Set:
 	btfsc	Time_Flag,0
 	goto	L_AlarmHour_Clear
 L_KeyTrigger_NoBlink_AlarmHour:
-	call	F_Display_Alarm						; åŠSäº®
+	call	F_Display_Alarm						; °ëSÁÁ
 	return
 L_AlarmHour_Clear:
 	bcf		Time_Flag,0
-	call	F_UnDisplay_D0_1					; 1Sç­
+	call	F_UnDisplay_D0_1					; 1SÃğ
 	return
 
 
 F_AlarmMin_Set:
 	bcf		RP0
 	btfsc	Key_Flag,3
-	goto	L_KeyTrigger_NoBlink_AlarmMin		; å­˜åœ¨å¿«åŠ æ—¶å¸¸äº®
+	goto	L_KeyTrigger_NoBlink_AlarmMin		; ´æÔÚ¿ì¼ÓÊ±³£ÁÁ
 	btfss	Time_Flag,1
 	return
 
@@ -62,23 +62,23 @@ F_AlarmMin_Set:
 	btfsc	Time_Flag,0
 	goto	L_AlarmMin_Clear
 L_KeyTrigger_NoBlink_AlarmMin:
-	call	F_Display_Alarm						; åŠSäº®
+	call	F_Display_Alarm						; °ëSÁÁ
 	return
 L_AlarmMin_Clear:
 	bcf		Time_Flag,0
-	call	F_UnDisplay_D2_3					; 1Sç­
+	call	F_UnDisplay_D2_3					; 1SÃğ
 	return
 
 
 
 
-; é—¹é’Ÿå¤„ç†
+; ÄÖÖÓ´¦Àí
 F_Alarm_Handler:
-	call	Is_AlarmTrigger						; åˆ¤æ–­é—¹é’Ÿæ˜¯å¦è§¦å‘
-	btfsc	Clock_Flag,2						; å­˜åœ¨å“é—¹æ ‡å¿—ä½æ‰ä¼šè¿›å¤„ç†
+	call	Is_AlarmTrigger						; ÅĞ¶ÏÄÖÖÓÊÇ·ñ´¥·¢
+	btfsc	Clock_Flag,2						; ´æÔÚÏìÄÖ±êÖ¾Î»²Å»á½ø´¦Àí
 	goto	L_Alarm_Process
 
-	btfsc	Beep_Flag,1							; å¦‚æœæœ‰æŒ‰é”®æç¤ºéŸ³ï¼Œåˆ™ä¸å…³é—­èœ‚é¸£å™¨
+	btfsc	Beep_Flag,1							; Èç¹ûÓĞ°´¼üÌáÊ¾Òô£¬Ôò²»¹Ø±Õ·äÃùÆ÷
 	goto	L_LoudingNoClose
 
 	bcf		Time_Flag,3
@@ -92,56 +92,56 @@ L_LoudingNoClose:
 
 Is_AlarmTrigger:
 	btfsc	Clock_Flag,2
-	goto	L_Alarm_NoStop						; å¦‚æ­¤æ—¶ä»åœ¨å“é—¹ï¼Œåˆ™ç›´æ¥è¿›å…¥å“é—¹æŒç»­éƒ¨åˆ†
+	goto	L_Alarm_NoStop						; Èç´ËÊ±ÈÔÔÚÏìÄÖ£¬ÔòÖ±½Ó½øÈëÏìÄÖ³ÖĞø²¿·Ö
 	
 	call	AlarmTrigger_Juge
 	btfss	Clock_Flag,1
-	goto	Is_Snooze							; é—¹é’Ÿè§¦å‘æ ‡å¿—æœ‰äº†æ‰ä¼šèµ°å“é—¹æµç¨‹ï¼Œå¦åˆ™è¿›è´ªç¡æµç¨‹
+	goto	Is_Snooze							; ÄÖÖÓ´¥·¢±êÖ¾ÓĞÁË²Å»á×ßÏìÄÖÁ÷³Ì£¬·ñÔò½øÌ°Ë¯Á÷³Ì
 
-	movf	R_Alarm_Hour,W						; é—¹é’Ÿè§¦å‘æ—¶ï¼ŒåŒæ­¥ä¸€æ¬¡é—¹é’Ÿåˆ°è´ªç¡é—¹é’Ÿ
-	movwf	R_Snooze_Hour						; è´ªç¡è§¦å‘æ—¶ï¼Œéœ€è¦åœ¨è¿™ä¸ªè´ªç¡æ—¶é’ŸåŸºç¡€ä¸ŠåŠ ä¸Šè´ªç¡æ—¶é—´
+	movf	R_Alarm_Hour,W						; ÄÖÖÓ´¥·¢Ê±£¬Í¬²½Ò»´ÎÄÖÖÓµ½Ì°Ë¯ÄÖÖÓ
+	movwf	R_Snooze_Hour						; Ì°Ë¯´¥·¢Ê±£¬ĞèÒªÔÚÕâ¸öÌ°Ë¯Ê±ÖÓ»ù´¡ÉÏ¼ÓÉÏÌ°Ë¯Ê±¼ä
 	movf	R_Alarm_Min,W
 	movwf	R_Snooze_Min
 	goto	L_AlarmTrigger
 Is_Snooze:
-	btfss	Clock_Flag,3						; å…ˆåˆ¤æ–­é—¹é’Ÿæ˜¯å¦è§¦å‘ï¼Œå†åˆ¤æ–­æ˜¯å¦å­˜åœ¨è´ªç¡
-	return										; å¦‚æ—¢æ— é—¹é’Ÿè§¦å‘ï¼Œåˆæ— è´ªç¡ï¼Œåˆ™ä¸éœ€è¦é—¹é’Ÿå¤„ç†ï¼Œç›´æ¥é€€å‡º
+	btfss	Clock_Flag,3						; ÏÈÅĞ¶ÏÄÖÖÓÊÇ·ñ´¥·¢£¬ÔÙÅĞ¶ÏÊÇ·ñ´æÔÚÌ°Ë¯
+	return										; Èç¼ÈÎŞÄÖÖÓ´¥·¢£¬ÓÖÎŞÌ°Ë¯£¬Ôò²»ĞèÒªÄÖÖÓ´¦Àí£¬Ö±½ÓÍË³ö
 
-	movf	R_Time_Hour,W						; è´ªç¡æ¨¡å¼ä¸‹,ç”¨è´ªç¡é—¹é’Ÿä»£æ›¿é—¹é’Ÿåˆ¤æ–­æ˜¯å¦å’Œå½“å‰æ—¶é’ŸåŒ¹é…
+	movf	R_Time_Hour,W						; Ì°Ë¯Ä£Ê½ÏÂ,ÓÃÌ°Ë¯ÄÖÖÓ´úÌæÄÖÖÓÅĞ¶ÏÊÇ·ñºÍµ±Ç°Ê±ÖÓÆ¥Åä
 	subwf	R_Snooze_Hour,W
 	btfsc	Z
 	goto	L_Snooze_CloseLoud
 
-L_AlarmTrigger:									; é—¹é’Ÿè¢«è§¦å‘æ—¶çš„å¤„ç†
+L_AlarmTrigger:									; ÄÖÖÓ±»´¥·¢Ê±µÄ´¦Àí
 	bsf		Time_Flag,6
-	bsf		TimeFlag_SW,1						; å¼€å¯èœ‚é¸£å™¨å®šæ—¶å™¨
-	bsf		Clock_Flag,2						; ç½®ä½å“é—¹æ ‡å¿—ä½
-	bcf		Clock_Flag,1						; å…³é—­é—¹é’Ÿè§¦å‘æ ‡å¿—ä½ï¼Œé¿å…é‡å¤è§¦å‘é—¹é’Ÿ
+	bsf		TimeFlag_SW,1						; ¿ªÆô·äÃùÆ÷¶¨Ê±Æ÷
+	bsf		Clock_Flag,2						; ÖÃÎ»ÏìÄÖ±êÖ¾Î»
+	bcf		Clock_Flag,1						; ¹Ø±ÕÄÖÖÓ´¥·¢±êÖ¾Î»£¬±ÜÃâÖØ¸´´¥·¢ÄÖÖÓ
 
-L_Alarm_NoStop:									; å“é—¹æ—¶è¿›é—¹é’Ÿåˆ¤æ–­æ‰§è¡Œçš„æ“ä½œ
+L_Alarm_NoStop:									; ÏìÄÖÊ±½øÄÖÖÓÅĞ¶ÏÖ´ĞĞµÄ²Ù×÷
 	btfss	Clock_Flag,5
-	bsf		Clock_Flag,5						; ä¿å­˜è¿™æ¬¡çš„å“é—¹æ¨¡å¼ï¼Œç”¨äºè´ªç¡é—¹é’Ÿåˆ¤æ–­
+	bsf		Clock_Flag,5						; ±£´æÕâ´ÎµÄÏìÄÖÄ£Ê½£¬ÓÃÓÚÌ°Ë¯ÄÖÖÓÅĞ¶Ï
 	return
 
-L_Snooze_CloseLoud:								; è´ªç¡å¯¼è‡´çš„å“é—¹ç»“æŸ
+L_Snooze_CloseLoud:								; Ì°Ë¯µ¼ÖÂµÄÏìÄÖ½áÊø
 	btfss	Clock_Flag,5
 	return										; last==1 && now==0
 
-	bcf		Clock_Flag,5						; å“é—¹ç»“æŸæ—¶åŒæ­¥å“é—¹æ ‡å¿—ä½åˆ°Backup
-	btfss	Clock_Flag,6						; æ— è´ªç¡é”® && å¤„äºè´ªç¡æ¨¡å¼ && å“é—¹ç»“æŸ
-	goto	L_NoSnooze_CloseLoud				; æ‰ä¼šç»“æŸè´ªç¡å¹¶å…³é—­å“é—¹
+	bcf		Clock_Flag,5						; ÏìÄÖ½áÊøÊ±Í¬²½ÏìÄÖ±êÖ¾Î»µ½Backup
+	btfss	Clock_Flag,6						; ÎŞÌ°Ë¯¼ü && ´¦ÓÚÌ°Ë¯Ä£Ê½ && ÏìÄÖ½áÊø
+	goto	L_NoSnooze_CloseLoud				; ²Å»á½áÊøÌ°Ë¯²¢¹Ø±ÕÏìÄÖ
 
-	bcf		Clock_Flag,6						; æ¸…é™¤è´ªç¡è§¦å‘æ ‡å¿—
+	bcf		Clock_Flag,6						; Çå³ıÌ°Ë¯´¥·¢±êÖ¾
 	goto	L_CloseLoud
 L_NoSnooze_CloseLoud:
 	bcf		Clock_Flag,3
 	bcf		Clock_Flag,6
 L_CloseLoud:
 	clrf	AlarmLoud_Counter
-	movlw	B'11011001'							; Clock_Flag 1ã€2ã€5 Bitç½®0
-	andwf	Clock_Flag,F						; å…³é—­é—¹é’Ÿè§¦å‘æ ‡å¿—ï¼Œå…³é—­å“é—¹æ¨¡å¼
+	movlw	B'11011001'							; Clock_Flag 1¡¢2¡¢5 BitÖÃ0
+	andwf	Clock_Flag,F						; ¹Ø±ÕÄÖÖÓ´¥·¢±êÖ¾£¬¹Ø±ÕÏìÄÖÄ£Ê½
 
-	btfsc	Key_Flag,4							; å¦‚æœæœ‰æŒ‰é”®æç¤ºéŸ³ï¼Œåˆ™ä¸å…³é—­èœ‚é¸£å™¨
+	btfsc	Key_Flag,4							; Èç¹ûÓĞ°´¼üÌáÊ¾Òô£¬Ôò²»¹Ø±Õ·äÃùÆ÷
 	return
 
 	bcf		TimeFlag_SW,1
@@ -163,11 +163,11 @@ L_Alarm_Process:
 	movlw	60
 	subwf	AlarmLoud_Counter,W
 	btfsc	Z
-	goto	L_NoSnooze_CloseLoud				; å“é“ƒ60Såå…³é—­
+	goto	L_NoSnooze_CloseLoud				; ÏìÁå60Sºó¹Ø±Õ
 
 	movlw	8
-	movwf	Beep_Serial							; é‡è£…è½½å“é“ƒåºåˆ—
-	incf	AlarmLoud_Counter					; å¢åŠ å“é“ƒè®¡æ—¶
+	movwf	Beep_Serial							; ÖØ×°ÔØÏìÁåĞòÁĞ
+	incf	AlarmLoud_Counter					; Ôö¼ÓÏìÁå¼ÆÊ±
 	return
 
 
@@ -175,28 +175,30 @@ L_Alarm_Process:
 
 AlarmTrigger_Juge:
 	movf	R_Time_Hour,W
-	subwf	R_Alarm_Hour,W						; åˆ¤æ–­å°æ—¶æ˜¯å¦åŒ¹é…é—¹é’Ÿ
+	subwf	R_Alarm_Hour,W						; ÅĞ¶ÏĞ¡Ê±ÊÇ·ñÆ¥ÅäÄÖÖÓ
 	btfss	Z
 	goto	Alarm_NoMatch
 
 	movf	R_Time_Min,W
-	subwf	R_Alarm_Min,W						; åˆ¤æ–­åˆ†é’Ÿæ˜¯å¦åŒ¹é…é—¹é’Ÿ
+	subwf	R_Alarm_Min,W						; ÅĞ¶Ï·ÖÖÓÊÇ·ñÆ¥ÅäÄÖÖÓ
 	btfss	Z
 	goto	Alarm_NoMatch
 
-	movf	R_Time_Sec,F						; åˆ¤æ–­å½“å‰ç§’æ˜¯å¦ä¸º0
+	movf	R_Time_Sec,F						; ÅĞ¶Ïµ±Ç°ÃëÊÇ·ñÎª0
 	btfss	Z
 	goto	Alarm_NoMatch
 
-	call	L_NoSnooze_CloseLoud				; é‡ç½®è´ªç¡çŠ¶æ€
+	
+
+	call	L_NoSnooze_CloseLoud				; ÖØÖÃÌ°Ë¯×´Ì¬
 	btfsc	Clock_Flag,4
-	goto	Alarm_Blocked						; åˆ¤æ–­æœ‰é—¹é’Ÿè§¦å‘é˜»å¡æ ‡å¿—ï¼Œé˜²æ­¢é—¹é’Ÿæ²¡åˆ°1sè¢«å…³é—­ï¼Œè¿˜ä¼šé‡å¤è§¦å‘é—¹é’Ÿ
-	bsf		Clock_Flag,1						; ç½®ä½é—¹é’Ÿè§¦å‘
+	goto	Alarm_Blocked						; ÅĞ¶ÏÓĞÄÖÖÓ´¥·¢×èÈû±êÖ¾£¬·ÀÖ¹ÄÖÖÓÃ»µ½1s±»¹Ø±Õ£¬»¹»áÖØ¸´´¥·¢ÄÖÖÓ
+	bsf		Clock_Flag,1						; ÖÃÎ»ÄÖÖÓ´¥·¢
 Alarm_Blocked:
 	bsf		Clock_Flag,4
 	return
 
-; é—¹é’Ÿä¸åŒ¹é…åˆ™é€€å‡º
+; ÄÖÖÓ²»Æ¥ÅäÔòÍË³ö
 Alarm_NoMatch:
 	bcf		Clock_Flag,1
 	return

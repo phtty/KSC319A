@@ -50,7 +50,7 @@ L_month_Overflow:
 Is_Leap_Year:
 	bcf		RP0
 	movlw	B'0011'
-	andwf	R_Date_Year
+	andwf	R_Date_Year,W
 	btfsc	Z
 	goto	L_Set_LeapYear_Flag
 	bcf		Calendar_Flag,0
@@ -76,7 +76,7 @@ L_GetWeek:
 
 	movlw	High(L_Table_Gap_CommonMonth)
 	movwf	PMADRH
-	movlw	low(L_Table_Gap_CommonMonth)	; 平年当月首日的星期
+	movlw	low(L_Table_Gap_CommonMonth)	; 平年当月首日的星期偏移
 	goto	L_Get_Week
 L_DateToWeek_Leap:
 	movlw	High(L_Table_Gap_LeapMonth)
@@ -91,25 +91,26 @@ L_Get_Week:
 	movf	PMDATH,W
 	movwf	P_Temp+2
 
+	movf	R_Date_Year,W
 	bcf		C
-	iorwf	R_Date_Year,W
+	rrf		R_Date_Year,W					; 年份除以2作为索引查表
 	movwf	R_X
 	movlw	High(L_Table_WeekInYear)
 	movwf	PMADRH
 	movlw	low(L_Table_WeekInYear)			; 查询当年首日的星期
-	addwf	R_X
+	addwf	R_X,W
 	movwf	PMADRL
 	bsf		RDON
 	nop
 	nop
 	movf	PMDATH,W
 	btfsc	R_Date_Year,0
-	goto	L_Odd_Year						; 奇数年份取低四位
+	goto	L_Odd_Year						; 偶数年份取低四位
 	andlw	B'00000111'
 	goto	L_Get_Weak_YearFirstDay
 L_Odd_Year:
 	movwf	P_Temp+3
-	swapf	P_Temp+3						; 偶数年份取高四位
+	swapf	P_Temp+3,F						; 奇数年份取高四位
 	movlw	B'00000111'
 	andwf	P_Temp+3,W
 L_Get_Weak_YearFirstDay:
