@@ -188,8 +188,27 @@ AlarmTrigger_Juge:
 	btfss	Z
 	goto	Alarm_NoMatch
 
-	
+	movlw	High(ATJuge_WorkDayMask_JumpTable)	; 工作日闹钟判断
+	movwf	PCLATH
+	movf	WorkDay_Alarm,W
+ATJuge_WorkDayMask_JumpTable:
+	addwf	PCL,F
+	goto	ATJuge_WorkDayMask_Over				; 星期1~7全响闹	
+	goto	ATJuge_WorkDay1_6					; 星期天不响闹
+	goto	ATJuge_WorkDay1_5					; 星期天星期六不响闹
 
+ATJuge_WorkDay1_5:
+	movlw	6
+	subwf	R_Date_Week,W
+	btfsc	Z
+	goto	Alarm_NoMatch						; 周六不响闹
+
+ATJuge_WorkDay1_6:
+	movf	R_Date_Week,F
+	btfsc	Z
+	goto	Alarm_NoMatch						; 周天不响闹
+
+ATJuge_WorkDayMask_Over:
 	call	L_NoSnooze_CloseLoud				; 重置贪睡状态
 	btfsc	Clock_Flag,4
 	goto	Alarm_Blocked						; 判断有闹钟触发阻塞标志，防止闹钟没到1s被关闭，还会重复触发闹钟

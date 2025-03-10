@@ -6,4 +6,6 @@
 *.map
 *.err
 *.o
+*.hc
+log*
 doc

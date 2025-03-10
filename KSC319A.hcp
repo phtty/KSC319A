@@ -1,7 +1,7 @@
 [HC-IDE]
 Version=3.0.11.S
 [File Count]
-Count=16
+Count=17
 [MCU]
 PowerSupply=2
 [Settings]
@@ -64,7 +64,8 @@ File8=IRQHandler.inc
 File9=KeyHandler.inc
 File10=LedTable.inc
 File11=main.asm
-File12=RAM_DEF.inc
-File13=Temper.inc
-File14=Time.inc
-File15=VoiceSwitch.inc
+File12=NightMode.inc
+File13=RAM_DEF.inc
+File14=Temper.inc
+File15=Time.inc
+File16=VoiceSwitch.inc

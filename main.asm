@@ -100,5 +100,6 @@ include VoiceSwitch.inc
 include Time.inc
 include Calendar.inc
 include Alarm.inc
+include Nightmode.inc
 
 end

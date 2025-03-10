@@ -188,8 +188,10 @@ L_KeyATrigger_LongTri:					; 能触发长按说明模式已经在闹钟显示模式了
 
 L_KeyBTrigger:
 	call	L_Universal_TriggerHandle
-	bsf		SpecialKey_Flag,2			; B键等待松键事件
-	nop									; 启动贪睡功能
+	; bsf		SpecialKey_Flag,2			; B键等待松键事件
+
+	btfsc	Clock_Flag,2				; 非响闹状态，则B键不执行贪睡功能
+	goto	Alarm_Snooze				; 启动贪睡功能
 	goto	L_KeyHandle_Over
 
 
@@ -982,6 +984,7 @@ TemperMode_Change:
 	xorwf	ADC_Flag					; 取反温度单位标志位，切换显示的温度单位
 	goto	L_KeyHandle_Over
 
+
 ; 调整亮度
 BackLight_Level_CHG:
 	movlw	High(BackLight_Level_JumpTable)
@@ -1017,6 +1020,40 @@ BackLight_Level2:						; 当前亮度为高亮，下一亮度为半亮
 	movwf	PWM0DH
 	goto	L_KeyHandle_Over
 
+
+; 贪睡处理
+Alarm_Snooze:
+	bsf		Clock_Flag,6				; 贪睡按键触发	
+	bsf		Clock_Flag,3				; 进入贪睡模式
+	bcf		Clock_Flag,2				; 关闭响闹模式
+
+	movf	R_Snooze_Min,W
+	addwf	R_Snooze_Time,W
+	movwf	P_Temp
+	movlw	60
+	subwf	P_Temp,W					; 60-贪睡闹钟判断是否溢出
+	btfsc	C
+	goto	L_Snooze_OverflowMin
+	movf	P_Temp,W
+	movwf	R_Snooze_Min
+	goto	L_KeyHandle_Over
+
+L_Snooze_OverflowMin:					; 贪睡闹钟的分溢出
+	movlw	60
+	subwf	P_Temp,W
+	movwf	R_Snooze_Min
+
+	incf	R_Snooze_Hour,F
+	movlw	24
+	subwf	R_Snooze_Hour,W
+	btfss	C
+	goto	L_KeyHandle_Over
+
+	clrf	R_Snooze_Hour				; 贪睡闹钟小时溢出
+	goto	L_KeyHandle_Over
+
+
+;======================================================================================
 
 
 L_DayOverflow_Juge:
